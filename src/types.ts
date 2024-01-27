@@ -10,12 +10,10 @@ export type ExportedSchema = {
   path: string;
 };
 
-export type NamedModel = Model & {
-  name?: string;
-  path: string;
-};
+export type NamedModel = Model & Ref;
 
 export type Model =
+  | ArrayModel
   | ObjectModel
   | StringModel
   | NumberModel
@@ -25,9 +23,14 @@ export type Model =
   | LiteralModel
   | UnknownModel;
 
+export type Ref = {
+  name?: string;
+  path: string;
+};
+
 export type ModelOrRef =
   | { kind: 'model'; model: Model }
-  | ({ kind: 'ref' } & ExportedSchema);
+  | { kind: 'ref'; ref: Ref };
 
 export type ArrayModel = {
   type: 'array';
@@ -37,7 +40,7 @@ export type ArrayModel = {
 export type ObjectModel = {
   type: 'object';
   fields: ({
-    name: string;
+    key: string;
     required: boolean;
   } & ModelOrRef)[];
 };

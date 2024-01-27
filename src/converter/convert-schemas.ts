@@ -2,10 +2,12 @@ import {
   ZodArray,
   ZodBoolean,
   ZodDate,
+  ZodDefault,
   ZodEnum,
   ZodLiteral,
   ZodNumber,
   ZodObject,
+  ZodOptional,
   ZodString,
   ZodType,
   ZodUnknown,
@@ -39,10 +41,20 @@ export function convertSchemas(
   }));
 }
 
-export function convertSchema(
+function convertSchema(
   schema: ZodType<unknown>,
   exportedSchemas: ExportedSchema[]
 ): Model {
+  if (schema instanceof ZodOptional) {
+    return convertSchema(schema._def.innerType, exportedSchemas);
+  }
+  if (schema instanceof ZodDefault) {
+    return convertSchema(schema._def.innerType, exportedSchemas);
+  }
+
+  if (schema instanceof ZodArray) {
+    return convertZodArray(schema, exportedSchemas);
+  }
   if (schema instanceof ZodObject) {
     return convertZodObject(schema, exportedSchemas);
   }
@@ -54,6 +66,9 @@ export function convertSchema(
   }
   if (schema instanceof ZodBoolean) {
     return convertZodBoolean(schema);
+  }
+  if (schema instanceof ZodDate) {
+    return convertZodDate(schema);
   }
   if (schema instanceof ZodEnum) {
     return convertZodEnum(schema);
@@ -72,15 +87,16 @@ export function convertSchema(
   );
 }
 
-export function createModelOrRef(
+function createModelOrRef(
   schema: ZodType<unknown>,
   exportedSchemas: ExportedSchema[]
 ): ModelOrRef {
   const exportedSchema = exportedSchemas.find(s => s.schema === schema);
   if (exportedSchema) {
+    const { schema, ...ref } = exportedSchema;
     return {
       kind: 'ref',
-      ...exportedSchema,
+      ref,
     };
   }
   return {
@@ -89,7 +105,7 @@ export function createModelOrRef(
   };
 }
 
-export function convertZodArray(
+function convertZodArray(
   schema: ZodArray<ZodTypeAny>,
   exportedSchemas: ExportedSchema[]
 ): ArrayModel {
@@ -99,7 +115,7 @@ export function convertZodArray(
   };
 }
 
-export function convertZodObject(
+function convertZodObject(
   schema: AnyZodObject,
   exportedSchemas: ExportedSchema[]
 ): ObjectModel {
@@ -108,55 +124,51 @@ export function convertZodObject(
     fields: Object.entries(schema._def.shape())
       .filter((pair): pair is [string, ZodType] => pair[1] instanceof ZodType)
       .map(([key, value]) => ({
-        name: key,
+        key,
         required: !value.isOptional(),
         ...createModelOrRef(value, exportedSchemas),
       })),
   };
 }
 
-export function convertZodString(schema: ZodString): StringModel {
+function convertZodString(schema: ZodString): StringModel {
   return {
     type: 'string',
   };
 }
 
-export function convertZodNumber(schema: ZodNumber): NumberModel {
+function convertZodNumber(schema: ZodNumber): NumberModel {
   return {
     type: 'number',
   };
 }
 
-export function convertZodBoolean(schema: ZodBoolean): BooleanModel {
+function convertZodBoolean(schema: ZodBoolean): BooleanModel {
   return {
     type: 'boolean',
   };
 }
 
-export function convertZodDate(schema: ZodDate): DateModel {
+function convertZodDate(schema: ZodDate): DateModel {
   return {
     type: 'date',
   };
 }
 
-export function convertZodEnum(
-  schema: ZodEnum<[string, ...string[]]>
-): EnumModel {
+function convertZodEnum(schema: ZodEnum<[string, ...string[]]>): EnumModel {
   return {
     type: 'enum',
     values: schema._def.values,
   };
 }
 
-export function convertZodUnknown(schema: ZodUnknown): UnknownModel {
+function convertZodUnknown(schema: ZodUnknown): UnknownModel {
   return {
     type: 'unknown',
   };
 }
 
-export function convertZodLiteral(
-  schema: ZodLiteral<z.Primitive>
-): LiteralModel {
+function convertZodLiteral(schema: ZodLiteral<z.Primitive>): LiteralModel {
   return {
     type: 'literal',
     value: schema._def.value,
