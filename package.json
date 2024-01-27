@@ -37,6 +37,11 @@
     "test": "jest",
     "build": "tsup"
   },
+  "dependencies": {
+    "bundle-require": "^4.0.2",
+    "esbuild": "^0.19.11",
+    "zod": "^3.22.4"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.11",
     "@types/node": "^20.11.0",
