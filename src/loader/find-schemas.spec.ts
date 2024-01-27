@@ -1,6 +1,6 @@
 import { z } from 'zod';
+import type { ExportedSchema } from '../types';
 import { findZodSchemas } from './find-schemas';
-import type { ExportedSchema } from './types';
 
 describe('find Zod schemas in modules', () => {
   const userSchema = z.object({

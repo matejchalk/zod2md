@@ -1,5 +1,6 @@
 import { ZodType } from 'zod';
-import type { ExportedSchema, ImportedModules } from './types';
+import type { ExportedSchema } from '../types';
+import type { ImportedModules } from './types';
 
 export function findZodSchemas(modules: ImportedModules): ExportedSchema[] {
   return Object.entries(modules).flatMap(([path, mod]) => {
