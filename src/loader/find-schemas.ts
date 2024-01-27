@@ -1,5 +1,18 @@
-import type { ImportedModules } from './types';
+import { ZodType } from 'zod';
+import type { ExportedSchema, ImportedModules } from './types';
 
-export function findZodSchemas(modules: ImportedModules) {
-  // TODO
+export function findZodSchemas(modules: ImportedModules): ExportedSchema[] {
+  return Object.entries(modules).flatMap(([path, mod]) =>
+    Object.entries(mod)
+      .filter(
+        (pair): pair is [string, ZodType<unknown>] => pair[1] instanceof ZodType
+      )
+      .map(
+        ([name, schema]): ExportedSchema => ({
+          ...(name !== 'default' && { name }),
+          schema,
+          path,
+        })
+      )
+  );
 }

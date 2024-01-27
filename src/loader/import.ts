@@ -18,9 +18,11 @@ export async function importModules(
         format: options.format,
       });
 
-      const name = path.basename(entry).replace(/\.[cm]?[jt]sx?$/, '');
+      if (typeof mod !== 'object' || mod === null) {
+        throw new Error('Expected module exports to be an object');
+      }
 
-      return [name, mod] as const;
+      return [path, mod] as const;
     })
   );
 

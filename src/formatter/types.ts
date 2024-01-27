@@ -1,3 +1,8 @@
+export type NameTransformFn = (
+  name: string | undefined,
+  path: string
+) => string;
+
 export type FormatterOptions = {
-  transformName?: (name: string) => string;
+  transformName?: NameTransformFn;
 };
