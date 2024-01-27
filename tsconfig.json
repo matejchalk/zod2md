@@ -12,6 +12,7 @@
     "moduleResolution": "Bundler",
     "module": "ESNext",
     "noEmit": true,
-    "lib": ["es2022"]
+    "lib": ["es2022"],
+    "types": ["vitest/globals"]
   }
 }
