@@ -2,8 +2,11 @@ import { ZodType } from 'zod';
 import type { ExportedSchema, ImportedModules } from './types';
 
 export function findZodSchemas(modules: ImportedModules): ExportedSchema[] {
-  return Object.entries(modules).flatMap(([path, mod]) =>
-    Object.entries(mod)
+  return Object.entries(modules).flatMap(([path, mod]) => {
+    if (mod instanceof ZodType) {
+      return [{ schema: mod, path }];
+    }
+    return Object.entries(mod)
       .filter(
         (pair): pair is [string, ZodType<unknown>] => pair[1] instanceof ZodType
       )
@@ -13,6 +16,6 @@ export function findZodSchemas(modules: ImportedModules): ExportedSchema[] {
           schema,
           path,
         })
-      )
-  );
+      );
+  });
 }
