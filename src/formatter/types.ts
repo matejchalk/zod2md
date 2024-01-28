@@ -4,5 +4,6 @@ export type NameTransformFn = (
 ) => string;
 
 export type FormatterOptions = {
+  title: string;
   transformName?: NameTransformFn;
 };
