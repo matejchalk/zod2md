@@ -1,5 +1,6 @@
+import type { z } from 'zod';
 import type { FormatterOptions } from '.';
-import type { Model, ModelOrRef, NamedModel } from '../types';
+import type { Model, ModelOrRef, NamedModel, Ref } from '../types';
 import * as md from './markdown';
 import { defaultNameTransform } from './name-transform';
 import type { NameTransformFn } from './types';
@@ -9,47 +10,50 @@ export function formatModelsAsMarkdown(
   options: FormatterOptions
 ): string {
   const { title, transformName = defaultNameTransform } = options;
-  return md.paragraphs(
-    md.heading(1, title),
-    ...models.flatMap(model => [
-      md.heading(2, transformName(model.name, model.path)),
-      formatModel(model, transformName),
-    ])
+  return md.document(
+    md.paragraphs(
+      md.heading(1, title),
+      ...models.flatMap(model => [
+        md.heading(2, transformName(model.name, model.path)),
+        formatModel(model, transformName),
+      ])
+    )
   );
 }
 
 function formatModel(model: Model, transformName: NameTransformFn): string {
   switch (model.type) {
     case 'array':
-      return `array of ${formatModelOrRef(model.items, transformName)} items`;
+      return `Array of ${formatModelOrRef(model.items, transformName)} items.`;
     case 'object':
       return md.paragraphs(
-        'object containing the following properties:',
+        'Object containing the following properties:',
         md.table(
           model.fields.map(field => [
-            md.code.inline(field.key),
-            field.required ? 'yes' : 'no',
+            field.required
+              ? `${md.bold(md.code.inline(field.key))} (\\*)`
+              : md.code.inline(field.key),
             formatModelOrRef(field, transformName),
           ]),
-          ['Property', 'Required?', 'Type'],
-          ['left', 'center', 'left']
+          ['Property', 'Type']
+        ),
+        md.italic(
+          model.fields.some(({ required }) => required)
+            ? 'Properties marked with (\\*) are required.'
+            : 'All properties are optional.'
         )
       );
     case 'enum':
       return md.paragraphs(
-        'enum string, one of the following possible values:',
+        'Enum string, one of the following possible values:',
         md.list.unordered(
-          model.values.map(value => md.code.inline(`"${value}"`))
+          model.values.map(value => md.code.inline(`'${value}'`))
         )
       );
     case 'literal':
-      return `literal ${md.code.inline(
-        typeof model.value === 'symbol'
-          ? model.value.toString()
-          : `${model.value}`
-      )} value`;
+      return `Literal ${md.code.inline(formatLiteral(model.value))} value.`;
     case 'unknown':
-      return 'unknown type';
+      return 'Unknown type.';
     default:
       return model.type;
   }
@@ -60,17 +64,67 @@ function formatModelOrRef(
   transformName: NameTransformFn
 ): string {
   if (modelOrRef.kind === 'ref') {
-    const { ref } = modelOrRef;
-    const name = transformName(ref.name, ref.path);
-    const href = `#${slugify(name)}`;
-    return md.link(href, name);
+    return formatRefLink(modelOrRef.ref, transformName);
   }
-  const { model } = modelOrRef;
+  return formatModelInline(modelOrRef.model, transformName);
+}
+
+function formatRefLink(ref: Ref, transformName: NameTransformFn): string {
+  const name = transformName(ref.name, ref.path);
+  const href = `#${slugify(name)}`;
+  return md.link(href, name);
+}
+
+function formatModelInline(
+  model: Model,
+  transformName: NameTransformFn
+): string {
   switch (model.type) {
+    case 'array':
+      if (model.items.kind === 'ref') {
+        return `array of ${formatRefLink(
+          model.items.ref,
+          transformName
+        )} items`;
+      }
+      const itemType = formatModelInline(
+        model.items.model,
+        transformName
+      ).replace(/`/g, '');
+      return md.code.inline(`Array<${itemType}>`);
+    case 'object':
+      throw new Error(`Inline ${model.type} formatting not yet implemented`);
     case 'enum':
-      return model.values.map(value => md.code.inline(`"${value}"`)).join('/');
-    default:
-      return formatModel(model, transformName);
+      return md.code.inline(
+        model.values.map(value => `'${value}'`).join(' | ')
+      );
+    case 'literal':
+      return md.code.inline(formatLiteral(model.value));
+    case 'date':
+      return md.code.inline('Date');
+    case 'boolean':
+    case 'string':
+    case 'number':
+    case 'unknown':
+      return md.code.inline(model.type);
+  }
+}
+
+function formatLiteral(value: z.Primitive): string {
+  switch (typeof value) {
+    case 'string':
+      return value.includes("'")
+        ? `"${value.replace(/"/g, '\\"')}"`
+        : `'${value.replace(/'/g, "\\'")}'`;
+    case 'number':
+    case 'boolean':
+    case 'symbol':
+    case 'bigint':
+      return value.toString();
+    case 'object':
+      return 'null';
+    case 'undefined':
+      return 'undefined';
   }
 }
 

@@ -2,25 +2,27 @@
 
 ## Config
 
-object containing the following properties:
+Object containing the following properties:
 
-|Property|Required?|Type|
-|:--|:-:|:--|
-|`entry`|yes|string|
-|`platform`|no|[Platform](#platform)|
-|`format`|no|array of [Format](#format) items|
-|`dts`|no|boolean|
+|Property|Type|
+|:--|:--|
+|**`entry`** (\*)|`string`|
+|`platform`|[Platform](#platform)|
+|`format`|array of [Format](#format) items|
+|`dts`|`boolean`|
+
+_Properties marked with (\*) are required._
 
 ## Format
 
-enum string, one of the following possible values:
+Enum string, one of the following possible values:
 
-- `"esm"`
-- `"cjs"`
+- `'esm'`
+- `'cjs'`
 
 ## Platform
 
-enum string, one of the following possible values:
+Enum string, one of the following possible values:
 
-- `"browser"`
-- `"node"`
+- `'browser'`
+- `'node'`

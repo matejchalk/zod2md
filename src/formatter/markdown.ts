@@ -1,10 +1,12 @@
-export const lines = (...texts: (string | null | undefined)[]) =>
+export const document = (text: string) => `${text.trim()}\n`;
+
+const lines = (...texts: (string | null | undefined | false)[]) =>
   texts
     .filter((text): text is string => !!text)
     .map(text => `${text}\n`)
     .join('');
 
-export const paragraphs = (...texts: (string | null | undefined)[]) =>
+export const paragraphs = (...texts: (string | null | undefined | false)[]) =>
   texts
     .filter((text): text is string => !!text)
     .map((text, i, arr) =>
@@ -66,5 +68,9 @@ export const table = (
       : []),
     ...cells,
   ];
-  return lines(...rows.map(row => `|${row.join('|')}|`));
+  return lines(
+    ...rows.map(
+      row => `|${row.map(cell => cell.replace(/\|/g, '\\|')).join('|')}|`
+    )
+  );
 };
