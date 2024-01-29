@@ -38,8 +38,38 @@ export function convertSchemas(
     name,
     path,
     ...convertSchema(schema, exportedSchemas),
-    ...(schema.description && { description: schema.description }),
+    ...schemaToMeta(schema),
   }));
+}
+
+function createModelOrRef(
+  schema: ZodType<unknown>,
+  exportedSchemas: ExportedSchema[]
+): ModelOrRef {
+  const exportedSchema = exportedSchemas.find(s => s.schema === schema);
+  if (exportedSchema) {
+    const { schema: _, ...ref } = exportedSchema;
+    return {
+      kind: 'ref',
+      ref: {
+        ...ref,
+        ...schemaToMeta(schema),
+      },
+    };
+  }
+  return {
+    kind: 'model',
+    model: {
+      ...convertSchema(schema, exportedSchemas),
+      ...schemaToMeta(schema),
+    },
+  };
+}
+
+function schemaToMeta(schema: ZodType<unknown>) {
+  return {
+    ...(schema.description && { description: schema.description }),
+  };
 }
 
 function convertSchema(
@@ -50,7 +80,10 @@ function convertSchema(
     return convertSchema(schema._def.innerType, exportedSchemas);
   }
   if (schema instanceof ZodDefault) {
-    return convertSchema(schema._def.innerType, exportedSchemas);
+    return {
+      ...convertSchema(schema._def.innerType, exportedSchemas),
+      default: schema._def.defaultValue(),
+    };
   }
 
   if (schema instanceof ZodArray) {
@@ -86,31 +119,6 @@ function convertSchema(
       'typeName' in schema._def ? schema._def.typeName : '<unknown>'
     } is not supported`
   );
-}
-
-function createModelOrRef(
-  schema: ZodType<unknown>,
-  exportedSchemas: ExportedSchema[]
-): ModelOrRef {
-  const { description } = schema;
-  const exportedSchema = exportedSchemas.find(s => s.schema === schema);
-  if (exportedSchema) {
-    const { schema: _, ...ref } = exportedSchema;
-    return {
-      kind: 'ref',
-      ref: {
-        ...ref,
-        ...(description && { description }),
-      },
-    };
-  }
-  return {
-    kind: 'model',
-    model: {
-      ...convertSchema(schema, exportedSchemas),
-      ...(description && { description }),
-    },
-  };
 }
 
 function convertZodArray(

@@ -1,4 +1,3 @@
-import type { z } from 'zod';
 import type { FormatterOptions } from '.';
 import type { Model, ModelOrRef, NamedModel, Ref } from '../types';
 import * as md from './markdown';
@@ -17,6 +16,10 @@ export function formatModelsAsMarkdown(
         md.heading(2, transformName(model.name, model.path)),
         model.description,
         formatModel(model, transformName),
+        'default' in model &&
+          `${md.italic('Default value:')} ${md.code.inline(
+            formatLiteral(model.default)
+          )}`,
       ])
     )
   );
@@ -29,19 +32,35 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
         `Array of ${formatModelOrRef(model.items, transformName)} items.`
       );
     case 'object':
+      const hasDefault = model.fields.some(
+        field => 'default' in metaFromModelOrRef(field)
+      );
       return md.paragraphs(
         md.italic('Object containing the following properties:'),
         md.table(
-          model.fields.map(field => [
-            field.required
-              ? `${md.bold(md.code.inline(field.key))} (\\*)`
-              : md.code.inline(field.key),
-            formatModelOrRef(field, transformName),
-            (field.kind === 'model'
-              ? field.model.description
-              : field.ref.description) ?? '',
-          ]),
-          ['Property', 'Type', 'Description']
+          model.fields.map(field => {
+            const meta = field.kind === 'model' ? field.model : field.ref;
+            return [
+              field.required
+                ? `${md.bold(md.code.inline(field.key))} (\\*)`
+                : md.code.inline(field.key),
+              formatModelOrRef(field, transformName),
+              ...(hasDefault
+                ? [
+                    'default' in meta
+                      ? md.code.inline(formatLiteral(meta.default))
+                      : '-',
+                  ]
+                : []),
+              meta.description ?? '',
+            ];
+          }),
+          [
+            'Property',
+            'Type',
+            ...(hasDefault ? ['Default'] : []),
+            'Description',
+          ]
         ),
         md.italic(
           model.fields.some(({ required }) => required)
@@ -65,6 +84,10 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
     default:
       return model.type;
   }
+}
+
+function metaFromModelOrRef(modelOrRef: ModelOrRef) {
+  return modelOrRef.kind === 'model' ? modelOrRef.model : modelOrRef.ref;
 }
 
 function formatModelOrRef(
@@ -118,7 +141,7 @@ function formatModelInline(
   }
 }
 
-function formatLiteral(value: z.Primitive): string {
+function formatLiteral(value: unknown): string {
   switch (typeof value) {
     case 'string':
       return value.includes("'")
@@ -129,10 +152,15 @@ function formatLiteral(value: z.Primitive): string {
     case 'symbol':
     case 'bigint':
       return value.toString();
-    case 'object':
-      return 'null';
     case 'undefined':
       return 'undefined';
+    case 'object':
+      if (value === null) {
+        return 'null';
+      }
+      return JSON.stringify(value);
+    case 'function':
+      return value.toString();
   }
 }
 

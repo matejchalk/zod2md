@@ -52,7 +52,7 @@ describe('convert exported Zod schemas to models', () => {
             kind: 'model',
             key: 'isAdmin',
             required: false,
-            model: { type: 'boolean' },
+            model: { type: 'boolean', default: false },
           },
           {
             kind: 'model',

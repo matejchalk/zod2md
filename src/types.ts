@@ -24,12 +24,14 @@ export type Model = (
   | UnknownModel
 ) & {
   description?: string;
+  default?: unknown;
 };
 
 export type Ref = {
   name?: string;
   path: string;
   description?: string;
+  default?: unknown;
 };
 
 export type ModelOrRef =

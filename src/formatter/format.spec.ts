@@ -106,6 +106,7 @@ describe('format models from Zod as Markdown document', () => {
                     },
                   },
                   description: 'Module formats',
+                  default: ['esm'],
                 },
               },
               {
@@ -115,6 +116,7 @@ describe('format models from Zod as Markdown document', () => {
                 model: {
                   type: 'boolean',
                   description: 'Emit declaration files?',
+                  default: false,
                 },
               },
             ],
