@@ -76,19 +76,26 @@ describe('convert exported Zod schemas to models', () => {
     ]);
   });
 
-  it('should reference other exported types', () => {
+  it('should reference other exported types and include descriptions', () => {
     const reviewSchema = z.object({
       text: z.string(),
       rating: z.number().min(0).max(5),
     });
-    const authorSchema = z.object({
-      name: z.string(),
-      dateOfBirth: z.date().optional(),
-    });
+    const authorSchema = z.object(
+      {
+        name: z.string({ description: 'First and last name' }),
+        dateOfBirth: z.date().optional(),
+      },
+      { description: 'Book author' }
+    );
     const bookSchema = z.object({
       title: z.string(),
       author: authorSchema,
-      reviews: z.array(reviewSchema).optional(),
+      reviews: z
+        .array(reviewSchema, {
+          description: 'Reader reviews ordered from most recent',
+        })
+        .optional(),
     });
 
     expect(
@@ -128,6 +135,7 @@ describe('convert exported Zod schemas to models', () => {
             ref: {
               name: 'Author',
               path: 'author.schema.ts',
+              description: 'Book author',
             },
           },
           {
@@ -143,6 +151,7 @@ describe('convert exported Zod schemas to models', () => {
                   path: 'review.schema.ts',
                 },
               },
+              description: 'Reader reviews ordered from most recent',
             },
           },
         ],
@@ -156,7 +165,10 @@ describe('convert exported Zod schemas to models', () => {
             kind: 'model',
             key: 'name',
             required: true,
-            model: { type: 'string' },
+            model: {
+              type: 'string',
+              description: 'First and last name',
+            },
           },
           {
             kind: 'model',
@@ -165,6 +177,7 @@ describe('convert exported Zod schemas to models', () => {
             model: { type: 'date' },
           },
         ],
+        description: 'Book author',
       },
       {
         name: 'Review',

@@ -38,6 +38,7 @@ export function convertSchemas(
     name,
     path,
     ...convertSchema(schema, exportedSchemas),
+    ...(schema.description && { description: schema.description }),
   }));
 }
 
@@ -91,17 +92,24 @@ function createModelOrRef(
   schema: ZodType<unknown>,
   exportedSchemas: ExportedSchema[]
 ): ModelOrRef {
+  const { description } = schema;
   const exportedSchema = exportedSchemas.find(s => s.schema === schema);
   if (exportedSchema) {
-    const { schema, ...ref } = exportedSchema;
+    const { schema: _, ...ref } = exportedSchema;
     return {
       kind: 'ref',
-      ref,
+      ref: {
+        ...ref,
+        ...(description && { description }),
+      },
     };
   }
   return {
     kind: 'model',
-    model: convertSchema(schema, exportedSchemas),
+    model: {
+      ...convertSchema(schema, exportedSchemas),
+      ...(description && { description }),
+    },
   };
 }
 

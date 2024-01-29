@@ -2,13 +2,13 @@
 
 ## Config
 
-Object containing the following properties:
+_Object containing the following properties:_
 
-|Property|Type|
-|:--|:--|
-|**`entry`** (\*)|`string`|
-|`platform`|`'browser' \| 'node'`|
-|`format`|`Array<'esm' \| 'cjs'>`|
-|`dts`|`boolean`|
+|Property|Type|Description|
+|:--|:--|:--|
+|**`entry`** (\*)|`string`|Entry point|
+|`platform`|`'browser' \| 'node'`|Target platform|
+|`format`|`Array<'esm' \| 'cjs'>`|Module formats|
+|`dts`|`boolean`|Emit declaration files?|
 
-_Properties marked with (\*) are required._
+_(\*) Required._

@@ -12,7 +12,7 @@ export type ExportedSchema = {
 
 export type NamedModel = Model & Ref;
 
-export type Model =
+export type Model = (
   | ArrayModel
   | ObjectModel
   | StringModel
@@ -21,11 +21,15 @@ export type Model =
   | DateModel
   | EnumModel
   | LiteralModel
-  | UnknownModel;
+  | UnknownModel
+) & {
+  description?: string;
+};
 
 export type Ref = {
   name?: string;
   path: string;
+  description?: string;
 };
 
 export type ModelOrRef =

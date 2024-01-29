@@ -15,6 +15,7 @@ export function formatModelsAsMarkdown(
       md.heading(1, title),
       ...models.flatMap(model => [
         md.heading(2, transformName(model.name, model.path)),
+        model.description,
         formatModel(model, transformName),
       ])
     )
@@ -24,36 +25,43 @@ export function formatModelsAsMarkdown(
 function formatModel(model: Model, transformName: NameTransformFn): string {
   switch (model.type) {
     case 'array':
-      return `Array of ${formatModelOrRef(model.items, transformName)} items.`;
+      return md.italic(
+        `Array of ${formatModelOrRef(model.items, transformName)} items.`
+      );
     case 'object':
       return md.paragraphs(
-        'Object containing the following properties:',
+        md.italic('Object containing the following properties:'),
         md.table(
           model.fields.map(field => [
             field.required
               ? `${md.bold(md.code.inline(field.key))} (\\*)`
               : md.code.inline(field.key),
             formatModelOrRef(field, transformName),
+            (field.kind === 'model'
+              ? field.model.description
+              : field.ref.description) ?? '',
           ]),
-          ['Property', 'Type']
+          ['Property', 'Type', 'Description']
         ),
         md.italic(
           model.fields.some(({ required }) => required)
-            ? 'Properties marked with (\\*) are required.'
+            ? '(\\*) Required.'
             : 'All properties are optional.'
         )
       );
     case 'enum':
       return md.paragraphs(
-        'Enum string, one of the following possible values:',
+        md.italic('Enum string, one of the following possible values:'),
         md.list.unordered(
           model.values.map(value => md.code.inline(`'${value}'`))
         )
       );
     case 'literal':
-      return `Literal ${md.code.inline(formatLiteral(model.value))} value.`;
+      return md.italic(
+        `Literal ${md.code.inline(formatLiteral(model.value))} value.`
+      );
     case 'unknown':
-      return 'Unknown type.';
+      return md.italic('Unknown type.');
     default:
       return model.type;
   }

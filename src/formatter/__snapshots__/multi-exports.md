@@ -2,27 +2,31 @@
 
 ## Config
 
-Object containing the following properties:
+_Object containing the following properties:_
 
-|Property|Type|
-|:--|:--|
-|**`entry`** (\*)|`string`|
-|`platform`|[Platform](#platform)|
-|`format`|array of [Format](#format) items|
-|`dts`|`boolean`|
+|Property|Type|Description|
+|:--|:--|:--|
+|**`entry`** (\*)|`string`|Entry point|
+|`platform`|[Platform](#platform)|Target platform|
+|`format`|array of [Format](#format) items|Module formats|
+|`dts`|`boolean`|Emit declaration files?|
 
-_Properties marked with (\*) are required._
+_(\*) Required._
 
 ## Format
 
-Enum string, one of the following possible values:
+Module format
+
+_Enum string, one of the following possible values:_
 
 - `'esm'`
 - `'cjs'`
 
 ## Platform
 
-Enum string, one of the following possible values:
+Target platform
+
+_Enum string, one of the following possible values:_
 
 - `'browser'`
 - `'node'`
