@@ -1,4 +1,5 @@
-import { User } from '../models.mjs';
+import { z } from 'zod';
+import { User, Username } from '../models.mjs';
 
 export const UpdateUserParams = z.object({ username: Username });
 

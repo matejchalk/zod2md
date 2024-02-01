@@ -1,5 +1,4 @@
 import { bundleRequire } from 'bundle-require';
-import path from 'node:path';
 import type { ImportedModules, LoaderOptions } from './types';
 import { groupPromiseResultsByStatus } from './utils';
 
@@ -22,7 +21,7 @@ export async function importModules(
         throw new Error('Expected module exports to be an object');
       }
 
-      return [path, mod] as const;
+      return [entry, mod] as const;
     })
   );
 
