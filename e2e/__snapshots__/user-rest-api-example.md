@@ -4,9 +4,9 @@
 
 _Object containing the following properties:_
 
-|Property|Type|Description|
-|:--|:--|:--|
-|**`username`** (\*)|`string`||
+|Property|Type|
+|:--|:--|
+|**`username`** (\*)|`string`|
 
 _(\*) Required._
 
@@ -14,12 +14,12 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-|Property|Type|Description|
-|:--|:--|:--|
-|**`username`** (\*)|`string`||
-|**`email`** (\*)|`string`||
-|`firstName`|`string`||
-|`lastName`|`string`||
+|Property|Type|
+|:--|:--|
+|**`username`** (\*)|`string`|
+|**`email`** (\*)|`string`|
+|`firstName`|`string`|
+|`lastName`|`string`|
 
 _(\*) Required._
 
@@ -27,13 +27,13 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-|Property|Type|Description|
-|:--|:--|:--|
-|**`username`** (\*)|`string`||
-|**`email`** (\*)|`string`||
-|`firstName`|`string`||
-|`lastName`|`string`||
-|**`password`** (\*)|`string`||
+|Property|Type|
+|:--|:--|
+|**`username`** (\*)|`string`|
+|**`email`** (\*)|`string`|
+|`firstName`|`string`|
+|`lastName`|`string`|
+|**`password`** (\*)|`string`|
 
 _(\*) Required._
 
@@ -41,12 +41,12 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-|Property|Type|Description|
-|:--|:--|:--|
-|**`username`** (\*)|`string`||
-|**`email`** (\*)|`string`||
-|`firstName`|`string`||
-|`lastName`|`string`||
+|Property|Type|
+|:--|:--|
+|**`username`** (\*)|`string`|
+|**`email`** (\*)|`string`|
+|`firstName`|`string`|
+|`lastName`|`string`|
 
 _(\*) Required._
 
@@ -54,9 +54,9 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-|Property|Type|Description|
-|:--|:--|:--|
-|**`username`** (\*)|`string`||
+|Property|Type|
+|:--|:--|
+|**`username`** (\*)|`string`|
 
 _(\*) Required._
 
@@ -64,11 +64,11 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-|Property|Type|Description|
-|:--|:--|:--|
-|**`email`** (\*)|`string`||
-|`firstName`|`string`||
-|`lastName`|`string`||
+|Property|Type|
+|:--|:--|
+|**`email`** (\*)|`string`|
+|`firstName`|`string`|
+|`lastName`|`string`|
 
 _(\*) Required._
 
@@ -76,8 +76,8 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-|Property|Type|Description|
-|:--|:--|:--|
-|**`username`** (\*)|`string`||
+|Property|Type|
+|:--|:--|
+|**`username`** (\*)|`string`|
 
 _(\*) Required._

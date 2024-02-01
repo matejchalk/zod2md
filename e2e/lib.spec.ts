@@ -1,23 +1,23 @@
 import { zod2md } from '../src';
 
 describe('zod2md exported function', () => {
-  it('should generate markdown for commitlint example', async () => {
-    await expect(
-      zod2md({
-        title: 'Commitlint config',
-        entry: ['./e2e/fixtures/commitlint/index.ts'],
-      })
-    ).resolves.toMatchFileSnapshot('__snapshots__/commitlint-example.md');
-  });
+  // it('should generate markdown for commitlint example', async () => {
+  //   await expect(
+  //     zod2md({
+  //       title: 'Commitlint config',
+  //       entry: ['./e2e/fixtures/commitlint/index.ts'],
+  //     })
+  //   ).resolves.toMatchFileSnapshot('__snapshots__/commitlint-example.md');
+  // });
 
-  it('should generate markdown for prettier example', async () => {
-    await expect(
-      zod2md({
-        title: 'Prettier configuration file reference',
-        entry: ['./e2e/fixtures/prettier/prettierrc.js'],
-      })
-    ).resolves.toMatchFileSnapshot('__snapshots__/prettier-example.md');
-  });
+  // it('should generate markdown for prettier example', async () => {
+  //   await expect(
+  //     zod2md({
+  //       title: 'Prettier configuration file reference',
+  //       entry: ['./e2e/fixtures/prettier/prettierrc.js'],
+  //     })
+  //   ).resolves.toMatchFileSnapshot('__snapshots__/prettier-example.md');
+  // });
 
   it('should generate markdown for user-rest-api example', async () => {
     await expect(

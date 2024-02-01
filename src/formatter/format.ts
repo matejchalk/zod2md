@@ -35,6 +35,9 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
       const hasDefault = model.fields.some(
         field => 'default' in metaFromModelOrRef(field)
       );
+      const hasDescription = model.fields.some(
+        field => metaFromModelOrRef(field).description
+      );
       return md.paragraphs(
         md.italic('Object containing the following properties:'),
         md.table(
@@ -52,14 +55,14 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
                       : '-',
                   ]
                 : []),
-              meta.description ?? '',
+              ...(hasDescription ? [meta.description ?? ''] : []),
             ];
           }),
           [
             'Property',
             'Type',
             ...(hasDefault ? ['Default'] : []),
-            'Description',
+            ...(hasDescription ? ['Description'] : []),
           ]
         ),
         md.italic(
