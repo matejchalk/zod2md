@@ -50,27 +50,46 @@ export const table = (
   headers?: string[],
   align?: ('left' | 'center' | 'right')[]
 ) => {
+  const alignSymbols = {
+    left: ':--',
+    center: ':-:',
+    right: '--:',
+  };
+
+  const getColAlign = (index: number) => align?.[index] ?? 'left';
+
   const rows: string[][] = [
     ...(headers
-      ? [
-          headers,
-          headers.map((_, i) => {
-            switch (align?.[i] ?? 'left') {
-              case 'left':
-                return ':--';
-              case 'center':
-                return ':-:';
-              case 'right':
-                return '--:';
-            }
-          }),
-        ]
+      ? [headers, headers.map((_, i) => alignSymbols[getColAlign(i)])]
       : []),
     ...cells,
-  ];
-  return lines(
-    ...rows.map(
-      row => `|${row.map(cell => cell.replace(/\|/g, '\\|')).join('|')}|`
-    )
+  ].map(row =>
+    row.map(cell => cell.replace(/\|/g, '\\|').replace(/\n+/g, ' '))
   );
+
+  const columnCount = Math.max(...rows.map(row => row.length));
+  const columnWidths = Array.from({ length: columnCount }).map((_, i) =>
+    Math.max(...rows.map(row => row[i]?.length ?? 0))
+  );
+
+  const formatCell = (cell: string, index: number) => {
+    const width = columnWidths[index] ?? cell.length;
+    const colAlign = getColAlign(index);
+    if (cell === alignSymbols[colAlign]) {
+      return `${cell[0]}${'-'.repeat(width - cell.length)}${cell.slice(1)}`;
+    }
+    switch (colAlign) {
+      case 'left':
+        return cell.padEnd(width, ' ');
+      case 'right':
+        return cell.padStart(width, ' ');
+      case 'center':
+        const toFill = width - cell.length;
+        const fillLeft = Math.floor(toFill / 2);
+        const fillRight = toFill - fillLeft;
+        return ' '.repeat(fillLeft) + cell + ' '.repeat(fillRight);
+    }
+  };
+
+  return lines(...rows.map(row => `| ${row.map(formatCell).join(' | ')} |`));
 };
