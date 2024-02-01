@@ -127,7 +127,7 @@ function convertZodArray(
 ): ArrayModel {
   return {
     type: 'array',
-    items: createModelOrRef(schema._def.type, exportedSchemas),
+    items: createModelOrRef(schema.element, exportedSchemas),
   };
 }
 

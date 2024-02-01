@@ -284,7 +284,9 @@ export const overridesSchema = z.object({
           description: 'Exclude these files from this override.',
         })
         .optional(),
-      options: optionsSchema.optional(), // The options to apply for this override.
+      options: optionsSchema
+        .describe('The options to apply for this override.')
+        .optional(),
     }),
     {
       description:
