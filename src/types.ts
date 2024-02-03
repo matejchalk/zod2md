@@ -22,6 +22,7 @@ export type Model = (
   | EnumModel
   | LiteralModel
   | UnknownModel
+  | UnionModel
 ) & {
   description?: string;
   default?: unknown;
@@ -79,4 +80,9 @@ export type LiteralModel = {
 
 export type UnknownModel = {
   type: 'unknown';
+};
+
+export type UnionModel = {
+  type: 'union';
+  options: ModelOrRef[];
 };

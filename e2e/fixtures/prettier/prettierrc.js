@@ -208,7 +208,7 @@ export const optionsSchema = z
           'Format code ending at a given character offset (exclusive).\nThe range will extend forwards to the end of the selected statement.',
       })
       .int()
-      .nullable()
+      // .nullable()
       .default(null),
 
     rangeStart: z

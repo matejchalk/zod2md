@@ -84,6 +84,15 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
       );
     case 'unknown':
       return md.italic('Unknown type.');
+    case 'union':
+      return md.paragraphs(
+        md.italic('Union of the following possible types:'),
+        md.list.unordered(
+          model.options.map(option =>
+            formatModelOrRefInline(option, transformName)
+          )
+        )
+      );
     default:
       return model.type;
   }
@@ -134,10 +143,7 @@ function formatModelInline(
     case 'object':
       return md.list.html.unordered(
         model.fields.map(field => {
-          const formattedType =
-            field.kind === 'ref'
-              ? formatRefLink(field.ref, transformName)
-              : formatModelInline(field.model, transformName);
+          const formattedType = formatModelOrRefInline(field, transformName);
           const { description } = metaFromModelOrRef(field);
           const formattedDescription = description ? `- ${description}` : '';
           return `${md.code.inline(
@@ -158,7 +164,31 @@ function formatModelInline(
     case 'number':
     case 'unknown':
       return md.code.inline(model.type);
+    case 'union':
+      const formattedOptions = model.options.map(option =>
+        formatModelOrRefInline(option, transformName)
+      );
+      if (model.options.every(option => option.kind === 'model')) {
+        return md.code.inline(
+          formattedOptions.map(option => option.replace(/`/g, '')).join(' | ')
+        );
+      }
+      return smartJoin(
+        model.options.map(option =>
+          formatModelOrRefInline(option, transformName)
+        ),
+        'or'
+      );
   }
+}
+
+function formatModelOrRefInline(
+  modelOrRef: ModelOrRef,
+  transformName: NameTransformFn
+): string {
+  return modelOrRef.kind === 'ref'
+    ? formatRefLink(modelOrRef.ref, transformName)
+    : formatModelInline(modelOrRef.model, transformName);
 }
 
 function formatLiteral(value: unknown): string {
@@ -189,4 +219,11 @@ function slugify(text: string): string {
     .replace(/\s+/g, '-')
     .toLowerCase()
     .replace(/[^a-z0-9-]/g, '');
+}
+
+function smartJoin(items: string[], sep: 'and' | 'or'): string {
+  return items.reduce((acc, item, idx) => {
+    const link = idx === items.length - 1 ? ` ${sep} ` : idx === 0 ? '' : ', ';
+    return acc + link + item;
+  }, '');
 }

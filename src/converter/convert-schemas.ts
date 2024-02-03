@@ -10,6 +10,7 @@ import {
   ZodOptional,
   ZodString,
   ZodType,
+  ZodUnion,
   ZodUnknown,
   z,
   type AnyZodObject,
@@ -28,6 +29,7 @@ import type {
   NumberModel,
   ObjectModel,
   StringModel,
+  UnionModel,
   UnknownModel,
 } from '../types';
 
@@ -113,6 +115,9 @@ function convertSchema(
   if (schema instanceof ZodUnknown) {
     return convertZodUnknown(schema);
   }
+  if (schema instanceof ZodUnion) {
+    return convertZodUnion(schema, exportedSchemas);
+  }
 
   throw new Error(
     `Zod type ${
@@ -188,5 +193,17 @@ function convertZodLiteral(schema: ZodLiteral<z.Primitive>): LiteralModel {
   return {
     type: 'literal',
     value: schema._def.value,
+  };
+}
+
+function convertZodUnion(
+  schema: ZodUnion<readonly [ZodTypeAny, ...ZodTypeAny[]]>,
+  exportedSchemas: ExportedSchema[]
+): UnionModel {
+  return {
+    type: 'union',
+    options: schema._def.options.map(option =>
+      createModelOrRef(option, exportedSchemas)
+    ),
   };
 }
