@@ -1,5 +1,5 @@
 import type { FormatterOptions } from '.';
-import type { Model, ModelOrRef, NamedModel, Ref } from '../types';
+import type { Model, ModelMeta, ModelOrRef, NamedModel, Ref } from '../types';
 import * as md from './markdown';
 import { defaultNameTransform } from './name-transform';
 import type { NameTransformFn } from './types';
@@ -15,7 +15,7 @@ export function formatModelsAsMarkdown(
       ...models.flatMap(model => [
         md.heading(2, transformName(model.name, model.path)),
         model.description,
-        formatModel(model, transformName),
+        formatModel(model, transformName) + metaToSuffix(model),
         'default' in model &&
           `${md.italic('Default value:')} ${md.code.inline(
             formatLiteral(model.default)
@@ -88,9 +88,7 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
       return md.paragraphs(
         md.italic('Union of the following possible types:'),
         md.list.unordered(
-          model.options.map(option =>
-            formatModelOrRefInline(option, transformName)
-          )
+          model.options.map(option => formatModelOrRef(option, transformName))
         )
       );
     default:
@@ -98,18 +96,28 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
   }
 }
 
-function metaFromModelOrRef(modelOrRef: ModelOrRef) {
+function metaFromModelOrRef(modelOrRef: ModelOrRef): ModelMeta {
   return modelOrRef.kind === 'model' ? modelOrRef.model : modelOrRef.ref;
+}
+
+function metaToSuffix(meta: ModelMeta): string {
+  const addon = (['optional', 'nullable'] as const)
+    .filter(key => meta[key])
+    .join(' & ');
+  return addon ? ` (${addon})` : '';
 }
 
 function formatModelOrRef(
   modelOrRef: ModelOrRef,
   transformName: NameTransformFn
 ): string {
+  const meta = metaFromModelOrRef(modelOrRef);
+  const suffix = metaToSuffix(meta);
+
   if (modelOrRef.kind === 'ref') {
-    return formatRefLink(modelOrRef.ref, transformName);
+    return formatRefLink(modelOrRef.ref, transformName) + suffix;
   }
-  return formatModelInline(modelOrRef.model, transformName);
+  return formatModelInline(modelOrRef.model, transformName) + suffix;
 }
 
 function formatRefLink(ref: Ref, transformName: NameTransformFn): string {
@@ -143,7 +151,7 @@ function formatModelInline(
     case 'object':
       return md.list.html.unordered(
         model.fields.map(field => {
-          const formattedType = formatModelOrRefInline(field, transformName);
+          const formattedType = formatModelOrRef(field, transformName);
           const { description } = metaFromModelOrRef(field);
           const formattedDescription = description ? `- ${description}` : '';
           return `${md.code.inline(
@@ -166,7 +174,7 @@ function formatModelInline(
       return md.code.inline(model.type);
     case 'union':
       const formattedOptions = model.options.map(option =>
-        formatModelOrRefInline(option, transformName)
+        formatModelOrRef(option, transformName)
       );
       if (model.options.every(option => option.kind === 'model')) {
         return md.code.inline(
@@ -174,21 +182,10 @@ function formatModelInline(
         );
       }
       return smartJoin(
-        model.options.map(option =>
-          formatModelOrRefInline(option, transformName)
-        ),
+        model.options.map(option => formatModelOrRef(option, transformName)),
         'or'
       );
   }
-}
-
-function formatModelOrRefInline(
-  modelOrRef: ModelOrRef,
-  transformName: NameTransformFn
-): string {
-  return modelOrRef.kind === 'ref'
-    ? formatRefLink(modelOrRef.ref, transformName)
-    : formatModelInline(modelOrRef.model, transformName);
 }
 
 function formatLiteral(value: unknown): string {

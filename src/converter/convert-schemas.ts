@@ -5,6 +5,7 @@ import {
   ZodDefault,
   ZodEnum,
   ZodLiteral,
+  ZodNullable,
   ZodNumber,
   ZodObject,
   ZodOptional,
@@ -24,6 +25,7 @@ import type {
   ExportedSchema,
   LiteralModel,
   Model,
+  ModelMeta,
   ModelOrRef,
   NamedModel,
   NumberModel,
@@ -46,7 +48,8 @@ export function convertSchemas(
 
 function createModelOrRef(
   schema: ZodType<unknown>,
-  exportedSchemas: ExportedSchema[]
+  exportedSchemas: ExportedSchema[],
+  implicitOptional?: boolean
 ): ModelOrRef {
   const exportedSchema = exportedSchemas.find(s => s.schema === schema);
   if (exportedSchema) {
@@ -55,7 +58,7 @@ function createModelOrRef(
       kind: 'ref',
       ref: {
         ...ref,
-        ...schemaToMeta(schema),
+        ...schemaToMeta(schema, implicitOptional),
       },
     };
   }
@@ -63,14 +66,19 @@ function createModelOrRef(
     kind: 'model',
     model: {
       ...convertSchema(schema, exportedSchemas),
-      ...schemaToMeta(schema),
+      ...schemaToMeta(schema, implicitOptional),
     },
   };
 }
 
-function schemaToMeta(schema: ZodType<unknown>) {
+function schemaToMeta(
+  schema: ZodType<unknown>,
+  implicitOptional?: boolean
+): Omit<ModelMeta, 'default'> {
   return {
     ...(schema.description && { description: schema.description }),
+    ...(!implicitOptional && schema.isOptional() && { optional: true }),
+    ...(schema.isNullable() && { nullable: true }),
   };
 }
 
@@ -79,6 +87,9 @@ function convertSchema(
   exportedSchemas: ExportedSchema[]
 ): Model {
   if (schema instanceof ZodOptional) {
+    return convertSchema(schema._def.innerType, exportedSchemas);
+  }
+  if (schema instanceof ZodNullable) {
     return convertSchema(schema._def.innerType, exportedSchemas);
   }
   if (schema instanceof ZodDefault) {
@@ -147,7 +158,7 @@ function convertZodObject(
       .map(([key, value]) => ({
         key,
         required: !value.isOptional(),
-        ...createModelOrRef(value, exportedSchemas),
+        ...createModelOrRef(value, exportedSchemas, true),
       })),
   };
 }

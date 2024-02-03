@@ -23,16 +23,19 @@ export type Model = (
   | LiteralModel
   | UnknownModel
   | UnionModel
-) & {
-  description?: string;
-  default?: unknown;
-};
+) &
+  ModelMeta;
 
 export type Ref = {
   name?: string;
   path: string;
+} & ModelMeta;
+
+export type ModelMeta = {
   description?: string;
   default?: unknown;
+  optional?: boolean;
+  nullable?: boolean;
 };
 
 export type ModelOrRef =
