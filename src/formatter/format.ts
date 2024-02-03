@@ -153,7 +153,7 @@ function formatModelInline(
         model.fields.map(field => {
           const formattedType = formatModelOrRef(field, transformName);
           const { description } = metaFromModelOrRef(field);
-          const formattedDescription = description ? `- ${description}` : '';
+          const formattedDescription = description ? ` - ${description}` : '';
           return `${md.code.inline(
             field.key
           )}: ${formattedType}${formattedDescription}`;

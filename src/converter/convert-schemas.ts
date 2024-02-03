@@ -51,7 +51,12 @@ function createModelOrRef(
   exportedSchemas: ExportedSchema[],
   implicitOptional?: boolean
 ): ModelOrRef {
-  const exportedSchema = exportedSchemas.find(s => s.schema === schema);
+  const exportedSchema = exportedSchemas.find(
+    exp =>
+      exp.schema === schema ||
+      // unwrap ZodOptional, ZodNullable and ZodDefault
+      ('innerType' in schema._def && exp.schema === schema._def.innerType)
+  );
   if (exportedSchema) {
     const { schema: _, ...ref } = exportedSchema;
     return {
