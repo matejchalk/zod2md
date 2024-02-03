@@ -116,10 +116,15 @@ function formatModelInline(
   switch (model.type) {
     case 'array':
       if (model.items.kind === 'ref') {
-        return `array of ${formatRefLink(
-          model.items.ref,
-          transformName
-        )} items`;
+        return md.italic(
+          `Array of ${formatRefLink(model.items.ref, transformName)} items`
+        );
+      }
+      if (model.items.model.type === 'object') {
+        return md.paragraphs(
+          md.italic('Array of objects:'),
+          formatModelInline(model.items.model, transformName)
+        );
       }
       const itemType = formatModelInline(
         model.items.model,
@@ -127,7 +132,19 @@ function formatModelInline(
       ).replace(/`/g, '');
       return md.code.inline(`Array<${itemType}>`);
     case 'object':
-      throw new Error(`Inline ${model.type} formatting not yet implemented`);
+      return md.list.html.unordered(
+        model.fields.map(field => {
+          const formattedType =
+            field.kind === 'ref'
+              ? formatRefLink(field.ref, transformName)
+              : formatModelInline(field.model, transformName);
+          const { description } = metaFromModelOrRef(field);
+          const formattedDescription = description ? `- ${description}` : '';
+          return `${md.code.inline(
+            field.key
+          )}: ${formattedType}${formattedDescription}`;
+        })
+      );
     case 'enum':
       return md.code.inline(
         model.values.map(value => `'${value}'`).join(' | ')

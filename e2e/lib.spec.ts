@@ -24,7 +24,7 @@ describe('zod2md exported function', () => {
       zod2md({
         title: 'User REST API',
         entry: [
-          // './e2e/fixtures/user-rest-api/endpoints/get-users.mjs',
+          './e2e/fixtures/user-rest-api/endpoints/get-users.mjs',
           './e2e/fixtures/user-rest-api/endpoints/get-user.mjs',
           './e2e/fixtures/user-rest-api/endpoints/create-user.mjs',
           './e2e/fixtures/user-rest-api/endpoints/update-user.mjs',

@@ -43,6 +43,12 @@ export const list = {
   unordered: (items: string[]) => lines(...items.map(item => `- ${item}`)),
   ordered: (items: string[]) =>
     lines(...items.map((item, idx) => `${idx + 1}. ${item}`)),
+  html: {
+    unordered: (items: string[]) =>
+      `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`,
+    ordered: (items: string[]) =>
+      `<ol>${items.map(item => `<li>${item}</li>`).join('')}</ol>`,
+  },
 };
 
 export const table = (
@@ -64,7 +70,7 @@ export const table = (
       : []),
     ...cells,
   ].map(row =>
-    row.map(cell => cell.replace(/\|/g, '\\|').replace(/\n+/g, ' '))
+    row.map(cell => cell.replace(/\|/g, '\\|').replace(/\n+/g, '<br />'))
   );
 
   const columnCount = Math.max(...rows.map(row => row.length));
