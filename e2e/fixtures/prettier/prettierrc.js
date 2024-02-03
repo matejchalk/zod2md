@@ -285,7 +285,7 @@ export const overridesSchema = z.object({
         })
         .optional(),
       options: optionsSchema
-        // .describe('The options to apply for this override.')
+        .describe('The options to apply for this override.')
         .optional(),
     }),
     {

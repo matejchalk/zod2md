@@ -51,11 +51,8 @@ function createModelOrRef(
   exportedSchemas: ExportedSchema[],
   implicitOptional?: boolean
 ): ModelOrRef {
-  const exportedSchema = exportedSchemas.find(
-    exp =>
-      exp.schema === schema ||
-      // unwrap ZodOptional, ZodNullable and ZodDefault
-      ('innerType' in schema._def && exp.schema === schema._def.innerType)
+  const exportedSchema = exportedSchemas.find(exp =>
+    isSameSchema(schema, exp.schema)
   );
   if (exportedSchema) {
     const { schema: _, ...ref } = exportedSchema;
@@ -74,6 +71,34 @@ function createModelOrRef(
       ...schemaToMeta(schema, implicitOptional),
     },
   };
+}
+
+function isSameSchema(currSchema: ZodTypeAny, namedSchema: ZodTypeAny) {
+  // unwrap ZodOptional, ZodNullable and ZodDefault
+  const currSchemaUnwrapped: ZodTypeAny | null =
+    currSchema instanceof ZodOptional ||
+    currSchema instanceof ZodNullable ||
+    currSchema instanceof ZodDefault
+      ? currSchema._def.innerType
+      : null;
+
+  // unwrap .describe() - every property except for description must be identical
+  const isOnlyDescriptionChanged = (schema: ZodTypeAny) =>
+    Object.keys(namedSchema._def).every(
+      key => namedSchema._def[key] === schema._def[key]
+    ) &&
+    schema.description !== namedSchema.description &&
+    Object.keys(schema._def)
+      .filter(key => key !== 'description')
+      .map(key => namedSchema._def[key] === schema._def[key]);
+
+  return (
+    currSchema === namedSchema ||
+    currSchemaUnwrapped === namedSchema ||
+    isOnlyDescriptionChanged(currSchema) ||
+    (currSchemaUnwrapped != null &&
+      isOnlyDescriptionChanged(currSchemaUnwrapped))
+  );
 }
 
 function schemaToMeta(
