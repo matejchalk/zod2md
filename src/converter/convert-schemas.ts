@@ -9,6 +9,7 @@ import {
   ZodFunction,
   ZodIntersection,
   ZodLiteral,
+  ZodNativeEnum,
   ZodNever,
   ZodNull,
   ZodNullable,
@@ -26,6 +27,7 @@ import {
   ZodVoid,
   z,
   type AnyZodObject,
+  type EnumLike,
   type ZodTuple,
   type ZodTypeAny,
 } from 'zod';
@@ -44,6 +46,7 @@ import type {
   ModelMeta,
   ModelOrRef,
   NamedModel,
+  NativeEnumModel,
   NeverModel,
   NullModel,
   NumberModel,
@@ -173,6 +176,9 @@ function convertSchema(
   if (schema instanceof ZodEnum) {
     return convertZodEnum(schema);
   }
+  if (schema instanceof ZodNativeEnum) {
+    return convertZodNativeEnum(schema);
+  }
   if (schema instanceof ZodUnion) {
     return convertZodUnion(schema, exportedSchemas);
   }
@@ -277,6 +283,15 @@ function convertZodEnum(schema: ZodEnum<[string, ...string[]]>): EnumModel {
   return {
     type: 'enum',
     values: schema._def.values,
+  };
+}
+
+function convertZodNativeEnum(
+  schema: ZodNativeEnum<EnumLike>
+): NativeEnumModel {
+  return {
+    type: 'native-enum',
+    enum: schema.enum,
   };
 }
 

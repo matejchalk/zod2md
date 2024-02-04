@@ -1,3 +1,4 @@
+import type { EnumLike } from 'zod';
 import type { FormatterOptions } from '.';
 import type { Model, ModelMeta, ModelOrRef, NamedModel, Ref } from '../types';
 import * as md from './markdown';
@@ -76,6 +77,17 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
         md.italic('Enum string, one of the following possible values:'),
         md.list.unordered(
           model.values.map(value => md.code.inline(`'${value}'`))
+        )
+      );
+    case 'native-enum':
+      return md.paragraphs(
+        'Native enum:',
+        md.table(
+          nativeEnumEntries(model.enum).map(([key, value]) => [
+            md.code.inline(key),
+            md.code.inline(formatLiteral(value)),
+          ]),
+          ['Key', 'Value']
         )
       );
     case 'union':
@@ -212,6 +224,15 @@ function formatModelInline(
       return md.code.inline(
         model.values.map(value => `'${value}'`).join(' | ')
       );
+    case 'native-enum':
+      return (
+        md.italic('Native enum: ') +
+        md.list.html.unordered(
+          nativeEnumEntries(model.enum).map(([key, value]) =>
+            md.code.inline(`${key} = ${formatLiteral(value)}`)
+          )
+        )
+      );
     case 'union':
       const formattedOptions = model.options.map(option =>
         formatModelOrRef(option, transformName)
@@ -314,6 +335,25 @@ function formatLiteral(value: unknown): string {
     case 'function':
       return value.toString();
   }
+}
+
+function nativeEnumEntries(enumObj: EnumLike): [string, string | number][] {
+  const numbers = Object.values(enumObj).filter(
+    value => typeof value === 'number'
+  );
+  const strings = Object.values(enumObj).filter(
+    value => typeof value === 'string'
+  );
+  if (
+    numbers.length === strings.length &&
+    numbers.every(num => typeof enumObj[num] === 'string') &&
+    strings.every(str => typeof enumObj[str] === 'number')
+  ) {
+    return Object.entries(enumObj).filter(
+      ([, value]) => typeof value === 'number'
+    );
+  }
+  return Object.entries(enumObj);
 }
 
 function isCode(markdown: string): boolean {

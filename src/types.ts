@@ -1,4 +1,4 @@
-import type { ZodType, z } from 'zod';
+import type { EnumLike, ZodType, z } from 'zod';
 import type { FormatterOptions } from './formatter';
 import type { LoaderOptions } from './loader';
 
@@ -20,6 +20,7 @@ export type Model = (
   | BooleanModel
   | DateModel
   | EnumModel
+  | NativeEnumModel
   | UnionModel
   | IntersectionModel
   | RecordModel
@@ -85,6 +86,11 @@ export type DateModel = {
 export type EnumModel = {
   type: 'enum';
   values: string[];
+};
+
+export type NativeEnumModel = {
+  type: 'native-enum';
+  enum: EnumLike;
 };
 
 export type UnionModel = {
