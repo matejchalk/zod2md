@@ -6,6 +6,7 @@ import {
   ZodDate,
   ZodDefault,
   ZodEnum,
+  ZodFunction,
   ZodIntersection,
   ZodLiteral,
   ZodNever,
@@ -24,6 +25,7 @@ import {
   ZodVoid,
   z,
   type AnyZodObject,
+  type ZodTuple,
   type ZodTypeAny,
 } from 'zod';
 import type {
@@ -34,6 +36,7 @@ import type {
   DateModel,
   EnumModel,
   ExportedSchema,
+  FunctionModel,
   IntersectionModel,
   LiteralModel,
   Model,
@@ -177,6 +180,9 @@ function convertSchema(
   if (schema instanceof ZodRecord) {
     return convertZodRecord(schema, exportedSchemas);
   }
+  if (schema instanceof ZodFunction) {
+    return convertZodFunction(schema, exportedSchemas);
+  }
   if (schema instanceof ZodLiteral) {
     return convertZodLiteral(schema);
   }
@@ -302,6 +308,20 @@ function convertZodRecord(
     type: 'record',
     keys: createModelOrRef(schema._def.keyType, exportedSchemas),
     values: createModelOrRef(schema._def.valueType, exportedSchemas),
+  };
+}
+
+function convertZodFunction(
+  schema: ZodFunction<ZodTuple<any>, ZodTypeAny>,
+  exportedSchemas: ExportedSchema[]
+): FunctionModel {
+  return {
+    type: 'function',
+    // TODO: support rest args? what about implicit `...unknown[]`?
+    parameters: (schema._def.args.items as ZodTypeAny[]).map(param =>
+      createModelOrRef(param, exportedSchemas)
+    ),
+    returnValue: createModelOrRef(schema._def.returns, exportedSchemas),
   };
 }
 

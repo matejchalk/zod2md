@@ -23,6 +23,7 @@ export type Model = (
   | UnionModel
   | IntersectionModel
   | RecordModel
+  | FunctionModel
   | LiteralModel
   | NullModel
   | UndefinedModel
@@ -99,6 +100,12 @@ export type RecordModel = {
   type: 'record';
   keys: ModelOrRef;
   values: ModelOrRef;
+};
+
+export type FunctionModel = {
+  type: 'function';
+  parameters: ModelOrRef[];
+  returnValue: ModelOrRef;
 };
 
 export type LiteralModel = {

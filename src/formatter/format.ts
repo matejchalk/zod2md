@@ -106,6 +106,20 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
           )}`,
         ])
       );
+    case 'function':
+      return md.paragraphs(
+        md.italic('Function.'),
+        md.italic('Parameters:'),
+        model.parameters.length > 0
+          ? md.list.ordered(
+              model.parameters.map(param =>
+                formatModelOrRef(param, transformName)
+              )
+            )
+          : md.list.unordered([md.italic('none')]),
+        md.italic('Returns:'),
+        md.list.unordered([formatModelOrRef(model.returnValue, transformName)])
+      );
     case 'literal':
       return md.italic(
         `Literal ${md.code.inline(formatLiteral(model.value))} value.`
@@ -219,6 +233,32 @@ function formatModelInline(
       }
       return md.italic(
         `Object with ${formattedKey} keys and ${formattedValue} values`
+      );
+    case 'function':
+      const formattedParameters = model.parameters.map(param =>
+        formatModelOrRef(param, transformName)
+      );
+      const formattedReturnValue = formatModelOrRef(
+        model.returnValue,
+        transformName
+      );
+      if (formattedParameters.every(isCode) && isCode(formattedReturnValue)) {
+        return md.code.inline(
+          `(${formattedParameters.map(stripCode).join(', ')}) => ${stripCode(
+            formattedReturnValue
+          )}`
+        );
+      }
+      return md.paragraphs(
+        md.italic('Function:'),
+        md.list.html.unordered([
+          `${md.italic('parameters:')} ${
+            formattedParameters.length > 0
+              ? md.list.html.ordered(formattedParameters)
+              : md.italic('none')
+          }`,
+          `${md.italic('returns:')} ${formattedReturnValue}`,
+        ])
       );
     case 'literal':
       return md.code.inline(formatLiteral(model.value));
