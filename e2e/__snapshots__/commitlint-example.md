@@ -64,7 +64,7 @@ _All properties are optional._
 _Object record with dynamic keys:_
 
 - _keys of type_ `string`
-- _values of type_ _Object:_<ul><li>`rules`: _Object with dynamic keys of type `string` and values of type [Rule](#rule)_</li></ul>
+- _values of type_ _Object with properties:_<ul><li>`rules`: _Object with dynamic keys of type `string` and values of type [Rule](#rule)_</li></ul>
 
 ## PluginRecords
 
@@ -77,11 +77,11 @@ _Object record with dynamic keys:_
 
 _Object containing the following properties:_
 
-| Property             | Type                                                                                                                                                                                                                                                                                                                                                                  |
-| :------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`settings`** (\*)  | _Object:_<ul><li>`scopeEnumSeparator`: `string`</li><li>`enableMultipleScopes`: `boolean`</li></ul>                                                                                                                                                                                                                                                                   |
-| **`messages`** (\*)  | [PromptMessages](#promptmessages)                                                                                                                                                                                                                                                                                                                                     |
-| **`questions`** (\*) | _Object with dynamic keys of type [PromptName](#promptname) and values of type _Object:_<ul><li>`description`: `string`</li><li>`messages`: `Record<string, string>`</li><li>`enum`: _Object with dynamic keys of type `string` and values of type _Object:_<ul><li>`description`: `string`</li><li>`title`: `string`</li><li>`emoji`: `string`</li></ul>_</li></ul>_ |
+| Property             | Type                                                                                                                                                                                                                                                                                                                                                                                                  |
+| :------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`settings`** (\*)  | _Object with properties:_<ul><li>`scopeEnumSeparator`: `string`</li><li>`enableMultipleScopes`: `boolean`</li></ul>                                                                                                                                                                                                                                                                                   |
+| **`messages`** (\*)  | [PromptMessages](#promptmessages)                                                                                                                                                                                                                                                                                                                                                                     |
+| **`questions`** (\*) | _Object with dynamic keys of type [PromptName](#promptname) and values of type _Object with properties:_<ul><li>`description`: `string`</li><li>`messages`: `Record<string, string>`</li><li>`enum`: _Object with dynamic keys of type `string` and values of type _Object with properties:_<ul><li>`description`: `string`</li><li>`title`: `string`</li><li>`emoji`: `string`</li></ul>_</li></ul>_ |
 
 _(\*) Required._
 
@@ -89,7 +89,7 @@ _(\*) Required._
 
 _Intersection of the following types:_
 
-- _Object:_<ul><li>`skip`: `string`</li><li>`max`: `string`</li><li>`min`: `string`</li><li>`emptyWarning`: `string`</li><li>`upperLimitWarning`: `string`</li><li>`lowerLimitWarning`: `string`</li></ul>
+- _Object with properties:_<ul><li>`skip`: `string`</li><li>`max`: `string`</li><li>`min`: `string`</li><li>`emptyWarning`: `string`</li><li>`upperLimitWarning`: `string`</li><li>`lowerLimitWarning`: `string`</li></ul>
 - `Record<string, string>`
 
 ## PromptName
@@ -168,17 +168,17 @@ _Object record with dynamic keys:_
 
 _Intersection of the following types:_
 
-- _Object:_<ul><li>`extends`: `string | Array<string>`</li><li>`formatter`: `string`</li><li>`rules`: [RulesConfig](#rulesconfig)</li><li>`parserPreset`: `string`, [ParserPreset](#parserpreset) or _Promise of _ [ParserPreset](#parserpreset)</li><li>`ignores`: `Array<(string) => boolean>`</li><li>`defaultIgnores`: `boolean`</li><li>`plugin`: [PluginRecords](#pluginrecords)</li><li>`helpUrl`: `string`</li><li>`prompt`: [UserPromptConfig](#userpromptconfig)</li></ul>
+- _Object with properties:_<ul><li>`extends`: `string | Array<string>`</li><li>`formatter`: `string`</li><li>`rules`: [RulesConfig](#rulesconfig)</li><li>`parserPreset`: `string`, [ParserPreset](#parserpreset) or _Promise of _ [ParserPreset](#parserpreset)</li><li>`ignores`: `Array<(string) => boolean>`</li><li>`defaultIgnores`: `boolean`</li><li>`plugin`: [PluginRecords](#pluginrecords)</li><li>`helpUrl`: `string`</li><li>`prompt`: [UserPromptConfig](#userpromptconfig)</li></ul>
 - _Object with dynamic keys of type `string` and values of type `unknown` (_optional & nullable_)_
 
 ## UserPromptConfig
 
 _Object containing the following properties:_
 
-| Property    | Type                                                                                                                                                                                                                                                                                                                                                                  |
-| :---------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `settings`  | _Object:_<ul><li>`scopeEnumSeparator`: `string`</li><li>`enableMultipleScopes`: `boolean`</li></ul>                                                                                                                                                                                                                                                                   |
-| `messages`  | [PromptMessages](#promptmessages)                                                                                                                                                                                                                                                                                                                                     |
-| `questions` | _Object with dynamic keys of type [PromptName](#promptname) and values of type _Object:_<ul><li>`description`: `string`</li><li>`messages`: `Record<string, string>`</li><li>`enum`: _Object with dynamic keys of type `string` and values of type _Object:_<ul><li>`description`: `string`</li><li>`title`: `string`</li><li>`emoji`: `string`</li></ul>_</li></ul>_ |
+| Property    | Type                                                                                                                                                                                                                                                                                                                                                                                                  |
+| :---------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `settings`  | _Object with properties:_<ul><li>`scopeEnumSeparator`: `string`</li><li>`enableMultipleScopes`: `boolean`</li></ul>                                                                                                                                                                                                                                                                                   |
+| `messages`  | [PromptMessages](#promptmessages)                                                                                                                                                                                                                                                                                                                                                                     |
+| `questions` | _Object with dynamic keys of type [PromptName](#promptname) and values of type _Object with properties:_<ul><li>`description`: `string`</li><li>`messages`: `Record<string, string>`</li><li>`enum`: _Object with dynamic keys of type `string` and values of type _Object with properties:_<ul><li>`description`: `string`</li><li>`title`: `string`</li><li>`emoji`: `string`</li></ul>_</li></ul>_ |
 
 _All properties are optional._

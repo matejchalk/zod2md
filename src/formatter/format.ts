@@ -230,7 +230,7 @@ function formatModelInline(
       return md.code.inline(`Array<${itemType}>`);
     case 'object':
       return (
-        md.italic('Object:') +
+        md.italic('Object with properties:') +
         md.list.html.unordered(
           model.fields.map(field => {
             const formattedType = formatModelOrRef(field, transformName);
