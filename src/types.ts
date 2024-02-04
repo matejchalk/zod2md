@@ -21,6 +21,7 @@ export type Model = (
   | DateModel
   | EnumModel
   | UnionModel
+  | IntersectionModel
   | RecordModel
   | LiteralModel
   | NullModel
@@ -87,6 +88,11 @@ export type EnumModel = {
 export type UnionModel = {
   type: 'union';
   options: ModelOrRef[];
+};
+
+export type IntersectionModel = {
+  type: 'intersection';
+  parts: [ModelOrRef, ModelOrRef];
 };
 
 export type RecordModel = {

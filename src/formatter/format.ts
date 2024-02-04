@@ -85,6 +85,13 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
           model.options.map(option => formatModelOrRef(option, transformName))
         )
       );
+    case 'intersection':
+      return md.paragraphs(
+        md.italic('Intersection of the following possible types:'),
+        md.list.unordered(
+          model.parts.map(part => formatModelOrRef(part, transformName))
+        )
+      );
     case 'record':
       return md.paragraphs(
         md.italic('Object record with dynamic keys:'),
@@ -167,10 +174,9 @@ function formatModelInline(
           formatModelInline(model.items.model, transformName)
         );
       }
-      const itemType = formatModelInline(
-        model.items.model,
-        transformName
-      ).replace(/`/g, '');
+      const itemType = stripCode(
+        formatModelInline(model.items.model, transformName)
+      );
       return md.code.inline(`Array<${itemType}>`);
     case 'object':
       return md.list.html.unordered(
@@ -191,23 +197,25 @@ function formatModelInline(
       const formattedOptions = model.options.map(option =>
         formatModelOrRef(option, transformName)
       );
-      if (model.options.every(option => option.kind === 'model')) {
-        return md.code.inline(
-          formattedOptions.map(option => option.replace(/`/g, '')).join(' | ')
-        );
+      if (formattedOptions.every(isCode)) {
+        return md.code.inline(formattedOptions.map(stripCode).join(' | '));
       }
-      return smartJoin(
-        model.options.map(option => formatModelOrRef(option, transformName)),
-        'or'
+      return smartJoin(formattedOptions, 'or');
+    case 'intersection':
+      const formattedParts = model.parts.map(part =>
+        formatModelOrRef(part, transformName)
       );
+      if (formattedParts.every(isCode)) {
+        return md.code.inline(formattedParts.map(stripCode).join(' & '));
+      }
+      return smartJoin(formattedParts, 'and');
     case 'record':
       const formattedKey = formatModelOrRef(model.keys, transformName);
       const formattedValue = formatModelOrRef(model.values, transformName);
-      if (formattedKey.startsWith('`') && formattedValue.startsWith('`')) {
-        return `Record<${formattedKey.replace(
-          /`/g,
-          ''
-        )}, ${formattedValue.replace(/`/g, '')}>`;
+      if (isCode(formattedKey) && isCode(formattedValue)) {
+        return `Record<${stripCode(formattedKey)}, ${stripCode(
+          formattedValue
+        )}>`;
       }
       return md.italic(
         `Object with ${formattedKey} keys and ${formattedValue} values`
@@ -252,6 +260,14 @@ function formatLiteral(value: unknown): string {
     case 'function':
       return value.toString();
   }
+}
+
+function isCode(markdown: string): boolean {
+  return markdown.startsWith('`') && markdown.endsWith('`');
+}
+
+function stripCode(markdown: string): string {
+  return markdown.replace(/`/g, '');
 }
 
 function slugify(text: string): string {

@@ -6,6 +6,7 @@ import {
   ZodDate,
   ZodDefault,
   ZodEnum,
+  ZodIntersection,
   ZodLiteral,
   ZodNever,
   ZodNull,
@@ -33,6 +34,7 @@ import type {
   DateModel,
   EnumModel,
   ExportedSchema,
+  IntersectionModel,
   LiteralModel,
   Model,
   ModelMeta,
@@ -169,6 +171,9 @@ function convertSchema(
   if (schema instanceof ZodUnion) {
     return convertZodUnion(schema, exportedSchemas);
   }
+  if (schema instanceof ZodIntersection) {
+    return convertZodIntersection(schema, exportedSchemas);
+  }
   if (schema instanceof ZodRecord) {
     return convertZodRecord(schema, exportedSchemas);
   }
@@ -273,6 +278,19 @@ function convertZodUnion(
     options: schema._def.options.map(option =>
       createModelOrRef(option, exportedSchemas)
     ),
+  };
+}
+
+function convertZodIntersection(
+  schema: ZodIntersection<ZodTypeAny, ZodTypeAny>,
+  exportedSchemas: ExportedSchema[]
+): IntersectionModel {
+  return {
+    type: 'intersection',
+    parts: [
+      createModelOrRef(schema._def.left, exportedSchemas),
+      createModelOrRef(schema._def.right, exportedSchemas),
+    ],
   };
 }
 
