@@ -17,6 +17,7 @@ import {
   ZodObject,
   ZodOptional,
   ZodPromise,
+  ZodReadonly,
   ZodRecord,
   ZodString,
   ZodSymbol,
@@ -100,13 +101,9 @@ function createModelOrRef(
 }
 
 function isSameSchema(currSchema: ZodTypeAny, namedSchema: ZodTypeAny) {
-  // unwrap ZodOptional, ZodNullable and ZodDefault
+  // unwrap ZodOptional, ZodNullable, ZodDefault, etc.
   const currSchemaUnwrapped: ZodTypeAny | null =
-    currSchema instanceof ZodOptional ||
-    currSchema instanceof ZodNullable ||
-    currSchema instanceof ZodDefault
-      ? currSchema._def.innerType
-      : null;
+    'innerType' in currSchema._def ? currSchema._def.innerType : null;
 
   // unwrap .describe() - every property except for description must be identical
   const isOnlyDescriptionChanged = (schema: ZodTypeAny) =>
@@ -152,6 +149,12 @@ function convertSchema(
     return {
       ...convertSchema(schema._def.innerType, exportedSchemas),
       default: schema._def.defaultValue(),
+    };
+  }
+  if (schema instanceof ZodReadonly) {
+    return {
+      ...convertSchema(schema._def.innerType, exportedSchemas),
+      readonly: true,
     };
   }
 

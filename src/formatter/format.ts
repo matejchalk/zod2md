@@ -163,10 +163,10 @@ function metaFromModelOrRef(modelOrRef: ModelOrRef): ModelMeta {
 }
 
 function metaToSuffix(meta: ModelMeta): string {
-  const addon = (['optional', 'nullable'] as const)
+  const addon = (['optional', 'nullable', 'readonly'] as const)
     .filter(key => meta[key])
     .join(' & ');
-  return addon ? ` (${addon})` : '';
+  return addon ? ` (${md.italic(addon)})` : '';
 }
 
 function formatModelOrRef(

@@ -48,6 +48,7 @@ export type ModelMeta = {
   default?: unknown;
   optional?: boolean;
   nullable?: boolean;
+  readonly?: boolean;
 };
 
 export type ModelOrRef =
