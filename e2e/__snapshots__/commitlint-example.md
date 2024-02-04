@@ -64,7 +64,7 @@ _All properties are optional._
 _Object record with dynamic keys:_
 
 - _keys:_ `string`
-- _values:_ <ul><li>`rules`: _Object with `string` keys and [Rule](#rule) values_</li></ul>
+- _values:_ _Object:_<ul><li>`rules`: _Object with `string` keys and [Rule](#rule) values_</li></ul>
 
 ## PluginRecords
 
@@ -77,11 +77,11 @@ _Object record with dynamic keys:_
 
 _Object containing the following properties:_
 
-| Property             | Type                                                                                                                                                                                                                                                                                              |
-| :------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`settings`** (\*)  | <ul><li>`scopeEnumSeparator`: `string`</li><li>`enableMultipleScopes`: `boolean`</li></ul>                                                                                                                                                                                                        |
-| **`messages`** (\*)  | [PromptMessages](#promptmessages)                                                                                                                                                                                                                                                                 |
-| **`questions`** (\*) | _Object with [PromptName](#promptname) keys and <ul><li>`description`: `string`</li><li>`messages`: Record<string, string></li><li>`enum`: _Object with `string` keys and <ul><li>`description`: `string`</li><li>`title`: `string`</li><li>`emoji`: `string`</li></ul> values_</li></ul> values_ |
+| Property             | Type                                                                                                                                                                                                                                                                                                                |
+| :------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`settings`** (\*)  | _Object:_<ul><li>`scopeEnumSeparator`: `string`</li><li>`enableMultipleScopes`: `boolean`</li></ul>                                                                                                                                                                                                                 |
+| **`messages`** (\*)  | [PromptMessages](#promptmessages)                                                                                                                                                                                                                                                                                   |
+| **`questions`** (\*) | _Object with [PromptName](#promptname) keys and _Object:_<ul><li>`description`: `string`</li><li>`messages`: Record<string, string></li><li>`enum`: _Object with `string` keys and _Object:_<ul><li>`description`: `string`</li><li>`title`: `string`</li><li>`emoji`: `string`</li></ul> values_</li></ul> values_ |
 
 _(\*) Required._
 
@@ -89,7 +89,7 @@ _(\*) Required._
 
 _Intersection of the following possible types:_
 
-- <ul><li>`skip`: `string`</li><li>`max`: `string`</li><li>`min`: `string`</li><li>`emptyWarning`: `string`</li><li>`upperLimitWarning`: `string`</li><li>`lowerLimitWarning`: `string`</li></ul>
+- _Object:_<ul><li>`skip`: `string`</li><li>`max`: `string`</li><li>`min`: `string`</li><li>`emptyWarning`: `string`</li><li>`upperLimitWarning`: `string`</li><li>`lowerLimitWarning`: `string`</li></ul>
 - Record<string, string>
 
 ## PromptName
@@ -168,17 +168,17 @@ _Object record with dynamic keys:_
 
 _Intersection of the following possible types:_
 
-- <ul><li>`extends`: `string | Array<string>`</li><li>`formatter`: `string`</li><li>`rules`: [RulesConfig](#rulesconfig)</li><li>`parserPreset`: `string`, [ParserPreset](#parserpreset) or _Promise of _ [ParserPreset](#parserpreset)</li><li>`ignores`: `Array<(string) => boolean>`</li><li>`defaultIgnores`: `boolean`</li><li>`plugin`: [PluginRecords](#pluginrecords)</li><li>`helpUrl`: `string`</li><li>`prompt`: [UserPromptConfig](#userpromptconfig)</li></ul>
+- _Object:_<ul><li>`extends`: `string | Array<string>`</li><li>`formatter`: `string`</li><li>`rules`: [RulesConfig](#rulesconfig)</li><li>`parserPreset`: `string`, [ParserPreset](#parserpreset) or _Promise of _ [ParserPreset](#parserpreset)</li><li>`ignores`: `Array<(string) => boolean>`</li><li>`defaultIgnores`: `boolean`</li><li>`plugin`: [PluginRecords](#pluginrecords)</li><li>`helpUrl`: `string`</li><li>`prompt`: [UserPromptConfig](#userpromptconfig)</li></ul>
 - _Object with `string` keys and `unknown` (_optional & nullable_) values_
 
 ## UserPromptConfig
 
 _Object containing the following properties:_
 
-| Property    | Type                                                                                                                                                                                                                                                                                              |
-| :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `settings`  | <ul><li>`scopeEnumSeparator`: `string`</li><li>`enableMultipleScopes`: `boolean`</li></ul>                                                                                                                                                                                                        |
-| `messages`  | [PromptMessages](#promptmessages)                                                                                                                                                                                                                                                                 |
-| `questions` | _Object with [PromptName](#promptname) keys and <ul><li>`description`: `string`</li><li>`messages`: Record<string, string></li><li>`enum`: _Object with `string` keys and <ul><li>`description`: `string`</li><li>`title`: `string`</li><li>`emoji`: `string`</li></ul> values_</li></ul> values_ |
+| Property    | Type                                                                                                                                                                                                                                                                                                                |
+| :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `settings`  | _Object:_<ul><li>`scopeEnumSeparator`: `string`</li><li>`enableMultipleScopes`: `boolean`</li></ul>                                                                                                                                                                                                                 |
+| `messages`  | [PromptMessages](#promptmessages)                                                                                                                                                                                                                                                                                   |
+| `questions` | _Object with [PromptName](#promptname) keys and _Object:_<ul><li>`description`: `string`</li><li>`messages`: Record<string, string></li><li>`enum`: _Object with `string` keys and _Object:_<ul><li>`description`: `string`</li><li>`title`: `string`</li><li>`emoji`: `string`</li></ul> values_</li></ul> values_ |
 
 _All properties are optional._

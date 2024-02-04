@@ -218,7 +218,10 @@ function formatModelInline(
       if (model.items.model.type === 'object') {
         return md.paragraphs(
           md.italic('Array of objects:'),
-          formatModelInline(model.items.model, transformName)
+          formatModelInline(model.items.model, transformName).replace(
+            /^_[^_]+_/,
+            ''
+          )
         );
       }
       const itemType = stripCode(
@@ -226,15 +229,18 @@ function formatModelInline(
       );
       return md.code.inline(`Array<${itemType}>`);
     case 'object':
-      return md.list.html.unordered(
-        model.fields.map(field => {
-          const formattedType = formatModelOrRef(field, transformName);
-          const { description } = metaFromModelOrRef(field);
-          const formattedDescription = description ? ` - ${description}` : '';
-          return `${md.code.inline(
-            field.key
-          )}: ${formattedType}${formattedDescription}`;
-        })
+      return (
+        md.italic('Object:') +
+        md.list.html.unordered(
+          model.fields.map(field => {
+            const formattedType = formatModelOrRef(field, transformName);
+            const { description } = metaFromModelOrRef(field);
+            const formattedDescription = description ? ` - ${description}` : '';
+            return `${md.code.inline(
+              field.key
+            )}: ${formattedType}${formattedDescription}`;
+          })
+        )
       );
     case 'enum':
       return md.code.inline(
