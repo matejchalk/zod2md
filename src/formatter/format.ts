@@ -108,11 +108,11 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
       return md.paragraphs(
         md.italic('Object record with dynamic keys:'),
         md.list.unordered([
-          `${md.italic('keys:')} ${formatModelOrRef(
+          `${md.italic('keys of type')} ${formatModelOrRef(
             model.keys,
             transformName
           )}`,
-          `${md.italic('values:')} ${formatModelOrRef(
+          `${md.italic('values of type')} ${formatModelOrRef(
             model.values,
             transformName
           )}`,
@@ -280,7 +280,7 @@ function formatModelInline(
         );
       }
       return md.italic(
-        `Object with ${formattedKey} keys and values of type ${formattedValue}`
+        `Object with dynamic keys of type ${formattedKey} and values of type ${formattedValue}`
       );
     case 'tuple':
       const formattedItems = model.items.map(item =>
