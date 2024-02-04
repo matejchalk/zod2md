@@ -99,7 +99,7 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
       );
     case 'intersection':
       return md.paragraphs(
-        md.italic('Intersection of the following possible types:'),
+        md.italic('Intersection of the following types:'),
         md.list.unordered(
           model.parts.map(part => formatModelOrRef(part, transformName))
         )

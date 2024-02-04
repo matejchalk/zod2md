@@ -87,7 +87,7 @@ _(\*) Required._
 
 ## PromptMessages
 
-_Intersection of the following possible types:_
+_Intersection of the following types:_
 
 - _Object:_<ul><li>`skip`: `string`</li><li>`max`: `string`</li><li>`min`: `string`</li><li>`emptyWarning`: `string`</li><li>`upperLimitWarning`: `string`</li><li>`lowerLimitWarning`: `string`</li></ul>
 - Record<string, string>
@@ -166,7 +166,7 @@ _Object record with dynamic keys:_
 
 ## UserConfig
 
-_Intersection of the following possible types:_
+_Intersection of the following types:_
 
 - _Object:_<ul><li>`extends`: `string | Array<string>`</li><li>`formatter`: `string`</li><li>`rules`: [RulesConfig](#rulesconfig)</li><li>`parserPreset`: `string`, [ParserPreset](#parserpreset) or _Promise of _ [ParserPreset](#parserpreset)</li><li>`ignores`: `Array<(string) => boolean>`</li><li>`defaultIgnores`: `boolean`</li><li>`plugin`: [PluginRecords](#pluginrecords)</li><li>`helpUrl`: `string`</li><li>`prompt`: [UserPromptConfig](#userpromptconfig)</li></ul>
 - _Object with `string` keys and `unknown` (_optional & nullable_) values_
