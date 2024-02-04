@@ -21,6 +21,7 @@ import {
   ZodRecord,
   ZodString,
   ZodSymbol,
+  ZodTuple,
   ZodType,
   ZodUndefined,
   ZodUnion,
@@ -29,7 +30,6 @@ import {
   z,
   type AnyZodObject,
   type EnumLike,
-  type ZodTuple,
   type ZodTypeAny,
 } from 'zod';
 import type {
@@ -56,6 +56,7 @@ import type {
   RecordModel,
   StringModel,
   SymbolModel,
+  TupleModel,
   UndefinedModel,
   UnionModel,
   UnknownModel,
@@ -190,6 +191,9 @@ function convertSchema(
   }
   if (schema instanceof ZodRecord) {
     return convertZodRecord(schema, exportedSchemas);
+  }
+  if (schema instanceof ZodTuple) {
+    return convertZodTuple(schema, exportedSchemas);
   }
   if (schema instanceof ZodFunction) {
     return convertZodFunction(schema, exportedSchemas);
@@ -331,6 +335,21 @@ function convertZodRecord(
     type: 'record',
     keys: createModelOrRef(schema._def.keyType, exportedSchemas),
     values: createModelOrRef(schema._def.valueType, exportedSchemas),
+  };
+}
+
+function convertZodTuple(
+  schema: ZodTuple,
+  exportedSchemas: ExportedSchema[]
+): TupleModel {
+  return {
+    type: 'tuple',
+    items: schema._def.items.map(item =>
+      createModelOrRef(item, exportedSchemas)
+    ),
+    ...(schema._def.rest != null && {
+      rest: createModelOrRef(schema._def.rest, exportedSchemas),
+    }),
   };
 }
 

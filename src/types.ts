@@ -24,6 +24,7 @@ export type Model = (
   | UnionModel
   | IntersectionModel
   | RecordModel
+  | TupleModel
   | FunctionModel
   | PromiseModel
   | LiteralModel
@@ -108,6 +109,12 @@ export type RecordModel = {
   type: 'record';
   keys: ModelOrRef;
   values: ModelOrRef;
+};
+
+export type TupleModel = {
+  type: 'tuple';
+  items: ModelOrRef[];
+  rest?: ModelOrRef;
 };
 
 export type FunctionModel = {

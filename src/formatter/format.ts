@@ -118,6 +118,22 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
           )}`,
         ])
       );
+    case 'tuple':
+      return md.paragraphs(
+        md.italic(
+          `Tuple, array of ${model.items.length}${model.rest ? '+' : ''} items:`
+        ),
+        md.list.ordered(
+          model.items.map(item => formatModelOrRef(item, transformName))
+        ),
+        model.rest &&
+          md.italic(
+            `... followed by variable number of ${formatModelOrRef(
+              model.rest,
+              transformName
+            )} items.`
+          )
+      );
     case 'function':
       return md.paragraphs(
         md.italic('Function.'),
@@ -259,6 +275,32 @@ function formatModelInline(
       }
       return md.italic(
         `Object with ${formattedKey} keys and ${formattedValue} values`
+      );
+    case 'tuple':
+      const formattedItems = model.items.map(item =>
+        formatModelOrRef(item, transformName)
+      );
+      const formattedRest =
+        model.rest && formatModelOrRef(model.rest, transformName);
+      if (
+        formattedItems.every(isCode) &&
+        (formattedRest == null || isCode(formattedRest))
+      ) {
+        return (
+          '[' +
+          [
+            ...formattedItems.map(stripCode),
+            ...(formattedRest ? [`...${stripCode(formattedRest)}[]`] : []),
+          ].join(', ') +
+          ']'
+        );
+      }
+      return (
+        md.italic('Tuple:') +
+        md.list.html.ordered(formattedItems) +
+        (formattedRest
+          ? md.italic(`...and variable number of ${formattedRest} items`)
+          : '')
       );
     case 'function':
       const formattedParameters = model.parameters.map(param =>
