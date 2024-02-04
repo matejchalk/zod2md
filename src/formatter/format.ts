@@ -85,16 +85,38 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
           model.options.map(option => formatModelOrRef(option, transformName))
         )
       );
+    case 'record':
+      return md.paragraphs(
+        md.italic('Object record with dynamic keys:'),
+        md.list.unordered([
+          `${md.italic('keys:')} ${formatModelOrRef(
+            model.keys,
+            transformName
+          )}`,
+          `${md.italic('values:')} ${formatModelOrRef(
+            model.values,
+            transformName
+          )}`,
+        ])
+      );
     case 'literal':
       return md.italic(
         `Literal ${md.code.inline(formatLiteral(model.value))} value.`
       );
-    case 'unknown':
-      return md.italic('Unknown type.');
-    case 'any':
-      return md.italic('Any type.');
-    default:
+    case 'string':
+    case 'number':
+    case 'boolean':
+    case 'date':
+    case 'symbol':
+    case 'bigint':
+    case 'null':
+    case 'undefined':
       return `${capitalize(model.type)}.`;
+    case 'unknown':
+    case 'any':
+    case 'void':
+    case 'never':
+      return `${capitalize(model.type)} type.`;
   }
 }
 
@@ -177,6 +199,18 @@ function formatModelInline(
       return smartJoin(
         model.options.map(option => formatModelOrRef(option, transformName)),
         'or'
+      );
+    case 'record':
+      const formattedKey = formatModelOrRef(model.keys, transformName);
+      const formattedValue = formatModelOrRef(model.values, transformName);
+      if (formattedKey.startsWith('`') && formattedValue.startsWith('`')) {
+        return `Record<${formattedKey.replace(
+          /`/g,
+          ''
+        )}, ${formattedValue.replace(/`/g, '')}>`;
+      }
+      return md.italic(
+        `Object with ${formattedKey} keys and ${formattedValue} values`
       );
     case 'literal':
       return md.code.inline(formatLiteral(model.value));

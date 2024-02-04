@@ -21,6 +21,7 @@ export type Model = (
   | DateModel
   | EnumModel
   | UnionModel
+  | RecordModel
   | LiteralModel
   | NullModel
   | UndefinedModel
@@ -86,6 +87,12 @@ export type EnumModel = {
 export type UnionModel = {
   type: 'union';
   options: ModelOrRef[];
+};
+
+export type RecordModel = {
+  type: 'record';
+  keys: ModelOrRef;
+  values: ModelOrRef;
 };
 
 export type LiteralModel = {

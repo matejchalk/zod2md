@@ -13,6 +13,7 @@ import {
   ZodNumber,
   ZodObject,
   ZodOptional,
+  ZodRecord,
   ZodString,
   ZodSymbol,
   ZodType,
@@ -41,6 +42,7 @@ import type {
   NullModel,
   NumberModel,
   ObjectModel,
+  RecordModel,
   StringModel,
   SymbolModel,
   UndefinedModel,
@@ -167,6 +169,9 @@ function convertSchema(
   if (schema instanceof ZodUnion) {
     return convertZodUnion(schema, exportedSchemas);
   }
+  if (schema instanceof ZodRecord) {
+    return convertZodRecord(schema, exportedSchemas);
+  }
   if (schema instanceof ZodLiteral) {
     return convertZodLiteral(schema);
   }
@@ -268,6 +273,17 @@ function convertZodUnion(
     options: schema._def.options.map(option =>
       createModelOrRef(option, exportedSchemas)
     ),
+  };
+}
+
+function convertZodRecord(
+  schema: ZodRecord,
+  exportedSchemas: ExportedSchema[]
+): RecordModel {
+  return {
+    type: 'record',
+    keys: createModelOrRef(schema._def.keyType, exportedSchemas),
+    values: createModelOrRef(schema._def.valueType, exportedSchemas),
   };
 }
 
