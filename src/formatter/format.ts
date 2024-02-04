@@ -280,9 +280,9 @@ function formatModelInline(
           `Record<${stripCode(formattedKey)}, ${stripCode(formattedValue)}>`
         );
       }
-      return md.italic(
-        `Object with dynamic keys of type ${formattedKey} and values of type ${formattedValue}`
-      );
+      return `${md.italic(
+        'Object with dynamic keys of type'
+      )} ${formattedKey} ${md.italic('and values of type')} ${formattedValue}`;
     case 'tuple':
       const formattedItems = model.items.map(item =>
         formatModelOrRef(item, transformName)
