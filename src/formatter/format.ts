@@ -275,12 +275,12 @@ function formatModelInline(
       const formattedKey = formatModelOrRef(model.keys, transformName);
       const formattedValue = formatModelOrRef(model.values, transformName);
       if (isCode(formattedKey) && isCode(formattedValue)) {
-        return `Record<${stripCode(formattedKey)}, ${stripCode(
-          formattedValue
-        )}>`;
+        return md.code.inline(
+          `Record<${stripCode(formattedKey)}, ${stripCode(formattedValue)}>`
+        );
       }
       return md.italic(
-        `Object with ${formattedKey} keys and ${formattedValue} values`
+        `Object with ${formattedKey} keys and values of type ${formattedValue}`
       );
     case 'tuple':
       const formattedItems = model.items.map(item =>
