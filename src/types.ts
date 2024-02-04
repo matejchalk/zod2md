@@ -20,9 +20,16 @@ export type Model = (
   | BooleanModel
   | DateModel
   | EnumModel
-  | LiteralModel
-  | UnknownModel
   | UnionModel
+  | LiteralModel
+  | NullModel
+  | UndefinedModel
+  | SymbolModel
+  | BigIntModel
+  | UnknownModel
+  | AnyModel
+  | VoidModel
+  | NeverModel
 ) &
   ModelMeta;
 
@@ -76,16 +83,44 @@ export type EnumModel = {
   values: string[];
 };
 
+export type UnionModel = {
+  type: 'union';
+  options: ModelOrRef[];
+};
+
 export type LiteralModel = {
   type: 'literal';
   value: z.Primitive;
+};
+
+export type NullModel = {
+  type: 'null';
+};
+
+export type UndefinedModel = {
+  type: 'undefined';
+};
+
+export type SymbolModel = {
+  type: 'symbol';
+};
+
+export type BigIntModel = {
+  type: 'bigint';
 };
 
 export type UnknownModel = {
   type: 'unknown';
 };
 
-export type UnionModel = {
-  type: 'union';
-  options: ModelOrRef[];
+export type AnyModel = {
+  type: 'any';
+};
+
+export type VoidModel = {
+  type: 'void';
+};
+
+export type NeverModel = {
+  type: 'never';
 };

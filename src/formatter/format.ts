@@ -78,12 +78,6 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
           model.values.map(value => md.code.inline(`'${value}'`))
         )
       );
-    case 'literal':
-      return md.italic(
-        `Literal ${md.code.inline(formatLiteral(model.value))} value.`
-      );
-    case 'unknown':
-      return md.italic('Unknown type.');
     case 'union':
       return md.paragraphs(
         md.italic('Union of the following possible types:'),
@@ -91,8 +85,16 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
           model.options.map(option => formatModelOrRef(option, transformName))
         )
       );
+    case 'literal':
+      return md.italic(
+        `Literal ${md.code.inline(formatLiteral(model.value))} value.`
+      );
+    case 'unknown':
+      return md.italic('Unknown type.');
+    case 'any':
+      return md.italic('Any type.');
     default:
-      return model.type;
+      return `${capitalize(model.type)}.`;
   }
 }
 
@@ -163,15 +165,6 @@ function formatModelInline(
       return md.code.inline(
         model.values.map(value => `'${value}'`).join(' | ')
       );
-    case 'literal':
-      return md.code.inline(formatLiteral(model.value));
-    case 'date':
-      return md.code.inline('Date');
-    case 'boolean':
-    case 'string':
-    case 'number':
-    case 'unknown':
-      return md.code.inline(model.type);
     case 'union':
       const formattedOptions = model.options.map(option =>
         formatModelOrRef(option, transformName)
@@ -185,6 +178,22 @@ function formatModelInline(
         model.options.map(option => formatModelOrRef(option, transformName)),
         'or'
       );
+    case 'literal':
+      return md.code.inline(formatLiteral(model.value));
+    case 'date':
+      return md.code.inline('Date');
+    case 'boolean':
+    case 'string':
+    case 'number':
+    case 'symbol':
+    case 'bigint':
+    case 'null':
+    case 'undefined':
+    case 'unknown':
+    case 'any':
+    case 'void':
+    case 'never':
+      return md.code.inline(model.type);
   }
 }
 
@@ -223,4 +232,8 @@ function smartJoin(items: string[], sep: 'and' | 'or'): string {
     const link = idx === items.length - 1 ? ` ${sep} ` : idx === 0 ? '' : ', ';
     return acc + link + item;
   }, '');
+}
+
+function capitalize<T extends string>(text: T) {
+  return `${text[0]?.toUpperCase() ?? ''}${text.slice(1)}` as Capitalize<T>;
 }

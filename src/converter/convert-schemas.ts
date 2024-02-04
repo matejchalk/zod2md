@@ -1,24 +1,33 @@
 import {
+  ZodAny,
   ZodArray,
+  ZodBigInt,
   ZodBoolean,
   ZodDate,
   ZodDefault,
   ZodEnum,
   ZodLiteral,
+  ZodNever,
+  ZodNull,
   ZodNullable,
   ZodNumber,
   ZodObject,
   ZodOptional,
   ZodString,
+  ZodSymbol,
   ZodType,
+  ZodUndefined,
   ZodUnion,
   ZodUnknown,
+  ZodVoid,
   z,
   type AnyZodObject,
   type ZodTypeAny,
 } from 'zod';
 import type {
+  AnyModel,
   ArrayModel,
+  BigIntModel,
   BooleanModel,
   DateModel,
   EnumModel,
@@ -28,11 +37,16 @@ import type {
   ModelMeta,
   ModelOrRef,
   NamedModel,
+  NeverModel,
+  NullModel,
   NumberModel,
   ObjectModel,
   StringModel,
+  SymbolModel,
+  UndefinedModel,
   UnionModel,
   UnknownModel,
+  VoidModel,
 } from '../types';
 
 export function convertSchemas(
@@ -150,14 +164,35 @@ function convertSchema(
   if (schema instanceof ZodEnum) {
     return convertZodEnum(schema);
   }
+  if (schema instanceof ZodUnion) {
+    return convertZodUnion(schema, exportedSchemas);
+  }
   if (schema instanceof ZodLiteral) {
     return convertZodLiteral(schema);
+  }
+  if (schema instanceof ZodNull) {
+    return convertZodNull(schema);
+  }
+  if (schema instanceof ZodUndefined) {
+    return convertZodUndefined(schema);
+  }
+  if (schema instanceof ZodSymbol) {
+    return convertZodSymbol(schema);
+  }
+  if (schema instanceof ZodBigInt) {
+    return convertZodBigInt(schema);
   }
   if (schema instanceof ZodUnknown) {
     return convertZodUnknown(schema);
   }
-  if (schema instanceof ZodUnion) {
-    return convertZodUnion(schema, exportedSchemas);
+  if (schema instanceof ZodAny) {
+    return convertZodAny(schema);
+  }
+  if (schema instanceof ZodVoid) {
+    return convertZodVoid(schema);
+  }
+  if (schema instanceof ZodNever) {
+    return convertZodNever(schema);
   }
 
   throw new Error(
@@ -224,9 +259,15 @@ function convertZodEnum(schema: ZodEnum<[string, ...string[]]>): EnumModel {
   };
 }
 
-function convertZodUnknown(schema: ZodUnknown): UnknownModel {
+function convertZodUnion(
+  schema: ZodUnion<readonly [ZodTypeAny, ...ZodTypeAny[]]>,
+  exportedSchemas: ExportedSchema[]
+): UnionModel {
   return {
-    type: 'unknown',
+    type: 'union',
+    options: schema._def.options.map(option =>
+      createModelOrRef(option, exportedSchemas)
+    ),
   };
 }
 
@@ -237,14 +278,50 @@ function convertZodLiteral(schema: ZodLiteral<z.Primitive>): LiteralModel {
   };
 }
 
-function convertZodUnion(
-  schema: ZodUnion<readonly [ZodTypeAny, ...ZodTypeAny[]]>,
-  exportedSchemas: ExportedSchema[]
-): UnionModel {
+function convertZodNull(schema: ZodNull): NullModel {
   return {
-    type: 'union',
-    options: schema._def.options.map(option =>
-      createModelOrRef(option, exportedSchemas)
-    ),
+    type: 'null',
+  };
+}
+
+function convertZodUndefined(schema: ZodUndefined): UndefinedModel {
+  return {
+    type: 'undefined',
+  };
+}
+
+function convertZodSymbol(schema: ZodSymbol): SymbolModel {
+  return {
+    type: 'symbol',
+  };
+}
+
+function convertZodBigInt(schema: ZodBigInt): BigIntModel {
+  return {
+    type: 'bigint',
+  };
+}
+
+function convertZodUnknown(schema: ZodUnknown): UnknownModel {
+  return {
+    type: 'unknown',
+  };
+}
+
+function convertZodAny(schema: ZodAny): AnyModel {
+  return {
+    type: 'any',
+  };
+}
+
+function convertZodVoid(schema: ZodVoid): VoidModel {
+  return {
+    type: 'void',
+  };
+}
+
+function convertZodNever(schema: ZodNever): NeverModel {
+  return {
+    type: 'never',
   };
 }
