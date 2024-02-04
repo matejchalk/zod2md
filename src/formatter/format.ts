@@ -81,7 +81,7 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
       );
     case 'native-enum':
       return md.paragraphs(
-        'Native enum:',
+        md.italic('Native enum:'),
         md.table(
           nativeEnumEntries(model.enum).map(([key, value]) => [
             md.code.inline(key),

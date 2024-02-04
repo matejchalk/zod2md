@@ -132,7 +132,7 @@ _Enum string, one of the following possible values:_
 
 ## RuleConfigSeverity
 
-Native enum:
+_Native enum:_
 
 | Key        | Value |
 | :--------- | :---- |
