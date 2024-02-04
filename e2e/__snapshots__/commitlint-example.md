@@ -121,7 +121,7 @@ _Parameters:_
 
 _Returns:_
 
-- [RuleOutcome](#ruleoutcome) or _Promise of _ [RuleOutcome](#ruleoutcome)
+- [RuleOutcome](#ruleoutcome) _or_ _Promise of_ [RuleOutcome](#ruleoutcome)
 
 ## RuleConfigCondition
 
@@ -168,7 +168,7 @@ _Object record with dynamic keys:_
 
 _Intersection of the following types:_
 
-- _Object with properties:_<ul><li>`extends`: `string | Array<string>`</li><li>`formatter`: `string`</li><li>`rules`: [RulesConfig](#rulesconfig)</li><li>`parserPreset`: `string`, [ParserPreset](#parserpreset) or _Promise of _ [ParserPreset](#parserpreset)</li><li>`ignores`: `Array<(string) => boolean>`</li><li>`defaultIgnores`: `boolean`</li><li>`plugin`: [PluginRecords](#pluginrecords)</li><li>`helpUrl`: `string`</li><li>`prompt`: [UserPromptConfig](#userpromptconfig)</li></ul>
+- _Object with properties:_<ul><li>`extends`: `string | Array<string>`</li><li>`formatter`: `string`</li><li>`rules`: [RulesConfig](#rulesconfig)</li><li>`parserPreset`: `string`, [ParserPreset](#parserpreset) _or_ _Promise of_ [ParserPreset](#parserpreset)</li><li>`ignores`: `Array<(string) => boolean>`</li><li>`defaultIgnores`: `boolean`</li><li>`plugin`: [PluginRecords](#pluginrecords)</li><li>`helpUrl`: `string`</li><li>`prompt`: [UserPromptConfig](#userpromptconfig)</li></ul>
 - _Object with dynamic keys of type `string` and values of type `unknown` (_optional & nullable_)_
 
 ## UserPromptConfig

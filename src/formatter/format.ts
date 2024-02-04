@@ -179,9 +179,10 @@ function metaFromModelOrRef(modelOrRef: ModelOrRef): ModelMeta {
 }
 
 function metaToSuffix(meta: ModelMeta): string {
-  const addon = (['optional', 'nullable', 'readonly'] as const)
-    .filter(key => meta[key])
-    .join(' & ');
+  const addon = smartJoin(
+    (['optional', 'nullable', 'readonly'] as const).filter(key => meta[key]),
+    '&'
+  );
   return addon ? ` (${md.italic(addon)})` : '';
 }
 
@@ -262,7 +263,7 @@ function formatModelInline(
       if (formattedOptions.every(isCode)) {
         return md.code.inline(formattedOptions.map(stripCode).join(' | '));
       }
-      return smartJoin(formattedOptions, 'or');
+      return smartJoin(formattedOptions, md.italic('or'));
     case 'intersection':
       const formattedParts = model.parts.map(part =>
         formatModelOrRef(part, transformName)
@@ -270,7 +271,7 @@ function formatModelInline(
       if (formattedParts.every(isCode)) {
         return md.code.inline(formattedParts.map(stripCode).join(' & '));
       }
-      return smartJoin(formattedParts, 'and');
+      return smartJoin(formattedParts, md.italic('and'));
     case 'record':
       const formattedKey = formatModelOrRef(model.keys, transformName);
       const formattedValue = formatModelOrRef(model.values, transformName);
@@ -342,7 +343,7 @@ function formatModelInline(
       if (isCode(formattedResolvedValue)) {
         return md.code.inline(`Promise<${stripCode(formattedResolvedValue)}>`);
       }
-      return `${md.italic('Promise of ')} ${formattedResolvedValue}`;
+      return `${md.italic('Promise of')} ${formattedResolvedValue}`;
     case 'literal':
       return md.code.inline(formatLiteral(model.value));
     case 'date':
@@ -419,9 +420,9 @@ function slugify(text: string): string {
     .replace(/[^a-z0-9-]/g, '');
 }
 
-function smartJoin(items: string[], sep: 'and' | 'or'): string {
+function smartJoin(items: string[], sep: string): string {
   return items.reduce((acc, item, idx) => {
-    const link = idx === items.length - 1 ? ` ${sep} ` : idx === 0 ? '' : ', ';
+    const link = idx === 0 ? '' : idx === items.length - 1 ? ` ${sep} ` : ', ';
     return acc + link + item;
   }, '');
 }
