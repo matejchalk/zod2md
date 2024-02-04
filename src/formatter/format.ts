@@ -120,6 +120,11 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
         md.italic('Returns:'),
         md.list.unordered([formatModelOrRef(model.returnValue, transformName)])
       );
+    case 'promise':
+      return `${md.italic('Promise, resolves to value:')} ${formatModelOrRef(
+        model.resolvedValue,
+        transformName
+      )}`;
     case 'literal':
       return md.italic(
         `Literal ${md.code.inline(formatLiteral(model.value))} value.`
@@ -132,12 +137,12 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
     case 'bigint':
     case 'null':
     case 'undefined':
-      return `${capitalize(model.type)}.`;
+      return md.italic(`${capitalize(model.type)}.`);
     case 'unknown':
     case 'any':
     case 'void':
     case 'never':
-      return `${capitalize(model.type)} type.`;
+      return md.italic(`${capitalize(model.type)} type.`);
   }
 }
 
@@ -260,6 +265,15 @@ function formatModelInline(
           `${md.italic('returns:')} ${formattedReturnValue}`,
         ])
       );
+    case 'promise':
+      const formattedResolvedValue = formatModelOrRef(
+        model.resolvedValue,
+        transformName
+      );
+      if (isCode(formattedResolvedValue)) {
+        return md.code.inline(`Promise<${stripCode(formattedResolvedValue)}>`);
+      }
+      return `${md.italic('Promise of ')} ${formattedResolvedValue}`;
     case 'literal':
       return md.code.inline(formatLiteral(model.value));
     case 'date':
@@ -326,4 +340,8 @@ function smartJoin(items: string[], sep: 'and' | 'or'): string {
 
 function capitalize<T extends string>(text: T) {
   return `${text[0]?.toUpperCase() ?? ''}${text.slice(1)}` as Capitalize<T>;
+}
+
+function uncapitalize<T extends string>(text: T) {
+  return `${text[0]?.toLowerCase() ?? ''}${text.slice(1)}` as Uncapitalize<T>;
 }

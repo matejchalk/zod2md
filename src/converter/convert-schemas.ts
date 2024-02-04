@@ -15,6 +15,7 @@ import {
   ZodNumber,
   ZodObject,
   ZodOptional,
+  ZodPromise,
   ZodRecord,
   ZodString,
   ZodSymbol,
@@ -47,6 +48,7 @@ import type {
   NullModel,
   NumberModel,
   ObjectModel,
+  PromiseModel,
   RecordModel,
   StringModel,
   SymbolModel,
@@ -182,6 +184,9 @@ function convertSchema(
   }
   if (schema instanceof ZodFunction) {
     return convertZodFunction(schema, exportedSchemas);
+  }
+  if (schema instanceof ZodPromise) {
+    return convertZodPromise(schema, exportedSchemas);
   }
   if (schema instanceof ZodLiteral) {
     return convertZodLiteral(schema);
@@ -322,6 +327,16 @@ function convertZodFunction(
       createModelOrRef(param, exportedSchemas)
     ),
     returnValue: createModelOrRef(schema._def.returns, exportedSchemas),
+  };
+}
+
+function convertZodPromise(
+  schema: ZodPromise<ZodTypeAny>,
+  exportedSchemas: ExportedSchema[]
+): PromiseModel {
+  return {
+    type: 'promise',
+    resolvedValue: createModelOrRef(schema._def.type, exportedSchemas),
   };
 }
 

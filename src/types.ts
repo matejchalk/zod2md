@@ -24,6 +24,7 @@ export type Model = (
   | IntersectionModel
   | RecordModel
   | FunctionModel
+  | PromiseModel
   | LiteralModel
   | NullModel
   | UndefinedModel
@@ -106,6 +107,11 @@ export type FunctionModel = {
   type: 'function';
   parameters: ModelOrRef[];
   returnValue: ModelOrRef;
+};
+
+export type PromiseModel = {
+  type: 'promise';
+  resolvedValue: ModelOrRef;
 };
 
 export type LiteralModel = {
