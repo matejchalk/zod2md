@@ -48,6 +48,7 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
               field.required
                 ? `${md.bold(md.code.inline(field.key))} (\\*)`
                 : md.code.inline(field.key),
+              ...(hasDescription ? [meta.description ?? ''] : []),
               formatModelOrRef(field, transformName),
               ...(hasDefault
                 ? [
@@ -56,14 +57,13 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
                       : '-',
                   ]
                 : []),
-              ...(hasDescription ? [meta.description ?? ''] : []),
             ];
           }),
           [
             'Property',
+            ...(hasDescription ? ['Description'] : []),
             'Type',
             ...(hasDefault ? ['Default'] : []),
-            ...(hasDescription ? ['Description'] : []),
           ]
         ),
         md.italic(

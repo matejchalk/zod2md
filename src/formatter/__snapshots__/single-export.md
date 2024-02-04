@@ -4,11 +4,11 @@
 
 _Object containing the following properties:_
 
-| Property         | Type                    | Description             |
+| Property         | Description             | Type                    |
 | :--------------- | :---------------------- | :---------------------- |
-| **`entry`** (\*) | `string`                | Entry point             |
-| `platform`       | `'browser' \| 'node'`   | Target platform         |
-| `format`         | `Array<'esm' \| 'cjs'>` | Module formats          |
-| `dts`            | `boolean`               | Emit declaration files? |
+| **`entry`** (\*) | Entry point             | `string`                |
+| `platform`       | Target platform         | `'browser' \| 'node'`   |
+| `format`         | Module formats          | `Array<'esm' \| 'cjs'>` |
+| `dts`            | Emit declaration files? | `boolean`               |
 
 _(\*) Required._

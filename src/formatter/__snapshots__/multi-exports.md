@@ -4,12 +4,12 @@
 
 _Object containing the following properties:_
 
-| Property         | Type                               | Default   | Description             |
-| :--------------- | :--------------------------------- | :-------- | :---------------------- |
-| **`entry`** (\*) | `string`                           | -         | Entry point             |
-| `platform`       | [Platform](#platform)              | -         | Target platform         |
-| `format`         | _Array of [Format](#format) items_ | `["esm"]` | Module formats          |
-| `dts`            | `boolean`                          | `false`   | Emit declaration files? |
+| Property         | Description             | Type                               | Default   |
+| :--------------- | :---------------------- | :--------------------------------- | :-------- |
+| **`entry`** (\*) | Entry point             | `string`                           | -         |
+| `platform`       | Target platform         | [Platform](#platform)              | -         |
+| `format`         | Module formats          | _Array of [Format](#format) items_ | `["esm"]` |
+| `dts`            | Emit declaration files? | `boolean`                          | `false`   |
 
 _(\*) Required._
 
