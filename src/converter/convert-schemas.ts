@@ -5,6 +5,7 @@ import {
   ZodBoolean,
   ZodDate,
   ZodDefault,
+  ZodEffects,
   ZodEnum,
   ZodFunction,
   ZodIntersection,
@@ -157,6 +158,9 @@ function convertSchema(
       ...convertSchema(schema._def.innerType, exportedSchemas),
       readonly: true,
     };
+  }
+  if (schema instanceof ZodEffects) {
+    return convertSchema(schema._def.schema, exportedSchemas);
   }
 
   if (schema instanceof ZodArray) {
