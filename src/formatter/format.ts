@@ -29,6 +29,10 @@ export function formatModelsAsMarkdown(
 function formatModel(model: Model, transformName: NameTransformFn): string {
   switch (model.type) {
     case 'array':
+      if (model.items.kind === 'model' && model.items.model.type === 'object') {
+        const formattedObject = formatModel(model.items.model, transformName);
+        return formattedObject.replace('Object', 'Array of objects');
+      }
       return md.italic(
         `Array of ${formatModelOrRef(model.items, transformName)} items.`
       );
