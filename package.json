@@ -36,6 +36,8 @@
     "prepublishOnly": "npm test && npm run build",
     "test": "vitest run",
     "test:watch": "vitest watch",
+    "e2e": "vitest run --config e2e/vitest.config.ts",
+    "e2e:watch": "vitest watch --config e2e/vitest.config.ts",
     "build": "tsup"
   },
   "dependencies": {
