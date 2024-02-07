@@ -8,3 +8,5 @@ export async function zod2md(options: Options): Promise<string> {
   const models = convertSchemas(schemas);
   return formatModelsAsMarkdown(models, options);
 }
+
+export type { Config, Options } from './types';

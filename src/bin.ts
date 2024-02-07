@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
-import { sayHello } from '.';
+import { zod2md } from '.';
+import { runCLI } from './cli';
 
-sayHello();
+runCLI(zod2md).catch(console.error);

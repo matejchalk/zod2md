@@ -39,7 +39,9 @@
     "build": "tsup"
   },
   "dependencies": {
+    "@commander-js/extra-typings": "^12.0.0",
     "bundle-require": "^4.0.2",
+    "commander": "^12.0.0",
     "esbuild": "^0.19.11"
   },
   "peerDependencies": {

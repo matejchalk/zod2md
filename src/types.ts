@@ -4,11 +4,15 @@ import type { LoaderOptions } from './loader';
 
 export type Options = LoaderOptions & FormatterOptions;
 
+export type Config = Options & { output: string };
+
 export type ExportedSchema = {
   name?: string;
   schema: ZodType<unknown>;
   path: string;
 };
+
+export type Prettify<T> = { [K in keyof T]: T[K] } & {};
 
 export type NamedModel = Model & Ref;
 
