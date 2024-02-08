@@ -1,4 +1,4 @@
-import type { Config } from '../../../src';
+import type { Config } from 'zod2md';
 
 export default {
   title: 'Commitlint config',

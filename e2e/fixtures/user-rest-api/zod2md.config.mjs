@@ -1,4 +1,4 @@
-/** @type {import('../../../src'.Config)} */
+/** @type {import('zod2md'.Config)} */
 const config = {
   title: 'User REST API',
   entry: [

@@ -10,7 +10,7 @@ const fixturesDir = join(fileURLToPath(dirname(import.meta.url)), 'fixtures');
 
 describe('zod2md config', () => {
   it('should generate markdown for commitlint example', async () => {
-    const { stdout, stderr } = await execAsync('npx ../../..', {
+    const { stdout, stderr } = await execAsync('npx zod2md', {
       cwd: join(fixturesDir, 'commitlint'),
     });
 
@@ -23,7 +23,7 @@ describe('zod2md config', () => {
   });
 
   it('should generate markdown for prettier example', async () => {
-    const { stdout, stderr } = await execAsync('npx ../../..', {
+    const { stdout, stderr } = await execAsync('npx zod2md', {
       cwd: join(fixturesDir, 'prettier'),
     });
 
@@ -36,7 +36,7 @@ describe('zod2md config', () => {
   });
 
   it('should generate markdown for user-rest-api example', async () => {
-    const { stdout, stderr } = await execAsync('npx ../../..', {
+    const { stdout, stderr } = await execAsync('npx zod2md', {
       cwd: join(fixturesDir, 'user-rest-api'),
     });
 

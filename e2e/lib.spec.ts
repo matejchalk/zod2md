@@ -1,4 +1,4 @@
-import { zod2md } from '../dist';
+import { zod2md } from 'zod2md';
 
 describe('zod2md exported function', () => {
   it('should generate markdown for commitlint example', async () => {

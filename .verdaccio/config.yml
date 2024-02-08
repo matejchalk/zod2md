@@ -1,0 +1,23 @@
+storage: ../tmp/local-registry/storage
+
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+    maxage: 60m
+
+packages:
+  zod2md:
+    access: $all
+    publish: $all
+    unpublish: $all
+  '**':
+    access: $all
+    proxy: npmjs
+
+logs:
+  type: stdout
+  format: pretty
+  level: warn
+
+publish:
+  allow_offline: true

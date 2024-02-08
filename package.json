@@ -33,12 +33,13 @@
     }
   },
   "scripts": {
-    "prepublishOnly": "npm test && npm run build",
+    "prepublishOnly": "npm run build",
+    "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "e2e": "vitest run --config e2e/vitest.config.ts",
-    "e2e:watch": "vitest watch --config e2e/vitest.config.ts",
-    "build": "tsup"
+    "verdaccio:serve": "verdaccio --config .verdaccio/config.yml",
+    "verdaccio:publish": "npm unpublish --registry http://localhost:4873 --force && npm publish --registry http://localhost:4873 --force"
   },
   "dependencies": {
     "@commander-js/extra-typings": "^12.0.0",
@@ -53,6 +54,7 @@
     "@types/node": "^20.11.0",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
+    "verdaccio": "^5.29.0",
     "vitest": "^1.2.2",
     "zod": "^3.22.4"
   }

@@ -7,7 +7,7 @@ const execAsync = promisify(exec);
 describe('zod2md CLI', () => {
   it('should generate markdown for commitlint example', async () => {
     const { stdout, stderr } = await execAsync(
-      'npx . --entry e2e/fixtures/commitlint/index.ts --output tmp/cli/commitlint.md --title "Commitlint config"'
+      'zod2md --entry e2e/fixtures/commitlint/index.ts --output tmp/cli/commitlint.md --title "Commitlint config"'
     );
 
     expect(stderr).toBe('');
@@ -20,7 +20,7 @@ describe('zod2md CLI', () => {
 
   it('should generate markdown for prettier example', async () => {
     const { stdout, stderr } = await execAsync(
-      `npx . --entry e2e/fixtures/prettier/prettierrc.js --output tmp/cli/prettier.md --title "Prettier configuration file reference"`
+      `zod2md --entry e2e/fixtures/prettier/prettierrc.js --output tmp/cli/prettier.md --title "Prettier configuration file reference"`
     );
 
     expect(stderr).toBe('');
@@ -33,7 +33,7 @@ describe('zod2md CLI', () => {
 
   it('should generate markdown for user-rest-api example', async () => {
     const { stdout, stderr } = await execAsync(
-      `npx . \\
+      `zod2md \\
          --entry e2e/fixtures/user-rest-api/endpoints/get-users.mjs \\
          --entry e2e/fixtures/user-rest-api/endpoints/get-user.mjs \\
          --entry e2e/fixtures/user-rest-api/endpoints/create-user.mjs \\
