@@ -28,13 +28,13 @@ describe('convert exported Zod schemas to models', () => {
             kind: 'model',
             key: 'id',
             required: true,
-            model: { type: 'number' },
+            model: { type: 'number', validations: ['int', ['gte', 0]] },
           },
           {
             kind: 'model',
             key: 'email',
             required: true,
-            model: { type: 'string' },
+            model: { type: 'string', validations: ['email'] },
           },
           {
             kind: 'model',
@@ -46,7 +46,7 @@ describe('convert exported Zod schemas to models', () => {
             kind: 'model',
             key: 'avatarUrl',
             required: false,
-            model: { type: 'string' },
+            model: { type: 'string', validations: ['url'] },
           },
           {
             kind: 'model',
@@ -194,7 +194,13 @@ describe('convert exported Zod schemas to models', () => {
             kind: 'model',
             key: 'rating',
             required: true,
-            model: { type: 'number' },
+            model: {
+              type: 'number',
+              validations: [
+                ['gte', 0],
+                ['lte', 5],
+              ],
+            },
           },
         ],
       },

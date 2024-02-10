@@ -36,7 +36,9 @@ import {
 import type {
   AnyModel,
   ArrayModel,
+  ArrayValidation,
   BigIntModel,
+  BigIntValidation,
   BooleanModel,
   DateModel,
   EnumModel,
@@ -52,10 +54,12 @@ import type {
   NeverModel,
   NullModel,
   NumberModel,
+  NumberValidation,
   ObjectModel,
   PromiseModel,
   RecordModel,
   StringModel,
+  StringValidation,
   SymbolModel,
   TupleModel,
   UndefinedModel,
@@ -244,9 +248,18 @@ function convertZodArray(
   schema: ZodArray<ZodTypeAny>,
   exportedSchemas: ExportedSchema[]
 ): ArrayModel {
+  const possibleValidations: (ArrayValidation | null)[] = [
+    schema._def.minLength && ['min', schema._def.minLength.value],
+    schema._def.maxLength && ['max', schema._def.maxLength.value],
+    schema._def.exactLength && ['length', schema._def.exactLength.value],
+  ];
+  const validations = possibleValidations.filter(
+    (value): value is ArrayValidation => value != null
+  );
   return {
     type: 'array',
     items: createModelOrRef(schema.element, exportedSchemas),
+    ...(validations.length > 0 && { validations }),
   };
 }
 
@@ -269,12 +282,64 @@ function convertZodObject(
 function convertZodString(schema: ZodString): StringModel {
   return {
     type: 'string',
+    ...(schema._def.checks.length > 0 && {
+      validations: schema._def.checks
+        .map((check): StringValidation | null => {
+          switch (check.kind) {
+            case 'min':
+            case 'max':
+            case 'length':
+              return [check.kind, check.value];
+            case 'email':
+            case 'url':
+            case 'emoji':
+            case 'uuid':
+            case 'cuid':
+            case 'cuid2':
+            case 'ulid':
+              return check.kind;
+            case 'regex':
+              return [check.kind, check.regex];
+            case 'includes':
+            case 'startsWith':
+            case 'endsWith':
+              return [check.kind, check.value];
+            case 'datetime':
+              return [
+                check.kind,
+                { offset: check.offset, precision: check.precision },
+              ];
+            case 'ip':
+              return [check.kind, { version: check.version }];
+            case 'toLowerCase':
+            case 'toUpperCase':
+            case 'trim':
+              return null;
+          }
+        })
+        .filter((value): value is StringValidation => value != null),
+    }),
   };
 }
 
 function convertZodNumber(schema: ZodNumber): NumberModel {
   return {
     type: 'number',
+    ...(schema._def.checks.length > 0 && {
+      validations: schema._def.checks.map((check): NumberValidation => {
+        switch (check.kind) {
+          case 'min':
+            return [check.inclusive ? 'gte' : 'gt', check.value];
+          case 'max':
+            return [check.inclusive ? 'lte' : 'lt', check.value];
+          case 'multipleOf':
+            return [check.kind, check.value];
+          case 'int':
+          case 'finite':
+            return check.kind;
+        }
+      }),
+    }),
   };
 }
 
@@ -409,6 +474,18 @@ function convertZodSymbol(schema: ZodSymbol): SymbolModel {
 function convertZodBigInt(schema: ZodBigInt): BigIntModel {
   return {
     type: 'bigint',
+    ...(schema._def.checks.length > 0 && {
+      validations: schema._def.checks.map((check): BigIntValidation => {
+        switch (check.kind) {
+          case 'min':
+            return [check.inclusive ? 'gte' : 'gt', check.value];
+          case 'max':
+            return [check.inclusive ? 'lte' : 'lt', check.value];
+          case 'multipleOf':
+            return [check.kind, check.value];
+        }
+      }),
+    }),
   };
 }
 

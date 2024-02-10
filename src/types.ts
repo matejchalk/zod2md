@@ -1,4 +1,4 @@
-import type { EnumLike, ZodType, z } from 'zod';
+import { z, type EnumLike, type ZodType } from 'zod';
 import type { FormatterOptions } from './formatter';
 import type { LoaderOptions } from './loader';
 
@@ -63,6 +63,7 @@ export type ModelOrRef =
 export type ArrayModel = {
   type: 'array';
   items: ModelOrRef;
+  validations?: ArrayValidation[];
 };
 
 export type ObjectModel = {
@@ -75,10 +76,12 @@ export type ObjectModel = {
 
 export type StringModel = {
   type: 'string';
+  validations?: StringValidation[];
 };
 
 export type NumberModel = {
   type: 'number';
+  validations?: NumberValidation[];
 };
 
 export type BooleanModel = {
@@ -151,6 +154,7 @@ export type SymbolModel = {
 
 export type BigIntModel = {
   type: 'bigint';
+  validations?: BigIntValidation[];
 };
 
 export type UnknownModel = {
@@ -168,3 +172,43 @@ export type VoidModel = {
 export type NeverModel = {
   type: 'never';
 };
+
+export type ArrayValidation =
+  | ['min', number]
+  | ['max', number]
+  | ['length', number];
+
+export type StringValidation =
+  | ['min', number]
+  | ['max', number]
+  | ['length', number]
+  | 'email'
+  | 'url'
+  | 'emoji'
+  | 'uuid'
+  | 'cuid'
+  | 'cuid2'
+  | 'ulid'
+  | ['regex', RegExp]
+  | ['includes', string]
+  | ['startsWith', string]
+  | ['endsWith', string]
+  | ['datetime', { offset: boolean; precision: number | null }]
+  | ['ip', { version?: 'v4' | 'v6' }];
+
+export type NumberValidation =
+  | ['gt', number]
+  | ['gte', number]
+  | ['lt', number]
+  | ['lte', number]
+  | 'int'
+  | ['multipleOf', number]
+  | 'finite'
+  | 'safe';
+
+export type BigIntValidation =
+  | ['gt', bigint]
+  | ['gte', bigint]
+  | ['lt', bigint]
+  | ['lte', bigint]
+  | ['multipleOf', bigint];
