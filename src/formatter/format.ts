@@ -33,8 +33,28 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
         const formattedObject = formatModel(model.items.model, transformName);
         return formattedObject.replace('Object', 'Array of objects');
       }
+      const lengthPrefix = model.validations?.length
+        ? smartJoin(
+            model.validations.map(([key, value]): string => {
+              switch (key) {
+                case 'min':
+                  return `at least ${value}`;
+                case 'max':
+                  return `at most ${value}`;
+                case 'length':
+                  return `exactly ${value}`;
+              }
+            }),
+            ' and '
+          ) + ' '
+        : '';
+      const isPlural =
+        model.validations?.every(([, value]) => value === 1) ?? true;
       return md.italic(
-        `Array of ${formatModelOrRef(model.items, transformName)} items.`
+        `Array of ${lengthPrefix}${formatModelOrRef(
+          model.items,
+          transformName
+        )} ${isPlural ? 'items' : 'item'}.`
       );
     case 'object':
       const hasDefault = model.fields.some(
@@ -163,10 +183,81 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
       );
     case 'string':
     case 'number':
+    case 'bigint':
+      if (model.validations?.length) {
+        return md.italic(
+          `${capitalize(model.type)} which ${smartJoin(
+            model.validations.map((validation): string => {
+              if (typeof validation === 'string') {
+                switch (validation) {
+                  case 'email':
+                  case 'emoji':
+                    return `is an ${validation}`;
+                  case 'url':
+                  case 'uuid':
+                  case 'cuid':
+                  case 'cuid2':
+                  case 'ulid':
+                    return `is a valid ${validation.toUpperCase()}`;
+                  case 'int':
+                    return 'is an integer';
+                  case 'finite':
+                    return 'is finite';
+                  case 'safe':
+                    return `is safe (i.e. between ${md.code.inline(
+                      'Number.MIN_SAFE_INTEGER'
+                    )} and ${md.code.inline('Number.MAX_SAFE_INTEGER')})`;
+                }
+              }
+              const [kind, value] = validation;
+              switch (kind) {
+                // string
+                case 'min':
+                case 'max':
+                  return `has a ${kind}imum length of ${value}`;
+                case 'length':
+                  return `has an exact length of ${value}`;
+                case 'regex':
+                  return `matches the regular expression ${md.code.inline(
+                    value.toString()
+                  )}`;
+                case 'includes':
+                  return `includes the substring "${value}"`;
+                case 'startsWith':
+                  return `starts with "${value}"`;
+                case 'endsWith':
+                  return `ends with "${value}"`;
+                case 'datetime':
+                  return `is a date and time in ISO 8601 format (${[
+                    value.offset ? 'UTC' : 'any timezone offset',
+                    ...(value.precision != null
+                      ? [
+                          `sub-second precision of ${value.precision} decimal places`,
+                        ]
+                      : []),
+                  ].join(',')})`;
+                case 'ip':
+                  return `is in IP${value.version ?? ''} address format`;
+                // number or bigint
+                case 'gt':
+                  return `is greater than ${value}`;
+                case 'gte':
+                  return `is greater than or equal to ${value}`;
+                case 'lt':
+                  return `is less than ${value}`;
+                case 'lte':
+                  return `is less than or equal to ${value}`;
+                case 'multipleOf':
+                  return value === 2 ? 'is even' : `is a multiple of ${value}`;
+              }
+            }),
+            'and'
+          )}.`
+        );
+      }
     case 'boolean':
     case 'date':
     case 'symbol':
-    case 'bigint':
     case 'null':
     case 'undefined':
       return md.italic(`${capitalize(model.type)}.`);
@@ -215,14 +306,38 @@ function formatModelInline(
 ): string {
   switch (model.type) {
     case 'array':
+      // TODO: un-duplicate
+      const lengthPrefix = model.validations?.length
+        ? smartJoin(
+            model.validations.map(([key, value]): string => {
+              switch (key) {
+                case 'min':
+                  return `at least ${value}`;
+                case 'max':
+                  return `at most ${value}`;
+                case 'length':
+                  return `exactly ${value}`;
+              }
+            }),
+            ' and '
+          ) + ' '
+        : '';
+      const isPlural =
+        model.validations?.every(([, value]) => value === 1) ?? true;
+
       if (model.items.kind === 'ref') {
         return md.italic(
-          `Array of ${formatRefLink(model.items.ref, transformName)} items`
+          `Array of ${lengthPrefix}${formatRefLink(
+            model.items.ref,
+            transformName
+          )} ${isPlural ? 'items' : 'item'}`
         );
       }
       if (model.items.model.type === 'object') {
         return md.paragraphs(
-          md.italic('Array of objects:'),
+          md.italic(
+            `Array of ${lengthPrefix}${isPlural ? 'objects' : 'object'}:`
+          ),
           formatModelInline(model.items.model, transformName).replace(
             /^_[^_]+_/,
             ''
@@ -232,7 +347,16 @@ function formatModelInline(
       const itemType = stripCode(
         formatModelInline(model.items.model, transformName)
       );
-      return md.code.inline(`Array<${itemType}>`);
+      return (
+        md.code.inline(`Array<${itemType}>`) +
+        (model.validations?.length
+          ? ` (${md.italic(
+              model.validations
+                .map(([key, value]) => `${key}: ${value}`)
+                .join(', ')
+            )})`
+          : '')
+      );
     case 'object':
       return (
         md.italic('Object with properties:') +
@@ -352,11 +476,45 @@ function formatModelInline(
       return md.code.inline(formatLiteral(model.value));
     case 'date':
       return md.code.inline('Date');
-    case 'boolean':
     case 'string':
     case 'number':
-    case 'symbol':
     case 'bigint':
+      if (model.validations?.length) {
+        const formattedValidations = model.validations.map(
+          (validation): string => {
+            if (typeof validation === 'string') {
+              return validation;
+            }
+            const [kind, value] = validation;
+            const formattedValue: string =
+              value instanceof RegExp
+                ? md.code.inline(value.toString())
+                : typeof value === 'object'
+                ? Object.entries(value)
+                    .map(([key, value]) => `${key}=${value}`)
+                    .join(' and ')
+                : value.toString();
+            switch (kind) {
+              case 'gt':
+                return `>${formattedValue}`;
+              case 'gte':
+                return `>=${formattedValue}`;
+              case 'lt':
+                return `<${formattedValue}`;
+              case 'lte':
+                return `<=${formattedValue}`;
+              case 'multipleOf':
+                return value === 2 ? 'even' : `multiple of ${formattedValue}`;
+            }
+            return `${kind}: ${formattedValue}`;
+          }
+        );
+        return `${md.code.inline(model.type)} (${md.italic(
+          formattedValidations.join(', ')
+        )})`;
+      }
+    case 'boolean':
+    case 'symbol':
     case 'null':
     case 'undefined':
     case 'unknown':
