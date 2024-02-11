@@ -41,7 +41,9 @@
     "e2e": "vitest run --config e2e/vitest.config.ts",
     "e2e:update": "vitest run --config e2e/vitest.config.ts -u",
     "verdaccio:serve": "verdaccio --config .verdaccio/config.yml",
-    "verdaccio:publish": "npm unpublish --registry http://localhost:4873 --force && npm publish --registry http://localhost:4873 --force"
+    "verdaccio:publish": "npm unpublish --registry http://localhost:4873 --force && npm publish --registry http://localhost:4873 --force",
+    "release": "release-it",
+    "release:dry-run": "release-it --dry-run"
   },
   "dependencies": {
     "@commander-js/extra-typings": "^12.0.0",
@@ -54,6 +56,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
+    "release-it": "^17.0.3",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
     "verdaccio": "^5.29.0",
