@@ -1,8 +1,9 @@
 # zod2md
 
 [![NPM package version](https://img.shields.io/npm/v/zod2md)](https://www.npmjs.com/package/zod2md)
-[![MIT License](https://img.shields.io/npm/l/zod2md)](https://opensource.org/license/mit/)
+[![MIT license](https://img.shields.io/npm/l/zod2md)](https://opensource.org/license/mit/)
 [![Zod peer dependency version](https://img.shields.io/npm/dependency-version/zod2md/peer/zod)](https://www.npmjs.com/package/zod)
+[![CI status](https://img.shields.io/github/actions/workflow/status/matejchalk/zod2md/ci.yml)](https://github.com/matejchalk/zod2md/actions/workflows/ci.yml)
 
 **Generate Markdown docs from [Zod](https://zod.dev/) schemas.**
 
@@ -101,3 +102,4 @@ A few examples of inputs and outputs are provided (used in E2E tests):
 - Run unit tests with `npm test` (uses [Vitest](https://vitest.dev/)).
 - Run E2E tests with `npm run e2e` (uses [Vitest](https://vitest.dev/) and [Verdaccio](https://verdaccio.org/)).
 - Build library with `npm run build` (uses [tsup](https://tsup.egoist.dev/)).
+- Release new version with `npm run release` (uses [release-it](https://github.com/release-it/release-it?tab=readme-ov-file)).
