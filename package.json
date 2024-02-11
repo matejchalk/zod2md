@@ -37,7 +37,9 @@
     "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest watch",
+    "test:update": "vitest run -u",
     "e2e": "vitest run --config e2e/vitest.config.ts",
+    "e2e:update": "vitest run --config e2e/vitest.config.ts -u",
     "verdaccio:serve": "verdaccio --config .verdaccio/config.yml",
     "verdaccio:publish": "npm unpublish --registry http://localhost:4873 --force && npm publish --registry http://localhost:4873 --force"
   },

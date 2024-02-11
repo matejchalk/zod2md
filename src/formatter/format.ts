@@ -78,7 +78,7 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
                 ? [
                     'default' in meta
                       ? md.code.inline(formatLiteral(meta.default))
-                      : '-',
+                      : '',
                   ]
                 : []),
             ];
@@ -486,27 +486,36 @@ function formatModelInline(
               return validation;
             }
             const [kind, value] = validation;
-            const formattedValue: string =
-              value instanceof RegExp
-                ? md.code.inline(value.toString())
-                : typeof value === 'object'
-                ? Object.entries(value)
-                    .map(([key, value]) => `${key}=${value}`)
-                    .join(' and ')
-                : value.toString();
             switch (kind) {
               case 'gt':
-                return `>${formattedValue}`;
+                return `>${value}`;
               case 'gte':
-                return `>=${formattedValue}`;
+                return `≥${value}`;
               case 'lt':
-                return `<${formattedValue}`;
+                return `<${value}`;
               case 'lte':
-                return `<=${formattedValue}`;
+                return `≤${value}`;
               case 'multipleOf':
-                return value === 2 ? 'even' : `multiple of ${formattedValue}`;
+                return value === 2 ? 'even' : `multiple of ${value}`;
+              case 'min':
+              case 'max':
+                return `${kind} length: ${value}`;
+              case 'regex':
+                return `${kind}: ${md.code.inline(value.toString())}`;
+              case 'datetime':
+                const options = [
+                  value.offset ? '' : 'no timezone offset',
+                  value.precision != null
+                    ? `${value.precision} decimals sub-second precision`
+                    : '',
+                ]
+                  .filter(Boolean)
+                  .join(' and ');
+                return options ? 'ISO 8601' : `ISO 8601 - ${options}`;
+              case 'ip':
+                return `IP${value.version ?? ''}`;
             }
-            return `${kind}: ${formattedValue}`;
+            return `${kind}: ${value}`;
           }
         );
         return `${md.code.inline(model.type)} (${md.italic(

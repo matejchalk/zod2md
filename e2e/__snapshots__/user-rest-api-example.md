@@ -4,10 +4,10 @@
 
 _Object containing the following properties:_
 
-| Property   | Type                         | Default |
-| :--------- | :--------------------------- | :------ |
-| `page`     | `number` (_int, >=1_)        | `1`     |
-| `pageSize` | `number` (_int, >=0, <=100_) | `30`    |
+| Property   | Type                       | Default |
+| :--------- | :------------------------- | :------ |
+| `page`     | `number` (_int, ≥1_)       | `1`     |
+| `pageSize` | `number` (_int, ≥0, ≤100_) | `30`    |
 
 _All properties are optional._
 
@@ -54,7 +54,7 @@ _Object containing the following properties:_
 | **`email`** (\*)    | `string` (_email_)                        |
 | `firstName`         | `string`                                  |
 | `lastName`          | `string`                                  |
-| **`password`** (\*) | `string` (_min: 6_)                       |
+| **`password`** (\*) | `string` (_min length: 6_)                |
 
 _(\*) Required._
 
