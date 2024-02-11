@@ -1,5 +1,9 @@
 # zod2md
 
+[![NPM package version](https://img.shields.io/npm/v/zod2md)](https://www.npmjs.com/package/zod2md)
+[![MIT License](https://img.shields.io/npm/l/zod2md)](https://opensource.org/license/mit/)
+[![Zod peer dependency version](https://img.shields.io/npm/dependency-version/zod2md/peer/zod)](https://www.npmjs.com/package/zod)
+
 **Generate Markdown docs from [Zod](https://zod.dev/) schemas.**
 
 ![image](./images/zod2md.png)
@@ -44,15 +48,15 @@ CLI arguments take precedence over configuration file values.
 
 ### CLI arguments
 
-| Option          | Type             | Required | Description                                                                   |
-| :-------------- | :--------------- | :------: | :---------------------------------------------------------------------------- |
-| `-e`/`--entry`  | `string[]` (\*)  |   yes    | Entry point(s), i.e. paths to modules with Zod schema exports                 |
-| `-t`/`--title`  | `string`         |   yes    | Heading text for Markdown document                                            |
-| `-o`/`--output` | `string`         |   yes    | Output file path where Markdown document will be generared                    |
-| `--tsconfig`    | `string`         |    no    | Path to `tsconfig.json` to be used when importing entry point(s)              |
-| `-f`/`--format` | `'esm' \| 'cjs'` |    no    | Module type to assume when importing entry point(s) (ES Modules vs CommonJS)  |
-| `-c`/`--config` | `string`         |    no    | Path to configuration file - looks for `zod2md.config.{ts,mjs,js}` by default |
-| `-h`/`--help`   | `boolean`        |    no    | Display CLI help and exit                                                     |
+| Option           | Type             | Required | Description                                                         |
+| :--------------- | :--------------- | :------: | :------------------------------------------------------------------ |
+| `-e`, `--entry`  | `string[]` (\*)  |   yes    | Entry point(s), i.e. paths to modules with Zod schema exports       |
+| `-t`, `--title`  | `string`         |   yes    | Heading text for Markdown document                                  |
+| `-o`, `--output` | `string`         |   yes    | Output file path where Markdown document will be generared          |
+| `--tsconfig`     | `string`         |    no    | Path to `tsconfig.json` to be used when importing entry point(s)    |
+| `-f`, `--format` | `'esm' \| 'cjs'` |    no    | Module type to assume when importing entry point(s)                 |
+| `-c`, `--config` | `string`         |    no    | Path to configuration file (default is `zod2md.config.{ts,mjs,js}`) |
+| `-h`, `--help`   | `boolean`        |    no    | Display CLI help and exit                                           |
 
 (\*) Use `--entry PATH_1 --entry PATH_2` to provide multiple paths.
 
@@ -62,7 +66,7 @@ CLI arguments take precedence over configuration file values.
 | :-------------- | :---------------------------------------------------- | :------: | :----------------------------------------------------------------------------------------- |
 | `entry`         | `string \| string[]`                                  |   yes    | Entry point(s), i.e. paths to modules with Zod schema exports                              |
 | `tsconfig`      | `string`                                              |    no    | Path to `tsconfig.json` to be used when importing entry point(s)                           |
-| `format`        | `'esm' \| 'cjs'`                                      |    no    | Module type to assume when importing entry point(s) (ES Modules vs CommonJS)               |
+| `format`        | `'esm' \| 'cjs'`                                      |    no    | Module type to assume when importing entry point(s)                                        |
 | `title`         | `string`                                              |   yes    | Heading text for Markdown document                                                         |
 | `transformName` | `(name: string \| undefined, path: string) => string` |    no    | Custom function for convert exported variable `name` and file `path` to display title (\*) |
 
