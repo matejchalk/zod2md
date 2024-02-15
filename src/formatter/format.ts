@@ -5,6 +5,8 @@ import * as md from './markdown';
 import { defaultNameTransform } from './name-transform';
 import type { NameTransformFn } from './types';
 
+const MAX_VALUES = 20;
+
 export function formatModelsAsMarkdown(
   models: NamedModel[],
   options: FormatterOptions
@@ -97,11 +99,20 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
         )
       );
     case 'enum':
+      const enumList = md.list.unordered(
+        model.values.map(value => md.code.inline(`'${value}'`))
+      );
       return md.paragraphs(
         md.italic('Enum string, one of the following possible values:'),
-        md.list.unordered(
-          model.values.map(value => md.code.inline(`'${value}'`))
-        )
+        model.values.length > MAX_VALUES
+          ? md.details(
+              md.italic(
+                `Expand for full list of ${model.values.length} values`,
+                'html'
+              ),
+              enumList
+            )
+          : enumList
       );
     case 'native-enum':
       return md.paragraphs(
@@ -373,7 +384,11 @@ function formatModelInline(
       );
     case 'enum':
       return md.code.inline(
-        model.values.map(value => `'${value}'`).join(' | ')
+        model.values
+          .slice(0, MAX_VALUES)
+          .map(value => `'${value}'`)
+          .concat(model.values.length > MAX_VALUES ? ['...'] : [])
+          .join(' | ')
       );
     case 'native-enum':
       return (

@@ -17,9 +17,11 @@ export const paragraphs = (...texts: (string | null | undefined | false)[]) =>
 export const heading = (level: 1 | 2 | 3 | 4 | 5 | 6, text: string) =>
   `${'#'.repeat(level)} ${text}`;
 
-export const bold = (text: string) => `**${text}**`;
+export const bold = (text: string, lang: 'md' | 'html' = 'md') =>
+  lang === 'html' ? `<b>${text}</b>` : `**${text}**`;
 
-export const italic = (text: string) => `_${text}_`;
+export const italic = (text: string, lang: 'md' | 'html' = 'md') =>
+  lang === 'html' ? `<i>${text}</i>` : `_${text}_`;
 
 export const link = (href: string, text?: string) =>
   `[${text ?? href}](${href})`;
@@ -99,3 +101,11 @@ export const table = (
 
   return lines(...rows.map(row => `| ${row.map(formatCell).join(' | ')} |`));
 };
+
+export const details = (summary: string, details: string) =>
+  lines(
+    '<details>',
+    `<summary>${summary}</summary>`,
+    `\n${details}\n`.replace(/^\n{2,}/, '\n').replace(/\n{2,}$/, '\n'),
+    '</details>'
+  );
