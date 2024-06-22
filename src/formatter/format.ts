@@ -1,9 +1,8 @@
 import type { EnumLike } from 'zod';
-import type { FormatterOptions } from '.';
 import type { Model, ModelMeta, ModelOrRef, NamedModel, Ref } from '../types';
 import * as md from './markdown';
 import { defaultNameTransform } from './name-transform';
-import type { NameTransformFn } from './types';
+import type { NameTransformFn, FormatterOptions } from './types';
 
 const MAX_VALUES = 20;
 

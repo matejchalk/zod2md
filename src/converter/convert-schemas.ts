@@ -3,6 +3,7 @@ import {
   ZodArray,
   ZodBigInt,
   ZodBoolean,
+  ZodBranded,
   ZodDate,
   ZodDefault,
   ZodEffects,
@@ -165,6 +166,9 @@ function convertSchema(
   }
   if (schema instanceof ZodEffects) {
     return convertSchema(schema._def.schema, exportedSchemas);
+  }
+  if (schema instanceof ZodBranded) {
+    return convertSchema(schema._def.type, exportedSchemas);
   }
 
   if (schema instanceof ZodArray) {

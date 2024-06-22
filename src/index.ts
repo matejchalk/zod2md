@@ -9,6 +9,6 @@ export async function zod2md(options: Options): Promise<string> {
   return formatModelsAsMarkdown(models, options);
 }
 
-export { convertSchemas, formatModelsAsMarkdown, loadZodSchemas }
+export { convertSchemas, formatModelsAsMarkdown, loadZodSchemas };
 
 export type { Config, Options } from './types';
