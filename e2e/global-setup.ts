@@ -18,7 +18,6 @@ export async function setup() {
   await promisify(exec)(
     `npm-cli-login -u test -p 1234 -e test@example.com -r ${registry}`
   );
-  await promisify(exec)(`npm unpublish --registry ${registry} --force`);
   await promisify(exec)(`npm publish --registry ${registry} --force`);
   console.info('🚀 Published package to local registry');
 
