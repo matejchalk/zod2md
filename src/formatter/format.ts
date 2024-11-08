@@ -391,7 +391,7 @@ function formatModelInline(
       );
     case 'native-enum':
       return (
-        md.italic('Native enum: ') +
+        md.italic('Native enum:') +
         md.list.html.unordered(
           nativeEnumEntries(model.enum).map(([key, value]) =>
             md.code.inline(`${key} = ${formatLiteral(value)}`)
