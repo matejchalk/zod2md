@@ -6,6 +6,7 @@ import {
   ZodBranded,
   ZodDate,
   ZodDefault,
+  ZodDiscriminatedUnion,
   ZodEffects,
   ZodEnum,
   ZodFunction,
@@ -18,6 +19,7 @@ import {
   ZodNumber,
   ZodObject,
   ZodOptional,
+  ZodPipeline,
   ZodPromise,
   ZodReadonly,
   ZodRecord,
@@ -239,6 +241,15 @@ function convertSchema(
   }
   if (schema instanceof ZodNever) {
     return convertZodNever(schema);
+  }
+  if (schema instanceof ZodPipeline) {
+    return convertSchema(schema._def.out, exportedSchemas);
+  }
+  if (schema instanceof ZodDiscriminatedUnion) {
+    return {
+      type: 'union',
+      options: schema._def.options.map((option: any) => createModelOrRef(option, exportedSchemas)),
+    };
   }
 
   throw new Error(
