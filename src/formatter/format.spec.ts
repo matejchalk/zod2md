@@ -1,8 +1,8 @@
 import { formatModelsAsMarkdown } from './format';
 
 describe('format models from Zod as Markdown document', () => {
-  it('should format single export', () => {
-    expect(
+  it('should format single export', async () => {
+    await expect(
       formatModelsAsMarkdown(
         [
           {
@@ -63,8 +63,8 @@ describe('format models from Zod as Markdown document', () => {
     ).toMatchFileSnapshot('__snapshots__/single-export.md');
   });
 
-  it('should format multiple exports', () => {
-    expect(
+  it('should format multiple exports', async () => {
+    await expect(
       formatModelsAsMarkdown(
         [
           {
