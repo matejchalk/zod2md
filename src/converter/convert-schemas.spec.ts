@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z, ZodType, type ZodTypeDef } from 'zod';
 import type { NamedModel } from '../types';
 import { convertSchemas } from './convert-schemas';
 
@@ -207,6 +207,40 @@ describe('convert exported Zod schemas to models', () => {
     ]);
   });
 
+  it('should warn if type unsupported and use never', () => {
+    vi.spyOn(console, 'warn').mockReturnValue();
+
+    expect(
+      convertSchemas([
+        { path: 'schemas.ts', name: 'ID', schema: z.string().brand('ID') },
+        {
+          path: 'schemas.ts',
+          name: 'Experimental',
+          schema: {
+            _def: { typeName: 'ZodExperimental' } as ZodTypeDef,
+            isOptional: () => false,
+            isNullable: () => false,
+          } as ZodType,
+        },
+      ])
+    ).toEqual<NamedModel[]>([
+      {
+        type: 'string',
+        name: 'ID',
+        path: 'schemas.ts',
+      },
+      {
+        type: 'never',
+        name: 'Experimental',
+        path: 'schemas.ts',
+      },
+    ]);
+
+    expect(console.warn).toHaveBeenCalledWith(
+      `WARNING: Zod type ZodExperimental is not supported, using never.\nIf you'd like support for ZodExperimental to be added, please create an issue: https://github.com/matejchalk/zod2md/issues/new`
+    );
+  });
+
   it('should support the ZodPipeline type', () => {
     const PostalCodeSchema = z
       .string()
@@ -219,7 +253,7 @@ describe('convert exported Zod schemas to models', () => {
       convertSchemas([
         { path: 'postalcode.ts', schema: PostalCodeSchema, name: 'PostalCode' },
       ])
-    ).toEqual(<NamedModel[]>[
+    ).toEqual<NamedModel[]>([
       {
         name: 'PostalCode',
         path: 'postalcode.ts',

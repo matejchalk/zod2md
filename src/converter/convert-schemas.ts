@@ -258,11 +258,18 @@ function convertSchema(
     };
   }
 
-  throw new Error(
-    `Zod type ${
-      'typeName' in schema._def ? schema._def.typeName : '<unknown>'
-    } is not supported`
-  );
+  const typeName = 'typeName' in schema._def ? schema._def.typeName : null;
+  const message = [
+    `WARNING: Zod type ${
+      typeName ?? '<unknown>'
+    } is not supported, using never.`,
+    typeName &&
+      `If you'd like support for ${typeName} to be added, please create an issue: https://github.com/matejchalk/zod2md/issues/new`,
+  ]
+    .filter(Boolean)
+    .join('\n');
+  console.warn(message);
+  return { type: 'never' };
 }
 
 function convertZodArray(
