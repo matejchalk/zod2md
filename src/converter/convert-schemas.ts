@@ -4,6 +4,7 @@ import {
   ZodBigInt,
   ZodBoolean,
   ZodBranded,
+  ZodCatch,
   ZodDate,
   ZodDefault,
   ZodDiscriminatedUnion,
@@ -169,6 +170,9 @@ function convertSchema(
   if (schema instanceof ZodEffects) {
     return convertSchema(schema._def.schema, exportedSchemas);
   }
+  if (schema instanceof ZodCatch) {
+    return convertSchema(schema._def.innerType, exportedSchemas);
+  }
   if (schema instanceof ZodBranded) {
     return convertSchema(schema._def.type, exportedSchemas);
   }
@@ -248,7 +252,9 @@ function convertSchema(
   if (schema instanceof ZodDiscriminatedUnion) {
     return {
       type: 'union',
-      options: schema._def.options.map((option: any) => createModelOrRef(option, exportedSchemas)),
+      options: schema._def.options.map((option: any) =>
+        createModelOrRef(option, exportedSchemas)
+      ),
     };
   }
 

@@ -210,95 +210,131 @@ describe('convert exported Zod schemas to models', () => {
   it('should support the ZodPipeline type', () => {
     const PostalCodeSchema = z
       .string()
-      .transform((postalCode: string) => postalCode.toUpperCase().replaceAll(' ', ''))
+      .transform((postalCode: string) =>
+        postalCode.toUpperCase().replaceAll(' ', '')
+      )
       .pipe(z.string().regex(/^\d{4}(?:[A-Z]{2}|\d)?$/, 'Invalid postal code'));
 
-    expect(convertSchemas([{path: 'postalcode.ts', schema: PostalCodeSchema, name: 'PostalCode'}])).toEqual(<NamedModel[]>[{
-      name: "PostalCode",
-      path: "postalcode.ts",
-      type: "string",
-      validations:  [
-         [
-          "regex",
-          /^\d{4}(?:[A-Z]{2}|\d)?$/,
-        ],
-      ],
-    }]);
+    expect(
+      convertSchemas([
+        { path: 'postalcode.ts', schema: PostalCodeSchema, name: 'PostalCode' },
+      ])
+    ).toEqual(<NamedModel[]>[
+      {
+        name: 'PostalCode',
+        path: 'postalcode.ts',
+        type: 'string',
+        validations: [['regex', /^\d{4}(?:[A-Z]{2}|\d)?$/]],
+      },
+    ]);
   });
 
   it('should suppot the ZodDiscriminatedUnion type', () => {
-    const schemaA = z.object({
-      type: z.literal('first'),
-      name: z.string()
-    }).describe('Schema A');
-    const schemaB = z.object({
-      type: z.literal('second'),
-      age: z.number().min(21).max(90)
-    }).describe('Schema B');
+    const schemaA = z
+      .object({
+        type: z.literal('first'),
+        name: z.string(),
+      })
+      .describe('Schema A');
+    const schemaB = z
+      .object({
+        type: z.literal('second'),
+        age: z.number().min(21).max(90),
+      })
+      .describe('Schema B');
     const unionSchema = z.discriminatedUnion('type', [schemaA, schemaB]);
 
-    expect(convertSchemas([{path: 'unionschema.ts', name: 'Union', schema: unionSchema}])).toEqual<NamedModel[]>([{
-      name: "Union",
-      options: [
-        {
-          kind: "model",
-          model: {
-            description: "Schema A",
-            fields: [
-              {
-                key: "type",
-                kind: "model",
-                model: {
-                  type: "literal",
-                  value: "first",
+    expect(
+      convertSchemas([
+        { path: 'unionschema.ts', name: 'Union', schema: unionSchema },
+      ])
+    ).toEqual<NamedModel[]>([
+      {
+        name: 'Union',
+        options: [
+          {
+            kind: 'model',
+            model: {
+              description: 'Schema A',
+              fields: [
+                {
+                  key: 'type',
+                  kind: 'model',
+                  model: {
+                    type: 'literal',
+                    value: 'first',
+                  },
+                  required: true,
                 },
-                required: true,
-              },
-              {
-                key: "name",
-                kind: "model",
-                model: {
-                  type: "string",
+                {
+                  key: 'name',
+                  kind: 'model',
+                  model: {
+                    type: 'string',
+                  },
+                  required: true,
                 },
-                required: true,
-              },
-            ],
-            type: "object",
+              ],
+              type: 'object',
+            },
           },
-        },
-        {
-          kind: "model",
-          model: {
-            description: "Schema B",
-            fields: [
-              {
-                key: "type",
-                kind: "model",
-                model: {
-                  type: "literal",
-                  value: "second",
+          {
+            kind: 'model',
+            model: {
+              description: 'Schema B',
+              fields: [
+                {
+                  key: 'type',
+                  kind: 'model',
+                  model: {
+                    type: 'literal',
+                    value: 'second',
+                  },
+                  required: true,
                 },
-                required: true,
-              },
-              {
-                key: "age",
-                kind: "model",
-                model: {
-                  type: "number",
-                  validations: [
-                    ["gte", 21],
-                    ["lte", 90],
-                  ],
+                {
+                  key: 'age',
+                  kind: 'model',
+                  model: {
+                    type: 'number',
+                    validations: [
+                      ['gte', 21],
+                      ['lte', 90],
+                    ],
+                  },
+                  required: true,
                 },
-                required: true,
-              },
-            ],
-            type: "object",
+              ],
+              type: 'object',
+            },
           },
+        ],
+        path: 'unionschema.ts',
+        type: 'union',
+      },
+    ]);
+  });
+
+  it('should support the ZodCatch type', () => {
+    const permissiveUrlSchema = z.string().url().catch('');
+
+    expect(
+      convertSchemas([
+        {
+          path: 'utils.ts',
+          schema: permissiveUrlSchema,
+          name: 'URL',
         },
-      ],
-      path: "unionschema.ts",
-      type: "union",
-    }])
-  })
+      ])
+    ).toEqual(<NamedModel[]>[
+      {
+        name: 'URL',
+        path: 'utils.ts',
+        type: 'string',
+        validations: ['url'],
+        nullable: true,
+        optional: true,
+      },
+    ]);
+  });
 });
