@@ -12,6 +12,7 @@ import {
   ZodEnum,
   ZodFunction,
   ZodIntersection,
+  ZodLazy,
   ZodLiteral,
   ZodNativeEnum,
   ZodNever,
@@ -183,6 +184,9 @@ function convertSchema(
   }
   if (schema instanceof ZodBranded) {
     return convertSchema(schema._def.type, exportedSchemas);
+  }
+  if (schema instanceof ZodLazy) {
+    return convertSchema(schema._def.getter(), exportedSchemas);
   }
 
   if (schema instanceof ZodArray) {

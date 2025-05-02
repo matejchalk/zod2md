@@ -372,12 +372,60 @@ describe('convert exported Zod schemas to models', () => {
           name: 'URL',
         },
       ])
-    ).toEqual(<NamedModel[]>[
+    ).toEqual<NamedModel[]>([
       {
         name: 'URL',
         path: 'utils.ts',
         type: 'string',
         validations: ['url'],
+      },
+    ]);
+  });
+
+  it('should support the ZodLazy type', () => {
+    const baseCategorySchema = z.object({
+      name: z.string(),
+    });
+    type Category = z.infer<typeof baseCategorySchema> & {
+      subcategories: Category[];
+    };
+    const categorySchema: z.ZodType<Category> = baseCategorySchema.extend({
+      subcategories: z.lazy(() => categorySchema.array()),
+    });
+
+    expect(
+      convertSchemas([
+        {
+          path: 'recursive.ts',
+          schema: categorySchema,
+          name: 'Category',
+        },
+      ])
+    ).toEqual<NamedModel[]>([
+      {
+        name: 'Category',
+        path: 'recursive.ts',
+        type: 'object',
+        fields: [
+          {
+            key: 'name',
+            kind: 'model',
+            model: { type: 'string' },
+            required: true,
+          },
+          {
+            key: 'subcategories',
+            kind: 'model',
+            model: {
+              type: 'array',
+              items: {
+                kind: 'ref',
+                ref: { path: 'recursive.ts', name: 'Category' },
+              },
+            },
+            required: true,
+          },
+        ],
       },
     ]);
   });
