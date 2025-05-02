@@ -350,7 +350,19 @@ describe('convert exported Zod schemas to models', () => {
   });
 
   it('should support the ZodCatch type', () => {
-    const permissiveUrlSchema = z.string().url().catch('');
+    const permissiveUrlSchema = z
+      .string()
+      .url()
+      .catch(ctx => {
+        if (
+          ctx.error.errors.length === 1 &&
+          ctx.error.errors[0]?.code === 'invalid_string' &&
+          ctx.error.errors[0].validation === 'url'
+        ) {
+          return '';
+        }
+        throw ctx.error;
+      });
 
     expect(
       convertSchemas([
@@ -366,8 +378,6 @@ describe('convert exported Zod schemas to models', () => {
         path: 'utils.ts',
         type: 'string',
         validations: ['url'],
-        nullable: true,
-        optional: true,
       },
     ]);
   });

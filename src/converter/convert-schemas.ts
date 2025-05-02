@@ -138,10 +138,18 @@ function schemaToMeta(
   schema: ZodType<unknown>,
   implicitOptional?: boolean
 ): Omit<ModelMeta, 'default'> {
+  const safeCheck = (is: () => boolean) => {
+    try {
+      return is();
+    } catch {
+      return false;
+    }
+  };
   return {
     ...(schema.description && { description: schema.description }),
-    ...(!implicitOptional && schema.isOptional() && { optional: true }),
-    ...(schema.isNullable() && { nullable: true }),
+    ...(!implicitOptional &&
+      safeCheck(schema.isOptional) && { optional: true }),
+    ...(safeCheck(schema.isNullable) && { nullable: true }),
   };
 }
 
