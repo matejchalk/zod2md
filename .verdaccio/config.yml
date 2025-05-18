@@ -25,3 +25,7 @@ log:
 
 publish:
   allow_offline: true
+
+security:
+  api:
+    migrateToSecureLegacySignature: true
