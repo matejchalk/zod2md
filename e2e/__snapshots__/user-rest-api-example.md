@@ -15,9 +15,9 @@ _All properties are optional._
 
 _Object containing the following properties:_
 
-| Property         | Type                                                                                                                                                                                            |
-| :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`users`** (\*) | _Array of objects:_<br /><ul><li>`username`: `string` (_regex: `/^[a-z][a-z0-9.]*$/`_)</li><li>`email`: `string` (_email_)</li><li>`firstName`: `string`</li><li>`lastName`: `string`</li></ul> |
+| Property         | Type                                                                                                                                                                                                              |
+| :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`users`** (\*) | _Array of objects:_<br /><ul><li>**`username`** (\*): `string` (_regex: `/^[a-z][a-z0-9.]*$/`_)</li><li>**`email`** (\*): `string` (_email_)</li><li>`firstName`: `string`</li><li>`lastName`: `string`</li></ul> |
 
 _(\*) Required._
 
