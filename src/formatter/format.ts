@@ -375,7 +375,7 @@ function formatModelInline(
             const formattedType = formatModelOrRef(field, transformName);
             const { description } = metaFromModelOrRef(field);
             const formattedDescription = description ? ` - ${description}` : '';
-            return `${md.code.inline(
+            return `${field.required ?  `${md.bold(md.code.inline(field.key))} (\\*)` :   md.code.inline(
               field.key
             )}: ${formattedType}${formattedDescription}`;
           })
