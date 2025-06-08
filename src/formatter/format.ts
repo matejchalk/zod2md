@@ -1,8 +1,14 @@
-import type { EnumLike } from 'zod';
-import type { Model, ModelMeta, ModelOrRef, NamedModel, Ref } from '../types';
+import type {
+  Model,
+  ModelMeta,
+  ModelOrRef,
+  NamedModel,
+  NativeEnumModel,
+  Ref,
+} from '../types';
 import * as md from './markdown';
 import { defaultNameTransform } from './name-transform';
-import type { NameTransformFn, FormatterOptions } from './types';
+import type { FormatterOptions, NameTransformFn } from './types';
 
 const MAX_VALUES = 20;
 
@@ -99,10 +105,14 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
       );
     case 'enum':
       const enumList = md.list.unordered(
-        model.values.map(value => md.code.inline(`'${value}'`))
+        model.values.map(value =>
+          typeof value === 'number'
+            ? md.code.inline(value.toString())
+            : md.code.inline(`'${value}'`)
+        )
       );
       return md.paragraphs(
-        md.italic('Enum string, one of the following possible values:'),
+        md.italic('Enum, one of the following possible values:'),
         model.values.length > MAX_VALUES
           ? md.details(
               md.italic(
@@ -208,6 +218,13 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
                   case 'cuid':
                   case 'cuid2':
                   case 'ulid':
+                  case 'nanoid':
+                  case 'base64':
+                  case 'base64url':
+                  case 'jwt':
+                  case 'date':
+                  case 'time':
+                  case 'duration':
                     return `is a valid ${validation.toUpperCase()}`;
                   case 'int':
                     return 'is an integer';
@@ -217,6 +234,18 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
                     return `is safe (i.e. between ${md.code.inline(
                       'Number.MIN_SAFE_INTEGER'
                     )} and ${md.code.inline('Number.MAX_SAFE_INTEGER')})`;
+                  case 'safeint':
+                    return `is a safe integer (i.e. between ${md.code.inline(
+                      'Number.MIN_SAFE_INTEGER'
+                    )} and ${md.code.inline('Number.MAX_SAFE_INTEGER')})`;
+                  case 'int32':
+                    return 'is a 32-bit integer';
+                  case 'uint32':
+                    return 'is a 32-bit unsigned integer';
+                  case 'float32':
+                    return 'is a 32-bit floating-point number';
+                  case 'float64':
+                    return 'is a 64-bit floating-point number';
                 }
               }
               const [kind, value] = validation;
@@ -245,9 +274,11 @@ function formatModel(model: Model, transformName: NameTransformFn): string {
                           `sub-second precision of ${value.precision} decimal places`,
                         ]
                       : []),
-                  ].join(',')})`;
+                  ].join(', ')})`;
                 case 'ip':
                   return `is in IP${value.version ?? ''} address format`;
+                case 'cidr':
+                  return `is in CIDR${value.version ?? ''} address format`;
                 // number or bigint
                 case 'gt':
                   return `is greater than ${value}`;
@@ -375,9 +406,11 @@ function formatModelInline(
             const formattedType = formatModelOrRef(field, transformName);
             const { description } = metaFromModelOrRef(field);
             const formattedDescription = description ? ` - ${description}` : '';
-            return `${field.required ?  `${md.bold(md.code.inline(field.key))} (\\*)` :   md.code.inline(
-              field.key
-            )}: ${formattedType}${formattedDescription}`;
+            return `${
+              field.required
+                ? `${md.bold(md.code.inline(field.key))} (\\*)`
+                : md.code.inline(field.key)
+            }: ${formattedType}${formattedDescription}`;
           })
         )
       );
@@ -571,7 +604,9 @@ function formatLiteral(value: unknown): string {
   }
 }
 
-function nativeEnumEntries(enumObj: EnumLike): [string, string | number][] {
+function nativeEnumEntries(
+  enumObj: NativeEnumModel['enum']
+): [string, string | number][] {
   const numbers = Object.values(enumObj).filter(
     value => typeof value === 'number'
   );
