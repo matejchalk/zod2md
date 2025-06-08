@@ -17,7 +17,7 @@ _(\*) Required._
 
 Module format
 
-_Enum string, one of the following possible values:_
+_Enum, one of the following possible values:_
 
 - `'esm'`
 - `'cjs'`
@@ -26,7 +26,7 @@ _Enum string, one of the following possible values:_
 
 Target platform
 
-_Enum string, one of the following possible values:_
+_Enum, one of the following possible values:_
 
 - `'browser'`
 - `'node'`

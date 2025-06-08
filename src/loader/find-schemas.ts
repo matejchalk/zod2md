@@ -1,15 +1,17 @@
-import { ZodType } from 'zod';
+import * as z3 from 'zod/v3';
+import * as z4 from 'zod/v4';
 import type { ExportedSchema } from '../types';
 import type { ImportedModules } from './types';
 
 export function findZodSchemas(modules: ImportedModules): ExportedSchema[] {
   return Object.entries(modules).flatMap(([path, mod]) => {
-    if (mod instanceof ZodType) {
+    if (mod instanceof z3.ZodType || mod instanceof z4.ZodType) {
       return [{ schema: mod, path }];
     }
     return Object.entries(mod)
       .filter(
-        (pair): pair is [string, ZodType<unknown>] => pair[1] instanceof ZodType
+        (pair): pair is [string, z3.ZodType<unknown> | z4.ZodType] =>
+          pair[1] instanceof z3.ZodType || pair[1] instanceof z4.ZodType
       )
       .map(
         ([name, schema]): ExportedSchema => ({

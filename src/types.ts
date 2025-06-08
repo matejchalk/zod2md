@@ -1,4 +1,5 @@
-import { z, type EnumLike, type ZodType } from 'zod';
+import * as z3 from 'zod/v3';
+import * as z4 from 'zod/v4';
 import type { FormatterOptions } from './formatter';
 import type { LoaderOptions } from './loader';
 
@@ -8,7 +9,7 @@ export type Config = Options & { output: string };
 
 export type ExportedSchema = {
   name?: string;
-  schema: ZodType<unknown>;
+  schema: z3.ZodType<unknown> | z4.ZodType;
   path: string;
 };
 
@@ -94,12 +95,12 @@ export type DateModel = {
 
 export type EnumModel = {
   type: 'enum';
-  values: string[];
+  values: (string | number)[];
 };
 
 export type NativeEnumModel = {
   type: 'native-enum';
-  enum: EnumLike;
+  enum: z3.EnumLike;
 };
 
 export type UnionModel = {
@@ -137,7 +138,7 @@ export type PromiseModel = {
 
 export type LiteralModel = {
   type: 'literal';
-  value: z.Primitive;
+  value: z3.Primitive | z4.core.util.Primitive;
 };
 
 export type NullModel = {
@@ -189,12 +190,20 @@ export type StringValidation =
   | 'cuid'
   | 'cuid2'
   | 'ulid'
+  | 'nanoid'
+  | 'base64'
+  | 'base64url'
+  | 'jwt'
+  | 'date'
+  | 'time'
+  | 'duration'
   | ['regex', RegExp]
   | ['includes', string]
   | ['startsWith', string]
   | ['endsWith', string]
   | ['datetime', { offset: boolean; precision: number | null }]
-  | ['ip', { version?: 'v4' | 'v6' }];
+  | ['ip', { version?: 'v4' | 'v6' }]
+  | ['cidr', { version?: 'v4' | 'v6' }];
 
 export type NumberValidation =
   | ['gt', number]
@@ -204,7 +213,12 @@ export type NumberValidation =
   | 'int'
   | ['multipleOf', number]
   | 'finite'
-  | 'safe';
+  | 'safe'
+  | 'safeint'
+  | 'int32'
+  | 'uint32'
+  | 'float32'
+  | 'float64';
 
 export type BigIntValidation =
   | ['gt', bigint]
