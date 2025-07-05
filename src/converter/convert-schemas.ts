@@ -82,9 +82,9 @@ function isSameSchema(
       ? currSchema._zod.def
       : currSchema._def;
 
-  // unwrap ZodOptional, ZodNullable, ZodDefault, etc.
+  // unwrap ZodOptional, ZodNullable, ZodDefault, etc. (exception for ZodPromise in v4)
   const currSchemaUnwrapped =
-    'innerType' in currSchemaDef
+    'innerType' in currSchemaDef && !(currSchema instanceof z4.core.$ZodPromise)
       ? (currSchemaDef.innerType as z3.ZodTypeAny | z4.core.$ZodType)
       : null;
 
