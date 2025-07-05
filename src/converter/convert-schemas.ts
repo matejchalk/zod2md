@@ -126,15 +126,20 @@ function schemaToMeta(
   implicitOptional?: boolean
 ): Omit<ModelMeta, 'default'> {
   if (schema instanceof z4.core.$ZodType) {
-    const meta = z4.globalRegistry.get(schema);
+    const describedSchema = findInWrapperType(
+      schema,
+      s => !!z4.globalRegistry.get(s)?.description
+    );
+    const description =
+      describedSchema && z4.globalRegistry.get(describedSchema)?.description;
 
     return {
-      ...(meta?.description && { description: meta.description }),
+      ...(description && { description }),
       ...(!implicitOptional &&
-        schema instanceof z4.core.$ZodOptional && {
+        findInWrapperType(schema, s => s instanceof z4.core.$ZodOptional) && {
           optional: true,
         }),
-      ...(schema instanceof z4.core.$ZodNullable && {
+      ...(findInWrapperType(schema, s => s instanceof z4.core.$ZodNullable) && {
         nullable: true,
       }),
     };
@@ -153,6 +158,27 @@ function schemaToMeta(
       safeCheck(schema.isOptional) && { optional: true }),
     ...(safeCheck(schema.isNullable) && { nullable: true }),
   };
+}
+
+function findInWrapperType(
+  schema: z4.core.$ZodType,
+  predicate: (s: z4.core.$ZodType) => boolean
+): z4.core.$ZodType | null {
+  let curr = schema;
+  while (!predicate(curr)) {
+    if (
+      curr instanceof z4.core.$ZodOptional ||
+      curr instanceof z4.core.$ZodNullable ||
+      curr instanceof z4.core.$ZodDefault ||
+      curr instanceof z4.core.$ZodReadonly ||
+      curr instanceof z4.core.$ZodCatch
+    ) {
+      curr = curr._zod.def.innerType;
+    } else {
+      return null;
+    }
+  }
+  return curr;
 }
 
 function convertSchema(
@@ -405,7 +431,10 @@ function convertZodObject(
       type: 'object',
       fields: Object.entries(schema._zod.def.shape).map(([key, value]) => ({
         key,
-        required: !(value instanceof z4.core.$ZodOptional),
+        required: !(
+          value instanceof z4.core.$ZodOptional ||
+          value instanceof z4.core.$ZodDefault
+        ),
         ...createModelOrRef(value, exportedSchemas, true),
       })),
     };
@@ -453,6 +482,73 @@ function isV4StringType(
   schema: z3.ZodTypeAny | z4.core.$ZodType
 ): schema is V4StringType {
   return V4_STRING_TYPES.some(type => schema instanceof type);
+}
+
+function parseV4StringType(
+  obj: V4StringType | z4.core.$ZodCheck
+): StringValidation | null {
+  if (obj instanceof z4.core.$ZodEmail) {
+    return 'email';
+  }
+  if (obj instanceof z4.core.$ZodURL) {
+    return 'url';
+  }
+  if (obj instanceof z4.core.$ZodEmoji) {
+    return 'emoji';
+  }
+  if (obj instanceof z4.core.$ZodUUID) {
+    return 'uuid';
+  }
+  if (obj instanceof z4.core.$ZodCUID) {
+    return 'cuid';
+  }
+  if (obj instanceof z4.core.$ZodCUID2) {
+    return 'cuid2';
+  }
+  if (obj instanceof z4.core.$ZodULID) {
+    return 'ulid';
+  }
+  if (obj instanceof z4.core.$ZodNanoID) {
+    return 'nanoid';
+  }
+  if (obj instanceof z4.core.$ZodBase64) {
+    return 'base64';
+  }
+  if (obj instanceof z4.core.$ZodBase64URL) {
+    return 'base64url';
+  }
+  if (obj instanceof z4.core.$ZodJWT) {
+    return 'jwt';
+  }
+  if (obj instanceof z4.core.$ZodISODate) {
+    return 'date';
+  }
+  if (obj instanceof z4.core.$ZodISOTime) {
+    return 'time';
+  }
+  if (obj instanceof z4.core.$ZodISODateTime) {
+    return [
+      'datetime',
+      { offset: obj._zod.def.offset, precision: obj._zod.def.precision },
+    ];
+  }
+  if (obj instanceof z4.core.$ZodISODuration) {
+    return 'duration';
+  }
+  if (obj instanceof z4.core.$ZodIPv4) {
+    return ['ip', { version: 'v4' }];
+  }
+  if (obj instanceof z4.core.$ZodIPv6) {
+    return ['ip', { version: 'v6' }];
+  }
+  if (obj instanceof z4.core.$ZodCIDRv4) {
+    return ['cidr', { version: 'v4' }];
+  }
+  if (obj instanceof z4.core.$ZodCIDRv6) {
+    return ['cidr', { version: 'v6' }];
+  }
+
+  return null;
 }
 
 function convertZodString(schema: z3.ZodString | V4StringType): StringModel {
@@ -507,32 +603,9 @@ function convertZodString(schema: z3.ZodString | V4StringType): StringModel {
     };
   }
 
-  const topLevelValidations: (StringValidation | false)[] = [
-    schema instanceof z4.core.$ZodEmail && 'email',
-    schema instanceof z4.core.$ZodURL && 'url',
-    schema instanceof z4.core.$ZodEmoji && 'emoji',
-    schema instanceof z4.core.$ZodUUID && 'uuid',
-    schema instanceof z4.core.$ZodCUID && 'cuid',
-    schema instanceof z4.core.$ZodCUID2 && 'cuid2',
-    schema instanceof z4.core.$ZodULID && 'ulid',
-    schema instanceof z4.core.$ZodNanoID && 'nanoid',
-    schema instanceof z4.core.$ZodBase64 && 'base64',
-    schema instanceof z4.core.$ZodBase64URL && 'base64url',
-    schema instanceof z4.core.$ZodJWT && 'jwt',
-    schema instanceof z4.core.$ZodISODate && 'date',
-    schema instanceof z4.core.$ZodISOTime && 'time',
-    schema instanceof z4.core.$ZodISODateTime && [
-      'datetime',
-      { offset: schema._zod.def.offset, precision: schema._zod.def.precision },
-    ],
-    schema instanceof z4.core.$ZodISODuration && 'duration',
-    schema instanceof z4.core.$ZodIPv4 && ['ip', { version: 'v4' }],
-    schema instanceof z4.core.$ZodIPv6 && ['ip', { version: 'v6' }],
-    schema instanceof z4.core.$ZodCIDRv4 && ['cidr', { version: 'v4' }],
-    schema instanceof z4.core.$ZodCIDRv6 && ['cidr', { version: 'v6' }],
-  ];
+  const subType = parseV4StringType(schema);
 
-  const subValidations =
+  const checks =
     schema._zod.def.checks?.map((check): StringValidation | null => {
       if (check instanceof z4.core.$ZodCheckMinLength) {
         return ['min', check._zod.def.minimum];
@@ -555,14 +628,14 @@ function convertZodString(schema: z3.ZodString | V4StringType): StringModel {
       if (check instanceof z4.core.$ZodCheckEndsWith) {
         return ['endsWith', check._zod.def.suffix];
       }
-      return null;
+      return parseV4StringType(check);
     }) ?? [];
+
+  const validations = [subType, ...checks].filter(value => value != null);
 
   return {
     type: 'string',
-    validations: [...topLevelValidations, ...subValidations].filter(
-      value => value != null && value !== false
-    ),
+    ...(validations.length && { validations }),
   };
 }
 
