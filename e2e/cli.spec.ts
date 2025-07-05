@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 import { readFile } from 'fs/promises';
 import { promisify } from 'util';
-import { VERSIONS } from './utils';
+import { VERSIONS, versionToCommitlintSnapshotFile } from './utils';
 
 const execAsync = promisify(exec);
 
@@ -17,7 +17,7 @@ describe.each(VERSIONS)('zod2md CLI (%s)', version => {
     await expect(
       readFile('tmp/cli/commitlint.md', 'utf8')
     ).resolves.toMatchFileSnapshot(
-      `__snapshots__/commitlint-example-${version}.md`
+      `__snapshots__/${versionToCommitlintSnapshotFile(version)}`
     );
   });
 

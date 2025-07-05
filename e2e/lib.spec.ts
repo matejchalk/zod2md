@@ -1,5 +1,5 @@
 import { zod2md } from 'zod2md';
-import { VERSIONS } from './utils';
+import { VERSIONS, versionToCommitlintSnapshotFile } from './utils';
 
 describe.each(VERSIONS)('zod2md exported function (%s)', version => {
   it('should generate markdown for commitlint example', async () => {
@@ -9,7 +9,7 @@ describe.each(VERSIONS)('zod2md exported function (%s)', version => {
         entry: [`./e2e/fixtures/commitlint/${version}/index.ts`],
       })
     ).resolves.toMatchFileSnapshot(
-      `__snapshots__/commitlint-example-${version}.md`
+      `__snapshots__/${versionToCommitlintSnapshotFile(version)}`
     );
   });
 
