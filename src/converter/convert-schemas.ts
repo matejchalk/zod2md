@@ -249,6 +249,17 @@ function convertSchema(
     return convertSchema(schema._zod.def.getter(), exportedSchemas);
   }
 
+  if (schema instanceof z3.ZodFunction) {
+    return convertZodFunction(schema, exportedSchemas);
+  }
+  if (schema instanceof z4.core.$ZodType) {
+    // workaround for z.function no longer being a schema in v4: https://zod.dev/v4/changelog?id=zfunction
+    const functionFactory = z4.globalRegistry.get(schema)?.$ZodFunction;
+    if (functionFactory instanceof z4.core.$ZodFunction) {
+      return convertZodFunction(functionFactory, exportedSchemas);
+    }
+  }
+
   if (schema instanceof z3.ZodPipeline) {
     return convertSchema(schema._def.out, exportedSchemas);
   }
@@ -316,12 +327,7 @@ function convertSchema(
   if (schema instanceof z3.ZodTuple || schema instanceof z4.core.$ZodTuple) {
     return convertZodTuple(schema, exportedSchemas);
   }
-  if (
-    schema instanceof z3.ZodFunction ||
-    schema instanceof z4.core.$ZodFunction
-  ) {
-    return convertZodFunction(schema, exportedSchemas);
-  }
+
   if (
     schema instanceof z3.ZodPromise ||
     schema instanceof z4.core.$ZodPromise
