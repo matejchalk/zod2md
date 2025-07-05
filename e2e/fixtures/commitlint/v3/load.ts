@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { UserPromptConfig } from './prompt';
 import { Rule, RulesConfig } from './rules';
 
