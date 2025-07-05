@@ -16,7 +16,9 @@ describe.each(VERSIONS)('zod2md CLI (%s)', version => {
 
     await expect(
       readFile('tmp/cli/commitlint.md', 'utf8')
-    ).resolves.toMatchFileSnapshot('__snapshots__/commitlint-example.md');
+    ).resolves.toMatchFileSnapshot(
+      `__snapshots__/commitlint-example-${version}.md`
+    );
   });
 
   it('should generate markdown for prettier example', async () => {

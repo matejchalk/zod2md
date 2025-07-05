@@ -8,7 +8,9 @@ describe.each(VERSIONS)('zod2md exported function (%s)', version => {
         title: 'Commitlint config',
         entry: [`./e2e/fixtures/commitlint/${version}/index.ts`],
       })
-    ).resolves.toMatchFileSnapshot('__snapshots__/commitlint-example.md');
+    ).resolves.toMatchFileSnapshot(
+      `__snapshots__/commitlint-example-${version}.md`
+    );
   });
 
   it('should generate markdown for prettier example', async () => {

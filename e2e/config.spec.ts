@@ -20,7 +20,9 @@ describe.each(VERSIONS)('zod2md config (%s)', version => {
 
     await expect(
       readFile('tmp/config/commitlint.md', 'utf8')
-    ).resolves.toMatchFileSnapshot('__snapshots__/commitlint-example.md');
+    ).resolves.toMatchFileSnapshot(
+      `__snapshots__/commitlint-example-${version}.md`
+    );
   });
 
   it('should generate markdown for prettier example', async () => {
