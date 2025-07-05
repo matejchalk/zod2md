@@ -4,6 +4,7 @@ import type {
   ModelOrRef,
   NamedModel,
   NativeEnumModel,
+  NumberValidation,
   Ref,
 } from '../types';
 import * as md from './markdown';
@@ -530,6 +531,9 @@ function formatModelInline(
         const formattedValidations = model.validations.map(
           (validation): string => {
             if (typeof validation === 'string') {
+              if (validation === 'safeint') {
+                return 'int' satisfies NumberValidation;
+              }
               return validation;
             }
             const [kind, value] = validation;
