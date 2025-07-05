@@ -9,7 +9,7 @@ export type Config = Options & { output: string };
 
 export type ExportedSchema = {
   name?: string;
-  schema: z3.ZodType<unknown> | z4.ZodType;
+  schema: z3.ZodType<unknown> | z4.core.$ZodType;
   path: string;
 };
 
