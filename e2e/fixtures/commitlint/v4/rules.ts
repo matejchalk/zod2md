@@ -1,4 +1,6 @@
 import { z } from 'zod/v4';
+import { convertZodFunctionToSchema } from './_internal';
+import { Commit } from './parse';
 
 export const RuleConfigSeverity = z.enum({
   Disabled: 0,
@@ -23,4 +25,9 @@ export const RuleOutcome = z
   .readonly();
 
 // Zod v4 drops function schema support: https://zod.dev/v4/changelog?id=zfunction
-export const Rule = z.any();
+export const Rule = convertZodFunctionToSchema(
+  z.function({
+    input: [Commit, RuleConfigCondition.optional(), z.never().optional()],
+    output: z.union([RuleOutcome, z.promise(RuleOutcome)]),
+  })
+);

@@ -1,4 +1,5 @@
 import { z } from 'zod/v4';
+import { convertZodFunctionToSchema } from './_internal';
 import { UserPromptConfig } from './prompt';
 import { Rule, RulesConfig } from './rules';
 
@@ -27,8 +28,9 @@ export const UserConfig = z
       .optional(),
     ignores: z
       .array(
-        // Zod v4 drops function schema support: https://zod.dev/v4/changelog?id=zfunction
-        z.any()
+        convertZodFunctionToSchema(
+          z.function({ input: [z.string()], output: z.boolean() })
+        )
       )
       .optional(),
     defaultIgnores: z.boolean().optional(),

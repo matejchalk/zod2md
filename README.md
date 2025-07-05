@@ -96,6 +96,41 @@ A few examples of inputs and outputs are provided (used in E2E tests):
 | [Commitlint](https://commitlint.js.org/) config object | [e2e/fixtures/commitlint](./e2e/fixtures/commitlint/)       | [e2e/\_\_snapshots\_\_/commitlint-example.md](./e2e/__snapshots__/commitlint-example.md)       |
 | User REST API                                          | [e2e/fixtures/user-rest-api](./e2e/fixtures/user-rest-api/) | [e2e/\_\_snapshots\_\_/user-rest-api-example.md](./e2e/__snapshots__/user-rest-api-example.md) |
 
+## Advanced usage
+
+### Function schemas
+
+Since Zod version 4, `z.function` is no longer a Zod schema, but a function factory (see [changelog](https://zod.dev/v4/changelog?id=zfunction)). If you wish to define function schemas like in Zod v3, you'll need the following workaround (`$ZodFunction` in metadata needed for `zod2md`):
+
+```ts
+// HELPER FUNCTION
+
+import { z } from 'zod/v4';
+import type { $ZodFunction } from 'zod/v4/core';
+
+export function convertZodFunctionToSchema<T extends $ZodFunction>(factory: T) {
+  return z
+    .custom()
+    .transform((arg, ctx) => {
+      // 👇 runtime validation
+      if (typeof arg !== 'function') {
+        ctx.addIssue('Must be a function');
+        return z.NEVER;
+      }
+      return factory.implement(arg as Parameters<T['implement']>[0]); // 👈 compile-time validation
+    })
+    .meta({
+      $ZodFunction: factory, // 👈 this metadata enables zod2md to find your input/output schemas
+    });
+}
+
+// USAGE
+
+export const predicateSchema = convertZodFunctionToSchema(
+  z.function({ input: [z.string(), z.number()], output: z.boolean() })
+);
+```
+
 ## Contributing
 
 - Install dependencies with `npm install`.
