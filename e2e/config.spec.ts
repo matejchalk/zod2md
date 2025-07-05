@@ -3,7 +3,7 @@ import { readFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
-import { VERSIONS } from './utils';
+import { VERSIONS, versionToCommitlintSnapshotFile } from './utils';
 
 const execAsync = promisify(exec);
 
@@ -21,7 +21,7 @@ describe.each(VERSIONS)('zod2md config (%s)', version => {
     await expect(
       readFile('tmp/config/commitlint.md', 'utf8')
     ).resolves.toMatchFileSnapshot(
-      `__snapshots__/commitlint-example-${version}.md`
+      `__snapshots__/${versionToCommitlintSnapshotFile(version)}`
     );
   });
 
