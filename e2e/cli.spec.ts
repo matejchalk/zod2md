@@ -1,13 +1,14 @@
 import { exec } from 'child_process';
 import { readFile } from 'fs/promises';
 import { promisify } from 'util';
+import { VERSIONS } from './utils';
 
 const execAsync = promisify(exec);
 
-describe('zod2md CLI', () => {
+describe.each(VERSIONS)('zod2md CLI (%s)', version => {
   it('should generate markdown for commitlint example', async () => {
     const { stdout, stderr } = await execAsync(
-      'zod2md --entry e2e/fixtures/commitlint/index.ts --output tmp/cli/commitlint.md --title "Commitlint config"'
+      `zod2md --entry e2e/fixtures/commitlint/${version}/index.ts --output tmp/cli/commitlint.md --title "Commitlint config"`
     );
 
     expect(stderr).toBe('');
@@ -20,7 +21,7 @@ describe('zod2md CLI', () => {
 
   it('should generate markdown for prettier example', async () => {
     const { stdout, stderr } = await execAsync(
-      `zod2md --entry e2e/fixtures/prettier/prettierrc.js --output tmp/cli/prettier.md --title "Prettier configuration file reference"`
+      `zod2md --entry e2e/fixtures/prettier/${version}/prettierrc.js --output tmp/cli/prettier.md --title "Prettier configuration file reference"`
     );
 
     expect(stderr).toBe('');
@@ -34,11 +35,11 @@ describe('zod2md CLI', () => {
   it('should generate markdown for user-rest-api example', async () => {
     const { stdout, stderr } = await execAsync(
       `zod2md \\
-         --entry e2e/fixtures/user-rest-api/endpoints/get-users.mjs \\
-         --entry e2e/fixtures/user-rest-api/endpoints/get-user.mjs \\
-         --entry e2e/fixtures/user-rest-api/endpoints/create-user.mjs \\
-         --entry e2e/fixtures/user-rest-api/endpoints/update-user.mjs \\
-         --entry e2e/fixtures/user-rest-api/endpoints/delete-user.mjs \\
+         --entry e2e/fixtures/user-rest-api/${version}/endpoints/get-users.mjs \\
+         --entry e2e/fixtures/user-rest-api/${version}/endpoints/get-user.mjs \\
+         --entry e2e/fixtures/user-rest-api/${version}/endpoints/create-user.mjs \\
+         --entry e2e/fixtures/user-rest-api/${version}/endpoints/update-user.mjs \\
+         --entry e2e/fixtures/user-rest-api/${version}/endpoints/delete-user.mjs \\
          --output tmp/cli/user-rest-api.md \\
          --title "User REST API"`
     );

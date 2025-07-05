@@ -8,7 +8,7 @@ const config = {
     './endpoints/update-user.mjs',
     './endpoints/delete-user.mjs',
   ],
-  output: '../../../tmp/config/user-rest-api.md',
+  output: '../../../../tmp/config/user-rest-api.md',
 };
 
 export default config;

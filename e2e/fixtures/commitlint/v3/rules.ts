@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { Commit } from './parse';
 
 export const RuleConfigSeverity = z.nativeEnum({

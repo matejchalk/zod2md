@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v3';
 
 // source: https://json.schemastore.org/prettierrc
 

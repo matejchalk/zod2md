@@ -94,7 +94,7 @@ _Intersection of the following types:_
 
 ## PromptName
 
-_Enum string, one of the following possible values:_
+_Enum, one of the following possible values:_
 
 - `'header'`
 - `'type'`
@@ -125,7 +125,7 @@ _Returns:_
 
 ## RuleConfigCondition
 
-_Enum string, one of the following possible values:_
+_Enum, one of the following possible values:_
 
 - `'always'`
 - `'never'`

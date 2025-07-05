@@ -3,15 +3,16 @@ import { readFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
+import { VERSIONS } from './utils';
 
 const execAsync = promisify(exec);
 
 const fixturesDir = join(fileURLToPath(dirname(import.meta.url)), 'fixtures');
 
-describe('zod2md config', () => {
+describe.each(VERSIONS)('zod2md config (%s)', version => {
   it('should generate markdown for commitlint example', async () => {
     const { stdout, stderr } = await execAsync('npx zod2md', {
-      cwd: join(fixturesDir, 'commitlint'),
+      cwd: join(fixturesDir, 'commitlint', version),
     });
 
     expect(stderr).toBe('');
@@ -24,7 +25,7 @@ describe('zod2md config', () => {
 
   it('should generate markdown for prettier example', async () => {
     const { stdout, stderr } = await execAsync('npx zod2md', {
-      cwd: join(fixturesDir, 'prettier'),
+      cwd: join(fixturesDir, 'prettier', version),
     });
 
     expect(stderr).toBe('');
@@ -37,7 +38,7 @@ describe('zod2md config', () => {
 
   it('should generate markdown for user-rest-api example', async () => {
     const { stdout, stderr } = await execAsync('npx zod2md', {
-      cwd: join(fixturesDir, 'user-rest-api'),
+      cwd: join(fixturesDir, 'user-rest-api', version),
     });
 
     expect(stderr).toBe('');
