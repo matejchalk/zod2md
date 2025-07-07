@@ -1,5 +1,5 @@
 import * as z3 from 'zod/v3';
-import * as z4 from 'zod/v4';
+import * as z4 from 'zod/v4/core';
 import type { FormatterOptions } from './formatter';
 import type { LoaderOptions } from './loader';
 
@@ -9,7 +9,7 @@ export type Config = Options & { output: string };
 
 export type ExportedSchema = {
   name?: string;
-  schema: z3.ZodType<unknown> | z4.core.$ZodType;
+  schema: z3.ZodType<unknown> | z4.$ZodType;
   path: string;
 };
 
@@ -138,7 +138,7 @@ export type PromiseModel = {
 
 export type LiteralModel = {
   type: 'literal';
-  value: z3.Primitive | z4.core.util.Primitive;
+  value: z3.Primitive | z4.util.Primitive;
 };
 
 export type NullModel = {
