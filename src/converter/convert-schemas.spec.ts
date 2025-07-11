@@ -241,7 +241,14 @@ describe('convert exported Zod schemas to models', () => {
     );
   });
 
-  it('should support the ZodPipeline type', () => {
+  it('should support z.pipe and z.transform', () => {
+    const CapitalizeSchema = z
+      .string()
+      .transform(x => `${x[0]?.toUpperCase() ?? ''}${x.substring(1)}`);
+    expect(
+      convertSchemas([{ path: 'utils.ts', schema: CapitalizeSchema }])
+    ).toEqual<NamedModel[]>([{ path: 'utils.ts', type: 'string' }]); // not 'never'
+
     const PostalCodeSchema = z
       .string()
       .transform((postalCode: string) =>
@@ -263,7 +270,7 @@ describe('convert exported Zod schemas to models', () => {
     ]);
   });
 
-  it('should suppot the ZodDiscriminatedUnion type', () => {
+  it('should support the ZodDiscriminatedUnion type', () => {
     const schemaA = z
       .object({
         type: z.literal('first'),

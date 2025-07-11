@@ -254,10 +254,20 @@ function convertSchema(
   }
 
   if (schema instanceof z3.ZodPipeline) {
-    return convertSchema(schema._def.out, exportedSchemas);
+    return convertSchema(
+      schema._def.out instanceof z3.ZodTransformer
+        ? schema._def.in
+        : schema._def.out,
+      exportedSchemas
+    );
   }
   if (schema instanceof z4.$ZodPipe) {
-    return convertSchema(schema._zod.def.out, exportedSchemas);
+    return convertSchema(
+      schema._zod.def.out instanceof z4.$ZodTransform
+        ? schema._zod.def.in
+        : schema._zod.def.out,
+      exportedSchemas
+    );
   }
 
   if (schema instanceof z3.ZodDiscriminatedUnion) {
