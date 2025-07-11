@@ -1,4 +1,4 @@
-import { z, ZodType, type ZodTypeDef } from 'zod';
+import { z, ZodType } from 'zod';
 import type { NamedModel } from '../types';
 import { convertSchemas } from './convert-schemas';
 
@@ -28,7 +28,7 @@ describe('convert exported Zod schemas to models', () => {
             kind: 'model',
             key: 'id',
             required: true,
-            model: { type: 'number', validations: ['int', ['gte', 0]] },
+            model: { type: 'number', validations: ['safeint', ['gte', 0]] },
           },
           {
             kind: 'model',
@@ -81,21 +81,19 @@ describe('convert exported Zod schemas to models', () => {
       text: z.string(),
       rating: z.number().min(0).max(5),
     });
-    const authorSchema = z.object(
-      {
-        name: z.string({ description: 'First and last name' }),
+    const authorSchema = z
+      .object({
+        name: z.string().describe('First and last name'),
         dateOfBirth: z.date().optional(),
-      },
-      { description: 'Book author' }
-    );
+      })
+      .describe('Book author');
     const bookSchema = z.object({
       title: z.string(),
       author: authorSchema,
       reviews: z
-        .array(reviewSchema, {
-          description: 'Reader reviews ordered from most recent',
-        })
-        .optional(),
+        .array(reviewSchema)
+        .optional()
+        .describe('Reader reviews ordered from most recent'),
     });
 
     expect(
@@ -216,11 +214,9 @@ describe('convert exported Zod schemas to models', () => {
         {
           path: 'schemas.ts',
           name: 'Experimental',
-          schema: {
-            _def: { typeName: 'ZodExperimental' } as ZodTypeDef,
-            isOptional: () => false,
-            isNullable: () => false,
-          } as ZodType,
+          schema: new ZodType({
+            type: 'ZodExperimental' as z.core.$ZodTypeDef['type'],
+          }),
         },
       ])
     ).toEqual<NamedModel[]>([
@@ -355,13 +351,13 @@ describe('convert exported Zod schemas to models', () => {
       .url()
       .catch(ctx => {
         if (
-          ctx.error.errors.length === 1 &&
-          ctx.error.errors[0]?.code === 'invalid_string' &&
-          ctx.error.errors[0].validation === 'url'
+          ctx.issues.length === 1 &&
+          ctx.issues[0]?.code === 'invalid_format' &&
+          ctx.issues[0]?.format === 'url'
         ) {
           return '';
         }
-        throw ctx.error;
+        throw ctx.issues;
       });
 
     expect(
