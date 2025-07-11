@@ -352,7 +352,7 @@ function convertSchema(
 
   const typeName =
     schema instanceof z4.$ZodType
-      ? schema._zod.def.type
+      ? schema.constructor.name
       : 'typeName' in schema._def
       ? schema._def.typeName
       : null;

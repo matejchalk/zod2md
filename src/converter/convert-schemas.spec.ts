@@ -208,15 +208,19 @@ describe('convert exported Zod schemas to models', () => {
   it('should warn if type unsupported and use never', () => {
     vi.spyOn(console, 'warn').mockReturnValue();
 
+    class ZodExperimental extends ZodType {
+      constructor() {
+        super({ type: 'experimental' as z.core.$ZodTypeDef['type'] });
+      }
+    }
+
     expect(
       convertSchemas([
         { path: 'schemas.ts', name: 'ID', schema: z.string().brand('ID') },
         {
           path: 'schemas.ts',
           name: 'Experimental',
-          schema: new ZodType({
-            type: 'ZodExperimental' as z.core.$ZodTypeDef['type'],
-          }),
+          schema: new ZodExperimental(),
         },
       ])
     ).toEqual<NamedModel[]>([
