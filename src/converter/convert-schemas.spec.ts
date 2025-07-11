@@ -1,8 +1,101 @@
+import { extensibleTechniqueSchema } from '@mitre-attack/attack-data-model';
 import { z, ZodType } from 'zod';
 import type { NamedModel } from '../types';
 import { convertSchemas } from './convert-schemas';
 
 describe('convert exported Zod schemas to models', () => {
+  it('should work with mitre-attack', () => {
+    // https://github.com/mitre-attack/attack-data-model/blob/main/src/schemas/common/stix-identifier.ts#L49C1-L97C5
+    const stixIdentifierSchema = z
+      .string()
+      // refine after describe will lose description
+      .refine(() => true)
+      .describe(
+        'Represents identifiers across the CTI specifications. The format consists of the name of the top-level object being identified, followed by two dashes (--), followed by a UUIDv4.'
+      );
+
+    // https://github.com/mitre-attack/attack-data-model/blob/alpha/src/schemas/common/common-properties.ts#L44
+    const descriptionSchema = z
+      .string()
+      .describe('A description of the object.');
+
+    // trying to make the chain as complex as possible, but descriptions are still preserved
+    const schema = z
+      .object({
+        name: z.string(),
+        id: stixIdentifierSchema.describe(
+          'The id property universally and uniquely identifies this object.'
+        ),
+      })
+      .required({ name: true })
+      .strict()
+      .extend({})
+      .refine(() => true)
+      .omit({ name: true })
+      .extend({
+        id: stixIdentifierSchema,
+        description: descriptionSchema.optional(),
+      });
+
+    console.log(
+      // interestingly, this is {}, not undefined ... but why not { description: '...' } ?
+      z.globalRegistry.get(
+        extensibleTechniqueSchema._zod.def.shape.description._zod.def.innerType
+      )
+    );
+
+    expect(
+      convertSchemas([
+        {
+          path: 'extensibleTechnique.ts',
+          name: 'ExtensibleTechnique',
+          // WORKS - has descriptions
+          // schema,
+          // DOESN'T WORK - no descriptions
+          // https://github.com/mitre-attack/attack-data-model/blob/alpha/src/schemas/sdo/technique.schema.ts#L326C1-L371C13
+          schema: extensibleTechniqueSchema.pick({
+            // .pick to have minimal diff
+            id: true,
+            description: true,
+          }),
+        },
+      ])
+    ).toEqual<NamedModel[]>([
+      {
+        path: 'extensibleTechnique.ts',
+        name: 'ExtensibleTechnique',
+        type: 'object',
+        fields: [
+          // {
+          //   kind: 'model',
+          //   key: 'name',
+          //   model: { type: 'string' },
+          //   required: true,
+          // },
+          {
+            kind: 'model',
+            key: 'id',
+            model: {
+              type: 'string',
+              description:
+                'Represents identifiers across the CTI specifications. The format consists of the name of the top-level object being identified, followed by two dashes (--), followed by a UUIDv4.',
+            },
+            required: true,
+          },
+          {
+            kind: 'model',
+            key: 'description',
+            model: {
+              type: 'string',
+              description: 'A description of the object.',
+            },
+            required: false,
+          },
+        ],
+      },
+    ]);
+  });
+
   it('should convert object type with primitives', () => {
     expect(
       convertSchemas([

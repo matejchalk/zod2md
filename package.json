@@ -55,6 +55,7 @@
     "zod": "^3.25.0 || ^4.0.0"
   },
   "devDependencies": {
+    "@mitre-attack/attack-data-model": "^4.0.0-alpha.1",
     "@types/node": "^20.11.0",
     "npm-cli-login": "^1.0.0",
     "release-it": "^17.0.3",
