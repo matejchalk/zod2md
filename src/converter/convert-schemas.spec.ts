@@ -91,7 +91,7 @@ describe('convert exported Zod schemas to models', () => {
       title: z.string(),
       author: authorSchema,
       reviews: z
-        .array(reviewSchema)
+        .array(reviewSchema.describe('Book review'))
         .optional()
         .describe('Reader reviews ordered from most recent'),
     });
@@ -147,6 +147,7 @@ describe('convert exported Zod schemas to models', () => {
                 ref: {
                   name: 'Review',
                   path: 'review.schema.ts',
+                  description: 'Book review',
                 },
               },
               description: 'Reader reviews ordered from most recent',

@@ -86,23 +86,24 @@ function isSameSchema(
       ? (currSchemaDef.innerType as z3.ZodTypeAny | z4.$ZodType)
       : null;
 
-  // unwrap .describe() - every property except for description must be identical
+  // unwrap .describe() or .meta()
   const isOnlyDescriptionChanged = (schema: z3.ZodTypeAny | z4.$ZodType) => {
-    if (schema instanceof z4.$ZodType || namedSchema instanceof z4.$ZodType) {
-      // Zod v4 stores description in registry
-      return false;
+    if (schema instanceof z4.$ZodType && namedSchema instanceof z4.$ZodType) {
+      return schema._zod.def === namedSchema._zod.def;
     }
-    const schemaDef =
-      schema instanceof z4.$ZodType ? schema._zod.def : schema._def;
-    return (
-      Object.keys(namedSchema._def).every(
-        key => namedSchema._def[key] === schemaDef[key]
-      ) &&
-      schema.description !== namedSchema.description &&
-      Object.keys(schemaDef)
-        .filter(key => key !== 'description')
-        .map(key => namedSchema._def[key] === schemaDef[key])
-    );
+    if (schema instanceof z3.ZodType && namedSchema instanceof z3.ZodType) {
+      // every property except for description must be identical
+      return (
+        Object.keys(namedSchema._def).every(
+          key => namedSchema._def[key] === schema._def[key]
+        ) &&
+        schema.description !== namedSchema.description &&
+        Object.keys(schema._def)
+          .filter(key => key !== 'description')
+          .map(key => namedSchema._def[key] === schema._def[key])
+      );
+    }
+    return false; // should be unreachable
   };
 
   return (
