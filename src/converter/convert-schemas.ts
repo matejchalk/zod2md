@@ -185,6 +185,15 @@ function convertSchema(
     return convertSchema(schema._zod.def.innerType, exportedSchemas);
   }
 
+  if (schema instanceof z4.$ZodNonOptional) {
+    return convertSchema(
+      schema._zod.def.innerType instanceof z4.$ZodOptional
+        ? schema._zod.def.innerType._zod.def.innerType
+        : schema._zod.def.innerType,
+      exportedSchemas
+    );
+  }
+
   if (schema instanceof z3.ZodNullable) {
     return convertSchema(schema._def.innerType, exportedSchemas);
   }
