@@ -430,12 +430,20 @@ function convertZodObject(
   exportedSchemas: ExportedSchema[]
 ): ObjectModel {
   if (schema instanceof z4.$ZodObject) {
+    const isOptionalOrHasDefault = (s: z4.$ZodType) =>
+      s instanceof z4.$ZodOptional || s instanceof z4.$ZodDefault;
     return {
       type: 'object',
       fields: Object.entries(schema._zod.def.shape).map(([key, value]) => ({
         key,
         required: !(
-          value instanceof z4.$ZodOptional || value instanceof z4.$ZodDefault
+          isOptionalOrHasDefault(value) ||
+          findInWrapperType(
+            value,
+            v =>
+              v instanceof z4.$ZodUnion &&
+              v._zod.def.options.some(isOptionalOrHasDefault)
+          )
         ),
         ...createModelOrRef(value, exportedSchemas, true),
       })),
