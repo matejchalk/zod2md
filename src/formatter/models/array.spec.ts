@@ -5,7 +5,7 @@ import { Renderer } from '../renderer';
 import { ArrayModel } from './array';
 
 describe('ArrayModel', () => {
-  describe('block', () => {
+  describe('renderBlock', () => {
     it('should render array with exported item schema', () => {
       const itemSchema = z.object({ id: z.uuid(), name: z.string() });
       const arraySchema = z.array(itemSchema);
@@ -49,7 +49,7 @@ describe('ArrayModel', () => {
     });
   });
 
-  describe('inline', () => {
+  describe('renderInline', () => {
     it('should render array with exported item schema', () => {
       const itemSchema = z.object({ id: z.uuid(), name: z.string() });
       const arraySchema = z.array(itemSchema);

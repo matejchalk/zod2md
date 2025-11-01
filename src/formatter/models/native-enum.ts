@@ -9,7 +9,7 @@ export class NativeEnumModel implements IModel<z3.ZodNativeEnum<z3.EnumLike>> {
     return schema instanceof z3.ZodNativeEnum;
   }
 
-  renderBlock(schema: z3.ZodNativeEnum<z3.EnumLike>): BlockText {
+  renderBlock<T extends z3.EnumLike>(schema: z3.ZodNativeEnum<T>): BlockText {
     return [
       md.italic('Native enum:'),
       md.table(
@@ -22,7 +22,7 @@ export class NativeEnumModel implements IModel<z3.ZodNativeEnum<z3.EnumLike>> {
     ];
   }
 
-  renderInline(schema: z3.ZodNativeEnum<z3.EnumLike>): InlineText {
+  renderInline<T extends z3.EnumLike>(schema: z3.ZodNativeEnum<T>): InlineText {
     return [
       md.italic('Native enum:'),
       md.list(
@@ -33,8 +33,8 @@ export class NativeEnumModel implements IModel<z3.ZodNativeEnum<z3.EnumLike>> {
     ];
   }
 
-  #listEntries(
-    schema: z3.ZodNativeEnum<z3.EnumLike>
+  #listEntries<T extends z3.EnumLike>(
+    schema: z3.ZodNativeEnum<T>
   ): [string, string | number][] {
     const numbers = Object.values(schema.enum).filter(
       value => typeof value === 'number'
