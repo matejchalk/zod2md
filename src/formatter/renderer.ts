@@ -1,9 +1,11 @@
-import { md, type BlockText, type InlineText } from 'build-md';
+import { md, type BlockText, type LinkMark } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
-import type { ExportedSchema } from '../types';
-import { slugify } from './formatting-utils';
+import { normalizeExportedSchemas } from '../normalize';
+import type { ExportedSchema, ExportedSchemas } from '../types';
+import { defaultNameTransform } from './name-transform';
 import type { IModel, NameTransformFn } from './types';
+import { slugify } from './utils';
 
 export class Renderer {
   #models: IModel<z3.ZodTypeAny | z4.$ZodType>[];
@@ -12,25 +14,25 @@ export class Renderer {
 
   constructor(
     models: IModel<z3.ZodTypeAny | z4.$ZodType>[],
-    exportedSchemas: ExportedSchema[],
-    transformName: NameTransformFn
+    exportedSchemas: ExportedSchemas,
+    transformName: NameTransformFn = defaultNameTransform
   ) {
     this.#models = models;
-    this.#exportedSchemas = exportedSchemas;
+    this.#exportedSchemas = normalizeExportedSchemas(exportedSchemas);
     this.#transformName = transformName;
   }
 
   renderSchemaBlock(schema: z3.ZodTypeAny | z4.$ZodType): BlockText {
-    const model = this.#findModel(schema);
+    const model = this.findModel(schema);
     return model.renderBlock(schema, this);
   }
 
   renderSchemaInline(schema: z3.ZodTypeAny | z4.$ZodType): BlockText {
-    const ref = this.#findExportedSchema(schema);
+    const ref = this.findExportedSchema(schema);
     if (ref) {
-      return this.#formatExportedSchema(ref);
+      return this.formatExportedSchema(ref);
     }
-    const model = this.#findModel(schema);
+    const model = this.findModel(schema);
     return model.renderInline(schema, this);
   }
 
@@ -71,13 +73,13 @@ export class Renderer {
     return curr;
   }
 
-  #formatExportedSchema(ref: ExportedSchema): InlineText {
+  formatExportedSchema(ref: ExportedSchema): LinkMark {
     const name = this.#transformName(ref.name, ref.path);
     const href = `#${slugify(name)}`;
     return md.link(href, name);
   }
 
-  #findExportedSchema(
+  findExportedSchema(
     schema: z3.ZodTypeAny | z4.$ZodType
   ): ExportedSchema | undefined {
     return this.#exportedSchemas.find(ref =>
@@ -85,7 +87,7 @@ export class Renderer {
     );
   }
 
-  #findModel(
+  findModel(
     schema: z3.ZodTypeAny | z4.$ZodType
   ): IModel<z3.ZodTypeAny | z4.$ZodType> {
     const model = this.#models.find(model => model.isSchema(schema));

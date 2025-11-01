@@ -1,12 +1,13 @@
 import { MarkdownDocument } from 'build-md';
-import type { ExportedSchema } from '../types';
+import { normalizeExportedSchemas } from '../normalize';
+import type { ExportedSchemas } from '../types';
 import { MODELS } from './models';
 import { defaultNameTransform } from './name-transform';
 import { Renderer } from './renderer';
 import type { FormatterOptions } from './types';
 
 export function formatSchemasAsMarkdown(
-  schemas: ExportedSchema[],
+  schemas: ExportedSchemas,
   options: FormatterOptions
 ) {
   const { title, transformName = defaultNameTransform } = options;
@@ -14,11 +15,13 @@ export function formatSchemasAsMarkdown(
 
   return new MarkdownDocument()
     .heading(1, title)
-    .$foreach(schemas, (doc, { name, path, schema }) =>
-      doc
-        .heading(2, transformName(name, path))
-        .paragraph(renderer.getDescription(schema))
-        .paragraph(renderer.renderSchemaBlock(schema))
+    .$foreach(
+      normalizeExportedSchemas(schemas),
+      (doc, { name, path, schema }) =>
+        doc
+          .heading(2, transformName(name, path))
+          .paragraph(renderer.getDescription(schema))
+          .paragraph(renderer.renderSchemaBlock(schema))
     )
     .toString();
 }
