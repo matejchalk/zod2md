@@ -20,11 +20,11 @@ describe('formatSchemasAsMarkdown', () => {
 
     await expect(
       formatSchemasAsMarkdown(
-        [
-          { schema: inputConfigSchema, name: 'InputConfig', path },
-          { schema: outputConfigSchema, name: 'OutputConfig', path },
-          { schema: configSchema, name: 'Config', path },
-        ],
+        {
+          InputConfig: inputConfigSchema,
+          OutputConfig: outputConfigSchema,
+          Config: configSchema,
+        },
         { title: 'Configuration API' }
       )
     ).toMatchFileSnapshot('__snapshots__/config.md');

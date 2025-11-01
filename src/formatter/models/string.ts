@@ -1,8 +1,8 @@
 import { md, type BlockText, type InlineText } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
-import { formatLiteral, smartJoin } from '../formatting-utils';
 import type { IModel } from '../types';
+import { formatLiteral, smartJoin } from '../utils';
 
 const STRING_TYPES = [
   z3.ZodString,

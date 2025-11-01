@@ -1,8 +1,8 @@
 import { md, type BlockText, type InlineText } from 'build-md';
 import * as z3 from 'zod/v3';
 import type { $ZodType } from 'zod/v4/core';
-import { formatLiteral } from '../formatting-utils';
 import type { IModel } from '../types';
+import { formatLiteral } from '../utils';
 
 export class NativeEnumModel implements IModel<z3.ZodNativeEnum<z3.EnumLike>> {
   isSchema(schema: z3.ZodTypeAny | $ZodType) {

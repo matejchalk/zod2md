@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@commander-js/extra-typings": "^12.0.0",
-    "build-md": "^0.4.2",
+    "build-md": "^0.4.5",
     "bundle-require": "^5.1.0",
     "commander": "^12.0.0",
     "esbuild": "^0.25.4"
@@ -62,7 +62,7 @@
     "tsup": "^8.0.1",
     "typescript": "^5.8.3",
     "verdaccio": "^6.1.2",
-    "vitest": "^3.0.5",
+    "vitest": "^3.2.4",
     "zod": "^4.0.5"
   }
 }
