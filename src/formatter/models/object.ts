@@ -7,9 +7,9 @@ import {
 } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
-import { formatLiteral } from '../formatting-utils';
 import type { Renderer } from '../renderer';
 import type { IModel } from '../types';
+import { formatLiteral } from '../utils';
 
 type ObjectField = {
   key: string;
@@ -17,6 +17,10 @@ type ObjectField = {
   description: string;
   required: boolean;
   defaultValue?: unknown;
+};
+
+type CustomRenderOptions = {
+  objectName?: string;
 };
 
 const REQUIRED_ASTERISK = '(\\*)';
@@ -30,7 +34,8 @@ export class ObjectModel
 
   renderBlock(
     schema: z3.ZodObject<z3.ZodRawShape> | z4.$ZodObject,
-    renderer: Renderer
+    renderer: Renderer,
+    options?: CustomRenderOptions
   ): BlockText {
     const fields = this.#parseObjectFields(schema, renderer);
 
@@ -45,7 +50,7 @@ export class ObjectModel
     ];
     const tableRows: TableRow[] = fields.map(field => [
       field.required
-        ? md.bold(md`${md.code(field.key)} ${REQUIRED_ASTERISK}`)
+        ? md`${md.bold(md.code(field.key))} ${REQUIRED_ASTERISK}`
         : md.code(field.key),
       ...(hasDescription ? [field.description ?? ''] : []),
       renderer.renderSchemaInline(field.schema),
@@ -58,35 +63,39 @@ export class ObjectModel
         : []),
     ]);
 
-    const introText = 'Object containing the following properties:';
+    const introText = `${
+      options?.objectName ?? 'Object'
+    } containing the following properties:`;
     const footerText = fields.some(({ required }) => required)
       ? `${REQUIRED_ASTERISK} Required.`
       : 'All properties are optional.';
 
-    return [
-      md.paragraph(md.italic(introText)),
-      md.paragraph(md.table(tableColumns, tableRows)),
-      md.paragraph(md.italic(footerText)),
-    ];
+    return md`${md.paragraph(md.italic(introText))}${md.table(
+      tableColumns,
+      tableRows
+    )}${md.paragraph(md.italic(footerText))}`;
   }
 
   renderInline(
     schema: z3.ZodObject<z3.ZodRawShape> | z4.$ZodObject,
-    renderer: Renderer
+    renderer: Renderer,
+    options?: CustomRenderOptions
   ): InlineText {
     const fields = this.#parseObjectFields(schema, renderer);
 
     const listItems = fields.map(field => {
       const formattedKey = field.required
-        ? md.bold(md`${md.code(field.key)} ${REQUIRED_ASTERISK}`)
+        ? md`${md.bold(md.code(field.key))} ${REQUIRED_ASTERISK}`
         : md.code(field.key);
       const formattedType = renderer.renderSchemaInline(field.schema);
       const description = renderer.getDescription(field.schema);
       const formattedDescription = description ? ` - ${description}` : '';
-      return `${formattedKey}: ${formattedType}${formattedDescription}`;
+      return md`${formattedKey}: ${formattedType}${formattedDescription}`;
     });
 
-    return md`${md.italic('Object with properties:')}${md.list(listItems)}`;
+    return md`${md.italic(
+      options?.objectName ?? 'Object with properties:'
+    )}${md.list(listItems)}`;
   }
 
   #parseObjectFields(

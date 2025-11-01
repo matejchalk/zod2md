@@ -6,7 +6,7 @@ _Object containing the following properties:_
 
 | Property         | Type     |
 | ---------------- | -------- |
-| **`entry` (\*)** | `string` |
+| **`entry`** (\*) | `string` |
 | `tsconfig`       | `string` |
 
 _(\*) Required._
@@ -29,7 +29,7 @@ _Object containing the following properties:_
 
 | Property         | Type                          |
 | ---------------- | ----------------------------- |
-| **`input` (\*)** | [InputConfig](#inputconfig)   |
+| **`input`** (\*) | [InputConfig](#inputconfig)   |
 | `output`         | [OutputConfig](#outputconfig) |
 
 _(\*) Required._

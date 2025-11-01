@@ -12,3 +12,7 @@ export type ExportedSchema = {
   schema: z3.ZodType<unknown> | z4.$ZodType;
   path: string;
 };
+
+export type ExportedSchemas =
+  | ExportedSchema[]
+  | Record<string, ExportedSchema['schema']>;
