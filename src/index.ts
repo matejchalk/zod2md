@@ -1,5 +1,5 @@
-import { convertSchemas } from './converter';
-import { formatModelsAsMarkdown } from './formatter';
+import { convertSchemas } from './legacy/converter';
+import { formatModelsAsMarkdown } from './legacy/formatter';
 import { loadZodSchemas } from './loader';
 import type { Options } from './types';
 
