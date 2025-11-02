@@ -7,14 +7,14 @@ import { formatLiteral } from '../utils';
 const MAX_VALUES = 20;
 
 export class EnumModel
-  implements IModel<z3.ZodEnum<[string, ...string[]]> | z4.$ZodEnum>
+  implements IModel<z4.$ZodEnum | z3.ZodEnum<[string, ...string[]]>>
 {
-  isSchema(schema: z3.ZodTypeAny | z4.$ZodType) {
-    return schema instanceof z3.ZodEnum || schema instanceof z4.$ZodEnum;
+  isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
+    return schema instanceof z4.$ZodEnum || schema instanceof z3.ZodEnum;
   }
 
   renderBlock(
-    schema: z3.ZodEnum<[string, ...string[]]> | z4.$ZodEnum
+    schema: z4.$ZodEnum | z3.ZodEnum<[string, ...string[]]>
   ): BlockText {
     const values = this.#listValues(schema);
     const listItems = values.map(value => md.code(formatLiteral(value)));
@@ -31,7 +31,7 @@ export class EnumModel
   }
 
   renderInline(
-    schema: z3.ZodEnum<[string, ...string[]]> | z4.$ZodEnum
+    schema: z4.$ZodEnum | z3.ZodEnum<[string, ...string[]]>
   ): InlineText {
     const values = this.#listValues(schema);
     return md.code(
@@ -44,7 +44,7 @@ export class EnumModel
   }
 
   #listValues(
-    schema: z3.ZodEnum<[string, ...string[]]> | z4.$ZodEnum
+    schema: z4.$ZodEnum | z3.ZodEnum<[string, ...string[]]>
   ): z4.util.EnumValue[] {
     if (schema instanceof z4.$ZodEnum) {
       return Object.values(schema._zod.def.entries);
