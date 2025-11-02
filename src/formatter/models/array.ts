@@ -12,14 +12,14 @@ type ArrayValidation =
   | { kind: 'length'; value: number };
 
 export class ArrayModel
-  implements IModel<z3.ZodArray<z3.ZodTypeAny> | z4.$ZodArray<z4.$ZodType>>
+  implements IModel<z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>>
 {
-  isSchema(schema: z3.ZodTypeAny | z4.$ZodType) {
-    return schema instanceof z3.ZodArray || schema instanceof z4.$ZodArray;
+  isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
+    return schema instanceof z4.$ZodArray || schema instanceof z3.ZodArray;
   }
 
   renderBlock(
-    schema: z3.ZodArray<z3.ZodTypeAny> | z4.$ZodArray<z4.$ZodType>,
+    schema: z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>,
     renderer: Renderer
   ): BlockText {
     const itemSchema = this.#getItemSchema(schema);
@@ -54,7 +54,7 @@ export class ArrayModel
   }
 
   renderInline(
-    schema: z3.ZodArray<z3.ZodTypeAny> | z4.$ZodArray<z4.$ZodType>,
+    schema: z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>,
     renderer: Renderer
   ): BlockText {
     const itemSchema = this.#getItemSchema(schema);
@@ -101,15 +101,15 @@ export class ArrayModel
   }
 
   #getItemSchema(
-    schema: z3.ZodArray<z3.ZodTypeAny> | z4.$ZodArray<z4.$ZodType>
-  ): z3.ZodTypeAny | z4.$ZodType {
+    schema: z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>
+  ): z4.$ZodType | z3.ZodTypeAny {
     return schema instanceof z3.ZodArray
       ? schema.element
       : schema._zod.def.element;
   }
 
   #listValidations(
-    schema: z3.ZodArray<z3.ZodTypeAny> | z4.$ZodArray<z4.$ZodType>
+    schema: z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>
   ): ArrayValidation[] {
     const possibleValidations: (ArrayValidation | null)[] =
       schema instanceof z3.ZodArray

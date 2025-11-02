@@ -11,12 +11,12 @@ type BigIntValidation =
   | { kind: 'lt'; value: bigint }
   | { kind: 'multipleOf'; value: bigint };
 
-export class BigIntModel implements IModel<z3.ZodBigInt | z4.$ZodBigInt> {
-  isSchema(schema: z3.ZodTypeAny | z4.$ZodType) {
-    return schema instanceof z3.ZodBigInt || schema instanceof z4.$ZodBigInt;
+export class BigIntModel implements IModel<z4.$ZodBigInt | z3.ZodBigInt> {
+  isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
+    return schema instanceof z4.$ZodBigInt || schema instanceof z3.ZodBigInt;
   }
 
-  renderBlock(schema: z3.ZodBigInt | z4.$ZodBigInt): BlockText {
+  renderBlock(schema: z4.$ZodBigInt | z3.ZodBigInt): BlockText {
     const validations = this.#listValidations(schema);
     if (validations.length === 0) {
       return md.italic('BigInt.');
@@ -29,7 +29,7 @@ export class BigIntModel implements IModel<z3.ZodBigInt | z4.$ZodBigInt> {
     );
   }
 
-  renderInline(schema: z3.ZodBigInt | z4.$ZodBigInt): InlineText {
+  renderInline(schema: z4.$ZodBigInt | z3.ZodBigInt): InlineText {
     const validations = this.#listValidations(schema);
     if (validations.length === 0) {
       return md.code('bigint');
@@ -73,7 +73,7 @@ export class BigIntModel implements IModel<z3.ZodBigInt | z4.$ZodBigInt> {
     }
   }
 
-  #listValidations(schema: z3.ZodBigInt | z4.$ZodBigInt): BigIntValidation[] {
+  #listValidations(schema: z4.$ZodBigInt | z3.ZodBigInt): BigIntValidation[] {
     if (schema instanceof z3.ZodBigInt) {
       return schema._def.checks.map((check): BigIntValidation => {
         switch (check.kind) {

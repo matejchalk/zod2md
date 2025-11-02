@@ -13,7 +13,7 @@ import { formatLiteral } from '../utils';
 
 type ObjectField = {
   key: string;
-  schema: z3.ZodTypeAny | z4.$ZodType;
+  schema: z4.$ZodType | z3.ZodTypeAny;
   description: string;
   required: boolean;
   defaultValue?: unknown;
@@ -26,14 +26,14 @@ type CustomRenderOptions = {
 const REQUIRED_ASTERISK = '(\\*)';
 
 export class ObjectModel
-  implements IModel<z3.ZodObject<z3.ZodRawShape> | z4.$ZodObject>
+  implements IModel<z4.$ZodObject | z3.ZodObject<z3.ZodRawShape>>
 {
-  isSchema(schema: z3.ZodTypeAny | z4.$ZodType) {
-    return schema instanceof z3.ZodObject || schema instanceof z4.$ZodObject;
+  isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
+    return schema instanceof z4.$ZodObject || schema instanceof z3.ZodObject;
   }
 
   renderBlock(
-    schema: z3.ZodObject<z3.ZodRawShape> | z4.$ZodObject,
+    schema: z4.$ZodObject | z3.ZodObject<z3.ZodRawShape>,
     renderer: Renderer,
     options?: CustomRenderOptions
   ): BlockText {
@@ -77,7 +77,7 @@ export class ObjectModel
   }
 
   renderInline(
-    schema: z3.ZodObject<z3.ZodRawShape> | z4.$ZodObject,
+    schema: z4.$ZodObject | z3.ZodObject<z3.ZodRawShape>,
     renderer: Renderer,
     options?: CustomRenderOptions
   ): InlineText {
@@ -99,7 +99,7 @@ export class ObjectModel
   }
 
   #parseObjectFields(
-    schema: z3.ZodObject<z3.ZodRawShape> | z4.$ZodObject,
+    schema: z4.$ZodObject | z3.ZodObject<z3.ZodRawShape>,
     renderer: Renderer
   ): ObjectField[] {
     if (schema instanceof z4.$ZodObject) {

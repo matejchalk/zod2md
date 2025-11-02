@@ -19,12 +19,12 @@ type NumberValidation =
   | { kind: 'float32' }
   | { kind: 'float64' };
 
-export class NumberModel implements IModel<z3.ZodNumber | z4.$ZodNumber> {
-  isSchema(schema: z3.ZodTypeAny | z4.$ZodType) {
-    return schema instanceof z3.ZodNumber || schema instanceof z4.$ZodNumber;
+export class NumberModel implements IModel<z4.$ZodNumber | z3.ZodNumber> {
+  isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
+    return schema instanceof z4.$ZodNumber || schema instanceof z3.ZodNumber;
   }
 
-  renderBlock(schema: z3.ZodNumber | z4.$ZodNumber): BlockText {
+  renderBlock(schema: z4.$ZodNumber | z3.ZodNumber): BlockText {
     const validations = this.#listValidations(schema);
     if (validations.length === 0) {
       return md.italic('Number.');
@@ -37,7 +37,7 @@ export class NumberModel implements IModel<z3.ZodNumber | z4.$ZodNumber> {
     );
   }
 
-  renderInline(schema: z3.ZodNumber | z4.$ZodNumber): InlineText {
+  renderInline(schema: z4.$ZodNumber | z3.ZodNumber): InlineText {
     const validations = this.#listValidations(schema);
     if (validations.length === 0) {
       return md.code('number');
@@ -103,7 +103,7 @@ export class NumberModel implements IModel<z3.ZodNumber | z4.$ZodNumber> {
     }
   }
 
-  #listValidations(schema: z3.ZodNumber | z4.$ZodNumber): NumberValidation[] {
+  #listValidations(schema: z4.$ZodNumber | z3.ZodNumber): NumberValidation[] {
     if (schema instanceof z3.ZodNumber) {
       return schema._def.checks.map((check): NumberValidation => {
         switch (check.kind) {
