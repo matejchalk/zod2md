@@ -66,10 +66,10 @@ export class StringModel implements IModel<StringType> {
       return md.italic('String.');
     }
     return md.italic(
-      `String which ${smartJoin(
+      `String that ${smartJoin(
         validations.map(this.#formatValidationLong),
         'and'
-      )}`
+      )}.`
     );
   }
 
