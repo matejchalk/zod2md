@@ -3,9 +3,9 @@ import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
 import type { IModel } from '../types';
 
-export class BooleanModel implements IModel<z3.ZodBoolean | z4.$ZodBoolean> {
-  isSchema(schema: z3.ZodTypeAny | z4.$ZodType) {
-    return schema instanceof z3.ZodBoolean || schema instanceof z4.$ZodBoolean;
+export class BooleanModel implements IModel<z4.$ZodBoolean | z3.ZodBoolean> {
+  isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
+    return schema instanceof z4.$ZodBoolean || schema instanceof z3.ZodBoolean;
   }
 
   renderBlock(): BlockText {

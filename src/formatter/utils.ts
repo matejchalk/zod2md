@@ -1,3 +1,5 @@
+import { md, type BlockText, type FormattedText, type Mark } from 'build-md';
+
 export function formatLiteral(value: unknown): string {
   switch (typeof value) {
     case 'string':
@@ -33,6 +35,14 @@ export function smartJoin(items: string[], sep: string): string {
     const link = idx === 0 ? '' : idx === items.length - 1 ? ` ${sep} ` : ', ';
     return acc + link + item;
   }, '');
+}
+
+export function smartJoinMd(items: BlockText[], sep: Mark): FormattedText {
+  return items.reduce<FormattedText>((acc, item, idx) => {
+    const link =
+      idx === 0 ? '' : idx === items.length - 1 ? md` ${sep} ` : ', ';
+    return md`${acc}${link}${item}`;
+  }, []);
 }
 
 export function capitalize<T extends string>(text: T) {

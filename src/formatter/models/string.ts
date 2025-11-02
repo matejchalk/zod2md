@@ -56,7 +56,7 @@ type StringValidation =
   | { kind: 'cidr'; version?: 'v4' | 'v6' };
 
 export class StringModel implements IModel<StringType> {
-  isSchema(schema: z3.ZodTypeAny | z4.$ZodType): schema is StringType {
+  isSchema(schema: z4.$ZodType | z3.ZodTypeAny): schema is StringType {
     return STRING_TYPES.some(type => schema instanceof type);
   }
 
@@ -207,7 +207,7 @@ export class StringModel implements IModel<StringType> {
   }
 
   #parseStringSubTypeV4(
-    obj: Exclude<StringType, z3.ZodString> | z4.$ZodCheck
+    obj: z4.$ZodCheck | Exclude<StringType, z3.ZodString>
   ): StringValidation | null {
     if (obj instanceof z4.$ZodEmail) {
       return { kind: 'email' };
