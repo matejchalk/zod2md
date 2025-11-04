@@ -3,7 +3,6 @@ import { formatSchemasAsMarkdown } from './formatter';
 
 describe('formatSchemasAsMarkdown', () => {
   it('should document schemas in markdown (Zod %s)', async () => {
-    const path = 'src/schemas.ts';
     const inputConfigSchema = z.object({
       entry: z.string(),
       tsconfig: z.string().optional(),
