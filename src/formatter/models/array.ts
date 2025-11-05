@@ -42,15 +42,16 @@ export class ArrayModel
       return md.italic(
         md`${this.#formatPrefix(validations)} ${renderer.formatExportedSchema(
           exportedSchema
-        )} ${this.#formatSuffix(validations)}`
+        )} ${this.#formatSuffix(validations)}.`
       );
     }
 
     return md`${md.italic(
       this.#formatPrefix(validations)
-    )} ${renderer.renderSchemaInline(itemSchema)} ${md.italic(
-      this.#formatSuffix(validations)
-    )}`;
+    )} ${renderer.renderSchemaInline(itemSchema)} ${md.italic([
+      this.#formatSuffix(validations),
+      '.',
+    ])}`;
   }
 
   renderInline(
