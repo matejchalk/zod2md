@@ -10,6 +10,7 @@ import { CatchModel } from './catch';
 import { DefaultModel } from './default';
 import { EffectsModel } from './effects';
 import { EnumModel } from './enum';
+import { FunctionModel } from './function';
 import { IntersectionModel } from './intersection';
 import { LazyModel } from './lazy';
 import { LiteralModel } from './literal';
@@ -40,6 +41,7 @@ export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new UnionModel(),
   new IntersectionModel(),
   new LiteralModel(),
+  new FunctionModel(),
   new ReadonlyModel(),
   new BigIntModel(),
   new PipeModel(),
