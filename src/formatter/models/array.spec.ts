@@ -26,7 +26,7 @@ describe('ArrayModel', () => {
         _Array of objects containing the following properties:_
         
         | Property        | Type     |
-        | --------------- | -------- |
+        | :-------------- | :------- |
         | **\`id\`** (\\*)   | \`string\` |
         | **\`name\`** (\\*) | \`string\` |
         
