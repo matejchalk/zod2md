@@ -15,10 +15,10 @@ describe('NativeEnumModel', () => {
           _Native enum:_
 
           | Key       | Value |
-          | --------- | ----- |
-          | \`Pending\` | \`0\`   |
-          | \`Success\` | \`1\`   |
-          | \`Failure\` | \`2\`   |        
+          | :-------- | ----: |
+          | \`Pending\` |   \`0\` |
+          | \`Success\` |   \`1\` |
+          | \`Failure\` |   \`2\` |        
         `);
     });
 
@@ -33,7 +33,7 @@ describe('NativeEnumModel', () => {
           _Native enum:_
 
           | Key       | Value       |
-          | --------- | ----------- |
+          | :-------- | :---------- |
           | \`Pending\` | \`'pending'\` |
           | \`Success\` | \`'success'\` |
           | \`Failure\` | \`'failure'\` |        
