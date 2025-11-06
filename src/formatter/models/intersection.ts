@@ -24,9 +24,7 @@ export class IntersectionModel
     renderer: Renderer
   ): BlockText {
     const parts = this.#getParts(schema);
-    return md`${md.italic(
-      'Intersection of the following possible types:'
-    )}${md.list([
+    return md`${md.italic('Intersection of the following types:')}${md.list([
       renderer.renderSchemaInline(parts.left),
       renderer.renderSchemaInline(parts.right),
     ])}`;
