@@ -19,7 +19,7 @@ describe('ObjectModel', () => {
         _Object containing the following properties:_
 
         | Property | Type                                        |
-        | -------- | ------------------------------------------- |
+        | :------- | :------------------------------------------ |
         | \`cache\`  | \`boolean\`                                   |
         | \`logs\`   | \`'error' \\| 'warning' \\| 'info' \\| 'debug'\` |
 
@@ -45,7 +45,7 @@ describe('ObjectModel', () => {
         _Object containing the following properties:_
 
         | Property | Type                  |
-        | -------- | --------------------- |
+        | :------- | :-------------------- |
         | \`level\`  | [LogLevel](#loglevel) |
 
         _All properties are optional._
@@ -62,7 +62,7 @@ describe('ObjectModel', () => {
         _Object containing the following properties:_
 
         | Property     | Type     |
-        | ------------ | -------- |
+        | :----------- | :------- |
         | **\`x\`** (\\*) | \`number\` |
         | **\`y\`** (\\*) | \`number\` |
         | \`z\`          | \`number\` |
@@ -84,7 +84,7 @@ describe('ObjectModel', () => {
         _Object containing the following properties:_
 
         | Property   | Description             | Type             |
-        | ---------- | ----------------------- | ---------------- |
+        | :--------- | :---------------------- | :--------------- |
         | \`format\`   | Module format           | \`'esm' \\| 'cjs'\` |
         | \`tsconfig\` | Path to \`tsconfig.json\` | \`string\`         |
 
@@ -105,7 +105,7 @@ describe('ObjectModel', () => {
         _Object containing the following properties:_
 
         | Property   | Type             | Default           |
-        | ---------- | ---------------- | ----------------- |
+        | :--------- | :--------------- | :---------------- |
         | \`format\`   | \`'esm' \\| 'cjs'\` |                   |
         | \`tsconfig\` | \`string\`         | \`'tsconfig.json'\` |
 

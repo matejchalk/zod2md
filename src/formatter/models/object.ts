@@ -47,7 +47,7 @@ export class ObjectModel
       ...(hasDescription ? ['Description'] : []),
       'Type',
       ...(hasDefault ? ['Default'] : []),
-    ];
+    ].map(heading => ({ heading, alignment: 'left' }));
     const tableRows: TableRow[] = fields.map(field => [
       field.required
         ? md`${md.bold(md.code(field.key))} ${REQUIRED_ASTERISK}`
