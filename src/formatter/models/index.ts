@@ -30,6 +30,7 @@ import { SymbolModel } from './symbol';
 import { UnionModel } from './union';
 import { UnknownModel } from './unknown';
 import { VoidModel } from './void';
+import { TupleModel } from './tuple';
 
 export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new ObjectModel(),
@@ -45,6 +46,7 @@ export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new UnionModel(),
   new IntersectionModel(),
   new RecordModel(),
+  new TupleModel(),
   new LiteralModel(),
   new FunctionModel(),
   new ReadonlyModel(),
