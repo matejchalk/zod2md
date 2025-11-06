@@ -24,6 +24,7 @@ import { NumberModel } from './number';
 import { ObjectModel } from './object';
 import { OptionalModel } from './optional';
 import { PipeModel } from './pipe';
+import { PromiseModel } from './promise';
 import { ReadonlyModel } from './readonly';
 import { RecordModel } from './record';
 import { StringModel } from './string';
@@ -51,6 +52,7 @@ export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new TupleModel(),
   new LiteralModel(),
   new FunctionModel(),
+  new PromiseModel(),
   new ReadonlyModel(),
   new SymbolModel(),
   new BigIntModel(),
