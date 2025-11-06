@@ -18,6 +18,7 @@ import { LiteralModel } from './literal';
 import { NativeEnumModel } from './native-enum';
 import { NeverModel } from './never';
 import { NonOptionalModel } from './non-optional';
+import { NullModel } from './null';
 import { NullableModel } from './nullable';
 import { NumberModel } from './number';
 import { ObjectModel } from './object';
@@ -27,10 +28,11 @@ import { ReadonlyModel } from './readonly';
 import { RecordModel } from './record';
 import { StringModel } from './string';
 import { SymbolModel } from './symbol';
+import { TupleModel } from './tuple';
+import { UndefinedModel } from './undefined';
 import { UnionModel } from './union';
 import { UnknownModel } from './unknown';
 import { VoidModel } from './void';
-import { TupleModel } from './tuple';
 
 export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new ObjectModel(),
@@ -55,6 +57,8 @@ export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new PipeModel(),
   new LazyModel(),
   new CatchModel(),
+  new UndefinedModel(),
+  new NullModel(),
   new UnknownModel(),
   new AnyModel(),
   new VoidModel(),
