@@ -24,6 +24,7 @@ import { ObjectModel } from './object';
 import { OptionalModel } from './optional';
 import { PipeModel } from './pipe';
 import { ReadonlyModel } from './readonly';
+import { RecordModel } from './record';
 import { StringModel } from './string';
 import { SymbolModel } from './symbol';
 import { UnionModel } from './union';
@@ -43,6 +44,7 @@ export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new DefaultModel(),
   new UnionModel(),
   new IntersectionModel(),
+  new RecordModel(),
   new LiteralModel(),
   new FunctionModel(),
   new ReadonlyModel(),
