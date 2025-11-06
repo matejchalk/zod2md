@@ -10,11 +10,20 @@ export class NativeEnumModel implements IModel<z3.ZodNativeEnum<z3.EnumLike>> {
   }
 
   renderBlock<T extends z3.EnumLike>(schema: z3.ZodNativeEnum<T>): BlockText {
+    const entries = this.#listEntries(schema);
     return [
       md.italic('Native enum:'),
       md.table(
-        ['Key', 'Value'],
-        this.#listEntries(schema).map(([key, value]) => [
+        [
+          { heading: 'Key', alignment: 'left' },
+          {
+            heading: 'Value',
+            alignment: entries.every(([_, value]) => typeof value === 'number')
+              ? 'right'
+              : 'left',
+          },
+        ],
+        entries.map(([key, value]) => [
           md.code(key),
           md.code(formatLiteral(value)),
         ])
