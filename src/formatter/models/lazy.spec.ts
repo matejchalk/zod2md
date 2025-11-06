@@ -38,7 +38,7 @@ describe('LazyModel', () => {
           subcategoriesSchema,
           new Renderer(MODELS, schemas)
         )
-      ).toEqualMarkdown('_Array of [Category](#category) items_');
+      ).toEqualMarkdown('_Array of_ [Category](#category) _items_');
     });
   });
 });
