@@ -7,6 +7,7 @@ import { BigIntModel } from './bigint';
 import { BooleanModel } from './boolean';
 import { BrandedModel } from './branded';
 import { CatchModel } from './catch';
+import { DateModel } from './date';
 import { DefaultModel } from './default';
 import { EffectsModel } from './effects';
 import { EnumModel } from './enum';
@@ -24,6 +25,7 @@ import { OptionalModel } from './optional';
 import { PipeModel } from './pipe';
 import { ReadonlyModel } from './readonly';
 import { StringModel } from './string';
+import { SymbolModel } from './symbol';
 import { UnionModel } from './union';
 import { UnknownModel } from './unknown';
 import { VoidModel } from './void';
@@ -35,6 +37,7 @@ export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new NumberModel(),
   new BooleanModel(),
   new EnumModel(),
+  new DateModel(),
   new OptionalModel(),
   new NullableModel(),
   new DefaultModel(),
@@ -43,6 +46,7 @@ export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new LiteralModel(),
   new FunctionModel(),
   new ReadonlyModel(),
+  new SymbolModel(),
   new BigIntModel(),
   new PipeModel(),
   new LazyModel(),
