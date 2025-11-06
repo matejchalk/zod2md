@@ -15,7 +15,7 @@ describe('IntersectionModel', () => {
           new Renderer(MODELS, {})
         )
       ).toEqualMarkdown(`
-        _Intersection of the following possible types:_
+        _Intersection of the following types:_
         
         - \`string\` (_uuid_)
         - _Object with properties:_
@@ -36,7 +36,7 @@ describe('IntersectionModel', () => {
           new Renderer(MODELS, schemas)
         )
       ).toEqualMarkdown(`
-        _Intersection of the following possible types:_
+        _Intersection of the following types:_
         
         - [ID](#id)
         - _Object with properties:_
