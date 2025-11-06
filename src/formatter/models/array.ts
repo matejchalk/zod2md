@@ -63,13 +63,11 @@ export class ArrayModel
 
     const exportedSchema = renderer.findExportedSchema(itemSchema);
     if (exportedSchema) {
-      return md.italic([
-        this.#formatPrefix(validations),
-        ' ',
-        renderer.formatExportedSchema(exportedSchema),
-        ' ',
-        this.#formatSuffix(validations),
-      ]);
+      return md`${md.italic(
+        this.#formatPrefix(validations)
+      )} ${renderer.formatExportedSchema(exportedSchema)} ${md.italic(
+        this.#formatSuffix(validations)
+      )}`;
     }
 
     const model = renderer.findModel(itemSchema);

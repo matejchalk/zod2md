@@ -68,9 +68,9 @@ describe('ArrayModel', () => {
           ]
         )
       ).toEqualMarkdown(`
-        | Property   | Type                                 |
-        | ---------- | ------------------------------------ |
-        | \`products\` | _Array of [Product](#product) items_ |
+        | Property   | Type                                   |
+        | ---------- | -------------------------------------- |
+        | \`products\` | _Array of_ [Product](#product) _items_ |
      `);
     });
 
