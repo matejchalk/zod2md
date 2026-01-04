@@ -11,4 +11,13 @@ export async function zod2md(options: Options): Promise<string> {
 
 export { convertSchemas, formatModelsAsMarkdown, loadZodSchemas };
 
-export type { Config, Options } from './types';
+export type {
+  Config,
+  Options,
+  NamedModel,
+  ObjectModel,
+  ModelOrRef,
+  Model,
+  Ref,
+  ModelMeta,
+} from './types';
