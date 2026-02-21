@@ -53,7 +53,9 @@ export class ObjectModel implements IModel<
         ? md`${md.bold(md.code(field.key))} ${REQUIRED_ASTERISK}`
         : md.code(field.key),
       ...(hasDescription ? [field.description ?? ''] : []),
-      renderer.renderSchemaInline(this.#unwrapPropSchema(field.schema)),
+      renderer.renderSchemaInline(
+        this.#unwrapPropSchema(field.schema, renderer),
+      ),
       ...(hasDefault
         ? [
             this.#hasDefaultValue(field)
@@ -88,7 +90,7 @@ export class ObjectModel implements IModel<
         ? md`${md.bold(md.code(field.key))} ${REQUIRED_ASTERISK}`
         : md.code(field.key);
       const formattedType = renderer.renderSchemaInline(
-        this.#unwrapPropSchema(field.schema),
+        this.#unwrapPropSchema(field.schema, renderer),
       );
       const description = renderer.getDescription(field.schema);
       const formattedDescription = description ? ` - ${description}` : '';
@@ -160,13 +162,21 @@ export class ObjectModel implements IModel<
 
   #unwrapPropSchema(
     schema: z4.$ZodType | z3.ZodTypeAny,
+    renderer: Renderer,
   ): z4.$ZodType | z3.ZodTypeAny {
-    if (schema instanceof z4.$ZodOptional || schema instanceof z4.$ZodDefault) {
-      return schema._zod.def.innerType;
+    if (schema instanceof z4.$ZodType) {
+      return (
+        renderer.findInWrapperTypeV4(
+          schema,
+          s => !(s instanceof z4.$ZodOptional || s instanceof z4.$ZodDefault),
+        ) ?? schema
+      );
     }
-    if (schema instanceof z3.ZodOptional || schema instanceof z3.ZodDefault) {
-      return schema._def.innerType;
-    }
-    return schema;
+    return (
+      renderer.findInWrapperTypeV3(
+        schema,
+        s => !(s instanceof z3.ZodOptional || s instanceof z3.ZodDefault),
+      ) ?? schema
+    );
   }
 }
