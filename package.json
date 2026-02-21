@@ -39,6 +39,7 @@
     "prepublishOnly": "npm run build",
     "prepare": "husky",
     "build": "tsup",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write .",

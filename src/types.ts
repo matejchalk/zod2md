@@ -16,3 +16,6 @@ export type ExportedSchema = {
 export type ExportedSchemas =
   | ExportedSchema[]
   | Record<string, ExportedSchema['schema']>;
+
+// https://www.totaltypescript.com/concepts/the-prettify-helper
+export type Prettify<T> = { [K in keyof T]: T[K] } & {};

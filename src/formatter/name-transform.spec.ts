@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { defaultNameTransform } from './name-transform';
 
 describe('default transformName', () => {
@@ -11,6 +12,16 @@ describe('default transformName', () => {
     ['LoginProps', 'src/pages/Login.tsx', 'LoginProps'],
     [undefined, 'schemas/log-entry.mjs', 'LogEntry'],
   ])('should transform %j from %j to %j', (name, path, result) => {
-    expect(defaultNameTransform(name, path)).toBe(result);
+    expect(defaultNameTransform(name, path, z.any())).toBe(result);
+  });
+
+  it('should use title from meta registry', () => {
+    expect(
+      defaultNameTransform(
+        'configSchema',
+        'src/models/index.ts',
+        z.object({}).meta({ title: 'CoreConfig' }),
+      ),
+    ).toBe('CoreConfig');
   });
 });
