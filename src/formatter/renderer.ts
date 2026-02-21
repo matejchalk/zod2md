@@ -95,7 +95,7 @@ export class Renderer {
   }
 
   formatExportedSchema(ref: ExportedSchema): LinkMark {
-    const name = this.#transformName(ref.name, ref.path);
+    const name = this.#transformName(ref.name, ref.path, ref.schema);
     const href = `#${slugify(name)}`;
     return md.link(href, name);
   }

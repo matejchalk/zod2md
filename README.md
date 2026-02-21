@@ -63,15 +63,15 @@ CLI arguments take precedence over configuration file values.
 
 ### Configuration file reference
 
-| Property        | Type                                                  | Required | Description                                                                                |
-| :-------------- | :---------------------------------------------------- | :------: | :----------------------------------------------------------------------------------------- |
-| `entry`         | `string \| string[]`                                  |   yes    | Entry point(s), i.e. paths to modules with Zod schema exports                              |
-| `tsconfig`      | `string`                                              |    no    | Path to `tsconfig.json` to be used when importing entry point(s)                           |
-| `format`        | `'esm' \| 'cjs'`                                      |    no    | Module type to assume when importing entry point(s)                                        |
-| `title`         | `string`                                              |   yes    | Heading text for Markdown document                                                         |
-| `transformName` | `(name: string \| undefined, path: string) => string` |    no    | Custom function for convert exported variable `name` and file `path` to display title (\*) |
+| Property        | Type                                                                                        | Required | Description                                                             |
+| :-------------- | :------------------------------------------------------------------------------------------ | :------: | :---------------------------------------------------------------------- |
+| `entry`         | `string \| string[]`                                                                        |   yes    | Entry point(s), i.e. paths to modules with Zod schema exports           |
+| `tsconfig`      | `string`                                                                                    |    no    | Path to `tsconfig.json` to be used when importing entry point(s)        |
+| `format`        | `'esm' \| 'cjs'`                                                                            |    no    | Module type to assume when importing entry point(s)                     |
+| `title`         | `string`                                                                                    |   yes    | Heading text for Markdown document                                      |
+| `transformName` | `(name: string \| undefined, path: string, schema: z4.$ZodType \| z3.ZodTypeAny) => string` |    no    | Custom function for converting exported schema to to display title (\*) |
 
-(\*) Default is to strip `Schema`-suffix and convert to _PascalCase_ (e.g. `userSchema` becomes `User`). In case of a default export, the file path is used.
+(\*) The default is to use the `title` from [Zod v4 metadata](https://zod.dev/metadata#metadata). Alternatively, the variable name is used, stripping the `Schema`-suffix and converting it to _PascalCase_ (e.g. `userSchema` becomes `User`). In case of a default export, the file path is used.
 
 ## Programmatic usage
 
@@ -127,7 +127,7 @@ export function convertZodFunctionToSchema<T extends $ZodFunction>(factory: T) {
 // USAGE
 
 export const predicateSchema = convertZodFunctionToSchema(
-  z.function({ input: [z.string(), z.number()], output: z.boolean() })
+  z.function({ input: [z.string(), z.number()], output: z.boolean() }),
 );
 ```
 

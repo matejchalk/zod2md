@@ -8,7 +8,7 @@ import type { FormatterOptions } from './types';
 
 export function formatSchemasAsMarkdown(
   schemas: ExportedSchemas,
-  options: FormatterOptions
+  options: FormatterOptions,
 ) {
   const { title, transformName = defaultNameTransform } = options;
   const renderer = new Renderer(MODELS, schemas, transformName);
@@ -19,9 +19,9 @@ export function formatSchemasAsMarkdown(
       normalizeExportedSchemas(schemas),
       (doc, { name, path, schema }) =>
         doc
-          .heading(2, transformName(name, path))
+          .heading(2, transformName(name, path, schema))
           .paragraph(renderer.getDescription(schema))
-          .paragraph(renderer.renderSchemaBlock(schema))
+          .paragraph(renderer.renderSchemaBlock(schema)),
     )
     .toString();
 }

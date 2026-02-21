@@ -1,16 +1,30 @@
 import { basename, dirname, sep } from 'node:path';
+import * as z3 from 'zod/v3';
+import * as z4 from 'zod/v4/core';
 import type { NameTransformFn } from './types';
 
-export const defaultNameTransform: NameTransformFn = (name, path) => {
+export const defaultNameTransform: NameTransformFn = (name, path, schema) => {
+  const metaTitle = getMetaTitle(schema);
+  if (metaTitle) {
+    return metaTitle;
+  }
+
   if (name) {
     return formatName(name);
   }
+
   const fileWithoutExt = basename(path).replace(/\.[cm]?[jt]sx?$/, '');
   if (fileWithoutExt !== 'index') {
     return formatName(fileWithoutExt);
   }
   const parentDir = dirname(path).split(sep).at(-1)!;
   return formatName(parentDir);
+};
+
+const getMetaTitle = (schema: z4.$ZodType | z3.ZodTypeAny) => {
+  if (schema instanceof z4.$ZodType) {
+    return z4.globalRegistry.get(schema)?.title;
+  }
 };
 
 const formatName = (name: string) => {

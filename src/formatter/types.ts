@@ -11,7 +11,8 @@ export interface IModel<T extends z4.$ZodType | z3.ZodTypeAny> {
 
 export type NameTransformFn = (
   name: string | undefined,
-  path: string
+  path: string,
+  schema: z4.$ZodType | z3.ZodTypeAny,
 ) => string;
 
 export type FormatterOptions = {
