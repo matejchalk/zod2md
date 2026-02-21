@@ -164,19 +164,15 @@ export class ObjectModel implements IModel<
     schema: z4.$ZodType | z3.ZodTypeAny,
     renderer: Renderer,
   ): z4.$ZodType | z3.ZodTypeAny {
-    if (schema instanceof z4.$ZodType) {
-      return (
-        renderer.findInWrapperTypeV4(
-          schema,
-          s => !(s instanceof z4.$ZodOptional || s instanceof z4.$ZodDefault),
-        ) ?? schema
-      );
+    if (renderer.findExportedSchema(schema)) {
+      return schema;
     }
-    return (
-      renderer.findInWrapperTypeV3(
-        schema,
-        s => !(s instanceof z3.ZodOptional || s instanceof z3.ZodDefault),
-      ) ?? schema
-    );
+    if (schema instanceof z4.$ZodOptional || schema instanceof z4.$ZodDefault) {
+      return this.#unwrapPropSchema(schema._zod.def.innerType, renderer);
+    }
+    if (schema instanceof z3.ZodOptional || schema instanceof z3.ZodDefault) {
+      return this.#unwrapPropSchema(schema._def.innerType, renderer);
+    }
+    return schema;
   }
 }
