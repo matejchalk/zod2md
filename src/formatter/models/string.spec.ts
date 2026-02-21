@@ -19,41 +19,47 @@ describe('StringModel', () => {
   describe('renderBlock', () => {
     it('should render one-word sentence if there are no validations', () => {
       expect(new StringModel().renderBlock(z.string())).toEqualMarkdown(
-        '_String._'
+        '_String._',
       );
     });
 
     it('should include validations from string checks', () => {
       expect(
-        new StringModel().renderBlock(z.string().min(1).max(280))
+        new StringModel().renderBlock(z.string().min(1).max(280)),
       ).toEqualMarkdown(
-        '_String that has a minimum length of 1 and has a maximum length of 280._'
+        '_String that has a minimum length of 1 and has a maximum length of 280._',
       );
     });
 
     it('should include validations from string sub-types', () => {
       expect(new StringModel().renderBlock(z.iso.datetime())).toEqualMarkdown(
-        '_String that is a date and time in ISO 8601 format (any timezone offset)._'
+        '_String that is a date and time in ISO 8601 format (any timezone offset)._',
       );
     });
   });
 
-  describe('inlineBlock', () => {
+  describe('renderInline', () => {
     it('should render typescript code if there are no validations', () => {
       expect(new StringModel().renderInline(z.string())).toEqualMarkdown(
-        '`string`'
+        '`string`',
       );
     });
 
     it('should include validations from string checks', () => {
       expect(
-        new StringModel().renderInline(z.string().regex(/^[a-z0-9_]+$/))
+        new StringModel().renderInline(z.string().regex(/^[a-z0-9_]+$/)),
       ).toEqualMarkdown('`string` (_regex: `/^[a-z0-9_]+$/`_)');
     });
 
     it('should include validations from string sub-types', () => {
       expect(new StringModel().renderInline(z.email())).toEqualMarkdown(
-        '`string` (_email_)'
+        '`string` (_email_)',
+      );
+    });
+
+    it('should ignore overwrites', () => {
+      expect(new StringModel().renderInline(z.string().trim())).toEqualMarkdown(
+        '`string`',
       );
     });
   });

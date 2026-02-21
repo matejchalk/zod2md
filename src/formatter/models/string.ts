@@ -68,8 +68,8 @@ export class StringModel implements IModel<StringType> {
     return md.italic(
       `String that ${smartJoin(
         validations.map(this.#formatValidationLong),
-        'and'
-      )}.`
+        'and',
+      )}.`,
     );
   }
 
@@ -79,7 +79,7 @@ export class StringModel implements IModel<StringType> {
       return md.code('string');
     }
     return md`${md.code('string')} (${md.italic(
-      validations.map(this.#formatValidationShort).join(', ')
+      validations.map(this.#formatValidationShort).join(', '),
     )})`;
   }
 
@@ -109,7 +109,7 @@ export class StringModel implements IModel<StringType> {
         return `has an exact length of ${validation.value}`;
       case 'regex':
         return `matches the regular expression ${md.code(
-          validation.regex.toString()
+          validation.regex.toString(),
         )}`;
       case 'includes':
         return `includes the substring ${formatLiteral(validation.value)}`;
@@ -203,11 +203,14 @@ export class StringModel implements IModel<StringType> {
     if (check instanceof z4.$ZodCheckEndsWith) {
       return { kind: 'endsWith', value: check._zod.def.suffix };
     }
+    if (check instanceof z4.$ZodCheckOverwrite) {
+      return null;
+    }
     return this.#parseStringSubTypeV4(check);
   }
 
   #parseStringSubTypeV4(
-    obj: z4.$ZodCheck | Exclude<StringType, z3.ZodString>
+    obj: z4.$ZodCheck | Exclude<StringType, z3.ZodString>,
   ): StringValidation | null {
     if (obj instanceof z4.$ZodEmail) {
       return { kind: 'email' };
