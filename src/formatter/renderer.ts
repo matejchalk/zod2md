@@ -15,7 +15,7 @@ export class Renderer {
   constructor(
     models: IModel<z3.ZodTypeAny | z4.$ZodType>[],
     exportedSchemas: ExportedSchemas,
-    transformName: NameTransformFn = defaultNameTransform
+    transformName: NameTransformFn = defaultNameTransform,
   ) {
     this.#models = models;
     this.#exportedSchemas = normalizeExportedSchemas(exportedSchemas);
@@ -37,12 +37,12 @@ export class Renderer {
   }
 
   getDescription(
-    schema: z3.ZodType<unknown> | z4.$ZodType
+    schema: z3.ZodType<unknown> | z4.$ZodType,
   ): string | undefined {
     if (schema instanceof z4.$ZodType) {
       const describedSchema = this.findInWrapperTypeV4(
         schema,
-        s => !!z4.globalRegistry.get(s)?.description
+        s => !!z4.globalRegistry.get(s)?.description,
       );
       return (
         describedSchema && z4.globalRegistry.get(describedSchema)?.description
@@ -52,10 +52,10 @@ export class Renderer {
     return schema.description;
   }
 
-  findInWrapperTypeV4(
+  findInWrapperTypeV4<T extends z4.$ZodType>(
     schema: z4.$ZodType,
-    predicate: (s: z4.$ZodType) => boolean
-  ): z4.$ZodType | undefined {
+    predicate: ((s: z4.$ZodType) => s is T) | ((s: z4.$ZodType) => boolean),
+  ): T | undefined {
     let curr = schema;
     while (!predicate(curr)) {
       if (
@@ -70,7 +70,28 @@ export class Renderer {
         return undefined;
       }
     }
-    return curr;
+    return curr as T;
+  }
+
+  findInWrapperTypeV3<T extends z3.ZodTypeAny>(
+    schema: z3.ZodTypeAny,
+    predicate: ((s: z3.ZodTypeAny) => s is T) | ((s: z3.ZodTypeAny) => boolean),
+  ): T | undefined {
+    let curr = schema;
+    while (!predicate(curr)) {
+      if (
+        curr instanceof z3.ZodOptional ||
+        curr instanceof z3.ZodNullable ||
+        curr instanceof z3.ZodDefault ||
+        curr instanceof z3.ZodReadonly ||
+        curr instanceof z3.ZodCatch
+      ) {
+        curr = curr._def.innerType;
+      } else {
+        return undefined;
+      }
+    }
+    return curr as T;
   }
 
   formatExportedSchema(ref: ExportedSchema): LinkMark {
@@ -80,15 +101,15 @@ export class Renderer {
   }
 
   findExportedSchema(
-    schema: z3.ZodTypeAny | z4.$ZodType
+    schema: z3.ZodTypeAny | z4.$ZodType,
   ): ExportedSchema | undefined {
     return this.#exportedSchemas.find(ref =>
-      this.#isSameSchema(schema, ref.schema)
+      this.#isSameSchema(schema, ref.schema),
     );
   }
 
   findModel(
-    schema: z3.ZodTypeAny | z4.$ZodType
+    schema: z3.ZodTypeAny | z4.$ZodType,
   ): IModel<z3.ZodTypeAny | z4.$ZodType> {
     const model = this.#models.find(model => model.isSchema(schema));
     if (model) {
@@ -99,8 +120,8 @@ export class Renderer {
       schema instanceof z4.$ZodType
         ? schema.constructor.name
         : 'typeName' in schema._def
-        ? schema._def.typeName
-        : null;
+          ? schema._def.typeName
+          : null;
     const message = [
       `WARNING: Zod type ${
         typeName ?? '<unknown>'
@@ -118,14 +139,14 @@ export class Renderer {
       renderBlock: () => md.quote(message),
       renderInline: () =>
         md.strikethrough(
-          `WARNING: Zod type ${typeName ?? '<unknown>'} not supported`
+          `WARNING: Zod type ${typeName ?? '<unknown>'} not supported`,
         ),
     };
   }
 
   #isSameSchema(
     currSchema: z3.ZodTypeAny | z4.$ZodType,
-    namedSchema: z3.ZodTypeAny | z4.$ZodType
+    namedSchema: z3.ZodTypeAny | z4.$ZodType,
   ) {
     const currSchemaDef =
       currSchema instanceof z4.$ZodType ? currSchema._zod.def : currSchema._def;
@@ -145,7 +166,7 @@ export class Renderer {
         // every property except for description must be identical
         return (
           Object.keys(namedSchema._def).every(
-            key => namedSchema._def[key] === schema._def[key]
+            key => namedSchema._def[key] === schema._def[key],
           ) &&
           schema.description !== namedSchema.description &&
           Object.keys(schema._def)
