@@ -1,4 +1,4 @@
-import { md, type BlockText, type InlineText } from 'build-md';
+import { type BlockText, type InlineText, md } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
 import type { IModel } from '../types';
@@ -32,8 +32,8 @@ export class NumberModel implements IModel<z4.$ZodNumber | z3.ZodNumber> {
     return md.italic(
       `Number that ${smartJoin(
         validations.map(this.#formatValidationLong),
-        'and'
-      )}.`
+        'and',
+      )}.`,
     );
   }
 
@@ -43,7 +43,7 @@ export class NumberModel implements IModel<z4.$ZodNumber | z3.ZodNumber> {
       return md.code('number');
     }
     return md`${md.code('number')} (${md.italic(
-      validations.map(this.#formatValidationShort).join(', ')
+      validations.map(this.#formatValidationShort).join(', '),
     )})`;
   }
 
@@ -67,11 +67,11 @@ export class NumberModel implements IModel<z4.$ZodNumber | z3.ZodNumber> {
         return 'is finite';
       case 'safe':
         return `is safe (i.e. between ${md.code(
-          'Number.MIN_SAFE_INTEGER'
+          'Number.MIN_SAFE_INTEGER',
         )} and ${md.code('Number.MAX_SAFE_INTEGER')})`;
       case 'safeint':
         return `is a safe integer (i.e. between ${md.code(
-          'Number.MIN_SAFE_INTEGER'
+          'Number.MIN_SAFE_INTEGER',
         )} and ${md.code('Number.MAX_SAFE_INTEGER')})`;
       case 'int32':
         return 'is a 32-bit integer';

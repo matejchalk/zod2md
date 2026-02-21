@@ -11,17 +11,23 @@ describe('ArrayModel', () => {
       const arraySchema = z.array(itemSchema);
       const schemas = { Product: itemSchema, Products: arraySchema };
       expect(
-        new ArrayModel().renderBlock(arraySchema, new Renderer(MODELS, schemas))
+        new ArrayModel().renderBlock(
+          arraySchema,
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown('_Array of [Product](#product) items._');
     });
 
     it('should render array with non-exported object schema', () => {
       const arraySchema = z.array(
-        z.object({ id: z.string(), name: z.string() })
+        z.object({ id: z.string(), name: z.string() }),
       );
       const schemas = { Products: arraySchema };
       expect(
-        new ArrayModel().renderBlock(arraySchema, new Renderer(MODELS, schemas))
+        new ArrayModel().renderBlock(
+          arraySchema,
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown(`
         _Array of objects containing the following properties:_
         
@@ -37,14 +43,14 @@ describe('ArrayModel', () => {
     it('should include validations', () => {
       const arraySchema = z.array(z.string()).min(1);
       expect(
-        new ArrayModel().renderBlock(arraySchema, new Renderer(MODELS, {}))
+        new ArrayModel().renderBlock(arraySchema, new Renderer(MODELS, {})),
       ).toEqualMarkdown('_Array of at least 1_ `string` _item._');
     });
 
     it('should render array of arrays', () => {
       const arraySchema = z.array(z.array(z.boolean()));
       expect(
-        new ArrayModel().renderBlock(arraySchema, new Renderer(MODELS, {}))
+        new ArrayModel().renderBlock(arraySchema, new Renderer(MODELS, {})),
       ).toEqualMarkdown('_Array of_ `Array<boolean>` _items._');
     });
   });
@@ -62,11 +68,11 @@ describe('ArrayModel', () => {
               md.code('products'),
               new ArrayModel().renderInline(
                 arraySchema,
-                new Renderer(MODELS, schemas)
+                new Renderer(MODELS, schemas),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property   | Type                                   |
         | ---------- | -------------------------------------- |
@@ -76,7 +82,7 @@ describe('ArrayModel', () => {
 
     it('should render array with non-exported object schema', () => {
       const arraySchema = z.array(
-        z.object({ id: z.string(), name: z.string() })
+        z.object({ id: z.string(), name: z.string() }),
       );
       const schemas = { Products: arraySchema };
       expect(
@@ -87,11 +93,11 @@ describe('ArrayModel', () => {
               md.code('products'),
               new ArrayModel().renderInline(
                 arraySchema,
-                new Renderer(MODELS, schemas)
+                new Renderer(MODELS, schemas),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property   | Type                                                                                                                                             |
         | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -109,11 +115,11 @@ describe('ArrayModel', () => {
               md.code('tags'),
               new ArrayModel().renderInline(
                 arraySchema,
-                new Renderer(MODELS, {})
+                new Renderer(MODELS, {}),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property | Type            |
         | -------- | --------------- |
@@ -131,11 +137,11 @@ describe('ArrayModel', () => {
               md.code('filters'),
               new ArrayModel().renderInline(
                 arraySchema,
-                new Renderer(MODELS, {})
+                new Renderer(MODELS, {}),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property  | Type                                |
         | --------- | ----------------------------------- |
@@ -153,11 +159,11 @@ describe('ArrayModel', () => {
               md.code('matrix'),
               new ArrayModel().renderInline(
                 arraySchema,
-                new Renderer(MODELS, {})
+                new Renderer(MODELS, {}),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property | Type                    |
         | -------- | ----------------------- |

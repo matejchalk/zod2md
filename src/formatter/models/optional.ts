@@ -1,12 +1,12 @@
-import { md, type BlockText, type InlineText } from 'build-md';
+import { type BlockText, type InlineText, md } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
 import type { Renderer } from '../renderer';
 import type { IModel } from '../types';
 
-export class OptionalModel
-  implements IModel<z4.$ZodOptional | z3.ZodOptional<z3.ZodTypeAny>>
-{
+export class OptionalModel implements IModel<
+  z4.$ZodOptional | z3.ZodOptional<z3.ZodTypeAny>
+> {
   isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
     return (
       schema instanceof z4.$ZodOptional || schema instanceof z3.ZodOptional
@@ -15,7 +15,7 @@ export class OptionalModel
 
   renderBlock(
     schema: z4.$ZodOptional | z3.ZodOptional<z3.ZodTypeAny>,
-    renderer: Renderer
+    renderer: Renderer,
   ): BlockText {
     const text = renderer.renderSchemaBlock(this.#getInnerType(schema));
     return md`${text}${md.paragraph(md.italic('Optional.'))}`;
@@ -23,14 +23,14 @@ export class OptionalModel
 
   renderInline(
     schema: z4.$ZodOptional | z3.ZodOptional<z3.ZodTypeAny>,
-    renderer: Renderer
+    renderer: Renderer,
   ): InlineText {
     const text = renderer.renderSchemaInline(this.#getInnerType(schema));
     return md`${text} (${md.italic('optional')})`;
   }
 
   #getInnerType(
-    schema: z4.$ZodOptional | z3.ZodOptional<z3.ZodTypeAny>
+    schema: z4.$ZodOptional | z3.ZodOptional<z3.ZodTypeAny>,
   ): z4.$ZodType | z3.ZodTypeAny {
     if (schema instanceof z4.$ZodOptional) {
       return schema._zod.def.innerType;

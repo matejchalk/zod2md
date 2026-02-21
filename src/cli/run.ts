@@ -5,7 +5,7 @@ import { resolveConfig } from './resolve-config';
 
 export async function runCLI(
   handler: (options: Options) => Promise<string>,
-  argv?: string[]
+  argv?: string[],
 ) {
   const config = await resolveConfig(argv);
 

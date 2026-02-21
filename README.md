@@ -104,7 +104,6 @@ Since Zod version 4, `z.function` is no longer a Zod schema, but a function fact
 
 ```ts
 // HELPER FUNCTION
-
 import { z } from 'zod/v4';
 import type { $ZodFunction } from 'zod/v4/core';
 

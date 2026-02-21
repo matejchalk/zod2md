@@ -5,7 +5,7 @@ describe('LiteralModel', () => {
   describe('renderBlock', () => {
     it('should render single literal value', () => {
       expect(new LiteralModel().renderBlock(z.literal(false))).toEqualMarkdown(
-        '_Literal `false` value._'
+        '_Literal `false` value._',
       );
     });
 
@@ -25,13 +25,13 @@ describe('LiteralModel', () => {
   describe('renderInline', () => {
     it('should render single literal value', () => {
       expect(new LiteralModel().renderInline(z.literal(false))).toEqualMarkdown(
-        '`false`'
+        '`false`',
       );
     });
 
     it('should render multiple literal values', () => {
       expect(
-        new LiteralModel().renderInline(z.literal([200, 400, 404, 500]))
+        new LiteralModel().renderInline(z.literal([200, 400, 404, 500])),
       ).toEqualMarkdown('`200 | 400 | 404 | 500`');
     });
   });

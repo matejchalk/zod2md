@@ -5,7 +5,7 @@ import { Rule, RulesConfig } from './rules';
 export const Plugin = z.record(
   z.object({
     rules: z.record(Rule),
-  })
+  }),
 );
 
 export const PluginRecords = z.record(Plugin);

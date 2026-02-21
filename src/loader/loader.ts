@@ -4,7 +4,7 @@ import { importModules } from './import';
 import type { LoaderOptions } from './types';
 
 export async function loadZodSchemas(
-  options: LoaderOptions
+  options: LoaderOptions,
 ): Promise<ExportedSchema[]> {
   const modules = await importModules(options);
   return findZodSchemas(modules);

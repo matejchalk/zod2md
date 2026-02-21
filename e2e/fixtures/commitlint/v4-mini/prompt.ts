@@ -24,7 +24,7 @@ export const PromptMessages = z.intersection(
     upperLimitWarning: z.string(),
     lowerLimitWarning: z.string(),
   }),
-  z.record(z.string(), z.string())
+  z.record(z.string(), z.string()),
 );
 
 export const PromptConfig = z.object({
@@ -45,10 +45,10 @@ export const PromptConfig = z.object({
             description: z.optional(z.string()),
             title: z.optional(z.string()),
             emoji: z.optional(z.string()),
-          })
-        )
+          }),
+        ),
       ),
-    })
+    }),
   ),
 });
 

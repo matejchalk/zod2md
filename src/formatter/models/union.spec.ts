@@ -15,8 +15,8 @@ describe('UnionModel', () => {
               config: z.string().optional(),
             }),
           ]),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Union of the following possible types:_
         
@@ -35,7 +35,10 @@ describe('UnionModel', () => {
       const inputSchema = z.union([z.array(z.string()), optionsSchema]);
       const schemas = { Options: optionsSchema, Input: inputSchema };
       expect(
-        new UnionModel().renderBlock(inputSchema, new Renderer(MODELS, schemas))
+        new UnionModel().renderBlock(
+          inputSchema,
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown(`
         _Union of the following possible types:_
         
@@ -56,8 +59,8 @@ describe('UnionModel', () => {
       expect(
         new UnionModel().renderInline(
           inputSchema,
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown('`Array<string>` _or_ [Options](#options)');
     });
 
@@ -65,8 +68,8 @@ describe('UnionModel', () => {
       expect(
         new UnionModel().renderInline(
           z.union([z.number(), z.enum(['auto', 'full'])]),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown("`number | 'auto' | 'full'`");
     });
   });

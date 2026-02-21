@@ -9,8 +9,8 @@ describe('ReadonlyModel', () => {
       expect(
         new ReadonlyModel().renderBlock(
           z.enum(['male', 'female', 'other']).readonly(),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Enum, one of the following possible values:_
 
@@ -28,8 +28,8 @@ describe('ReadonlyModel', () => {
       expect(
         new ReadonlyModel().renderInline(
           z.string().readonly(),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`string` (_readonly_)');
     });
   });

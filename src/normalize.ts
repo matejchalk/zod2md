@@ -1,7 +1,7 @@
 import type { ExportedSchema, ExportedSchemas } from './types';
 
 export function normalizeExportedSchemas(
-  exportedSchemas: ExportedSchemas
+  exportedSchemas: ExportedSchemas,
 ): ExportedSchema[] {
   if (Array.isArray(exportedSchemas)) {
     return exportedSchemas;

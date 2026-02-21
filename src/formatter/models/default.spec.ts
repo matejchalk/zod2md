@@ -9,8 +9,8 @@ describe('DefaultModel', () => {
       expect(
         new DefaultModel().renderBlock(
           z.number().default(0),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Number._
 
@@ -24,8 +24,8 @@ describe('DefaultModel', () => {
       expect(
         new DefaultModel().renderInline(
           z.number().default(0),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`number` (_default:_ `0`)');
     });
   });

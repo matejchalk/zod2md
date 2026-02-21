@@ -3,13 +3,13 @@ import { EnumModel } from './enum';
 
 describe('EnumModel', () => {
   const alphabet = Array.from({ length: 26 }).map((_, i) =>
-    String.fromCharCode('A'.charCodeAt(0) + i)
+    String.fromCharCode('A'.charCodeAt(0) + i),
   );
 
   describe('renderBlock', () => {
     it('should render list of values', () => {
       expect(
-        new EnumModel().renderBlock(z.enum(['pending', 'success', 'failure']))
+        new EnumModel().renderBlock(z.enum(['pending', 'success', 'failure'])),
       ).toEqualMarkdown(`
         _Enum, one of the following possible values:_
 
@@ -61,13 +61,13 @@ describe('EnumModel', () => {
   describe('renderInline', () => {
     it('should render typescript union of values', () => {
       expect(
-        new EnumModel().renderInline(z.enum(['pending', 'success', 'failure']))
+        new EnumModel().renderInline(z.enum(['pending', 'success', 'failure'])),
       ).toEqualMarkdown("`'pending' | 'success' | 'failure'`");
     });
 
     it('should truncate large list', () => {
       expect(new EnumModel().renderInline(z.enum(alphabet))).toEqualMarkdown(
-        "`'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | ...`"
+        "`'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | ...`",
       );
     });
   });

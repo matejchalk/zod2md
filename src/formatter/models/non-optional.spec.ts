@@ -9,8 +9,8 @@ describe('NonOptionalModel', () => {
       expect(
         new NonOptionalModel().renderBlock(
           z.string().optional().nonoptional(),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('_String._');
     });
 
@@ -18,8 +18,8 @@ describe('NonOptionalModel', () => {
       expect(
         new NonOptionalModel().renderBlock(
           z.string().nonoptional(),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('_String._');
     });
   });
@@ -29,8 +29,8 @@ describe('NonOptionalModel', () => {
       expect(
         new NonOptionalModel().renderInline(
           z.string().optional().nonoptional(),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`string`');
     });
 
@@ -38,8 +38,8 @@ describe('NonOptionalModel', () => {
       expect(
         new NonOptionalModel().renderInline(
           z.string().nullable().nonoptional(),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`string` (_nullable_)');
     });
   });

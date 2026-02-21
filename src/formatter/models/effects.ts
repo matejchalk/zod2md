@@ -12,14 +12,14 @@ export class EffectsModel implements IModel<z3.ZodEffects<z3.ZodTypeAny>> {
 
   renderBlock(
     schema: z3.ZodEffects<z3.ZodTypeAny>,
-    renderer: Renderer
+    renderer: Renderer,
   ): BlockText {
     return renderer.renderSchemaBlock(schema._def.schema);
   }
 
   renderInline(
     schema: z3.ZodEffects<z3.ZodTypeAny>,
-    renderer: Renderer
+    renderer: Renderer,
   ): InlineText {
     return renderer.renderSchemaInline(schema._def.schema);
   }

@@ -9,14 +9,14 @@ expect.extend({
       .filter(line => line.startsWith(' ') && line.trim().length > 0)
       .reduce(
         (acc, line) => Math.min(acc, line.match(/^( +)/)?.[1]?.length ?? 0),
-        Number.POSITIVE_INFINITY
+        Number.POSITIVE_INFINITY,
       );
     const rhs = lines
       .map(line =>
         line.length >= indentation &&
         line.slice(0, indentation).trim().length === 0
           ? line.slice(indentation)
-          : line
+          : line,
       )
       .join('\n')
       .trim();

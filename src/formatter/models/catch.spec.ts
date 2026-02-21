@@ -20,8 +20,8 @@ describe('CatchModel', () => {
       expect(
         new CatchModel().renderBlock(
           permissiveUrlSchema,
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('_String that is a valid URL._');
     });
   });
@@ -31,8 +31,8 @@ describe('CatchModel', () => {
       expect(
         new CatchModel().renderInline(
           permissiveUrlSchema,
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`string` (_url_)');
     });
   });

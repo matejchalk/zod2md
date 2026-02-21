@@ -55,8 +55,8 @@ describe('NativeEnumModel', () => {
               md.code('rel'),
               new NativeEnumModel().renderInline(z.nativeEnum(Rel)),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property | Type                                                                                |
         | -------- | ----------------------------------------------------------------------------------- |
@@ -77,8 +77,8 @@ describe('NativeEnumModel', () => {
               md.code('rel'),
               new NativeEnumModel().renderInline(z.nativeEnum(Rel)),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property | Type                                                                                          |
         | -------- | --------------------------------------------------------------------------------------------- |

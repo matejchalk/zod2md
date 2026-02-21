@@ -7,9 +7,9 @@ describe.each(VERSIONS)('zod2md exported function (%s)', version => {
       zod2md({
         title: 'Commitlint config',
         entry: [`./e2e/fixtures/commitlint/${version}/index.ts`],
-      })
+      }),
     ).resolves.toMatchFileSnapshot(
-      `__snapshots__/${versionToCommitlintSnapshotFile(version)}`
+      `__snapshots__/${versionToCommitlintSnapshotFile(version)}`,
     );
   });
 
@@ -18,7 +18,7 @@ describe.each(VERSIONS)('zod2md exported function (%s)', version => {
       zod2md({
         title: 'Prettier configuration file reference',
         entry: [`./e2e/fixtures/prettier/${version}/prettierrc.js`],
-      })
+      }),
     ).resolves.toMatchFileSnapshot('__snapshots__/prettier-example.md');
   });
 
@@ -33,7 +33,7 @@ describe.each(VERSIONS)('zod2md exported function (%s)', version => {
           `./e2e/fixtures/user-rest-api/${version}/endpoints/update-user.mjs`,
           `./e2e/fixtures/user-rest-api/${version}/endpoints/delete-user.mjs`,
         ],
-      })
+      }),
     ).resolves.toMatchFileSnapshot('__snapshots__/user-rest-api-example.md');
   });
 });

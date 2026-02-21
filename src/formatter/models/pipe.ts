@@ -4,29 +4,29 @@ import * as z4 from 'zod/v4/core';
 import type { Renderer } from '../renderer';
 import type { IModel } from '../types';
 
-export class PipeModel
-  implements IModel<z4.$ZodPipe | z3.ZodPipeline<z3.ZodTypeAny, z3.ZodTypeAny>>
-{
+export class PipeModel implements IModel<
+  z4.$ZodPipe | z3.ZodPipeline<z3.ZodTypeAny, z3.ZodTypeAny>
+> {
   isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
     return schema instanceof z4.$ZodPipe || schema instanceof z3.ZodPipeline;
   }
 
   renderBlock(
     schema: z4.$ZodPipe | z3.ZodPipeline<z3.ZodTypeAny, z3.ZodTypeAny>,
-    renderer: Renderer
+    renderer: Renderer,
   ): BlockText {
     return renderer.renderSchemaBlock(this.#getWrappedType(schema));
   }
 
   renderInline(
     schema: z4.$ZodPipe | z3.ZodPipeline<z3.ZodTypeAny, z3.ZodTypeAny>,
-    renderer: Renderer
+    renderer: Renderer,
   ): InlineText {
     return renderer.renderSchemaInline(this.#getWrappedType(schema));
   }
 
   #getWrappedType(
-    schema: z4.$ZodPipe | z3.ZodPipeline<z3.ZodTypeAny, z3.ZodTypeAny>
+    schema: z4.$ZodPipe | z3.ZodPipeline<z3.ZodTypeAny, z3.ZodTypeAny>,
   ) {
     if (schema instanceof z4.$ZodPipe) {
       return schema._zod.def.out instanceof z4.$ZodTransform

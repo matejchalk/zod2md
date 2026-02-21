@@ -1,6 +1,6 @@
-import { basename, dirname, sep } from 'node:path';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
+import { basename, dirname, sep } from 'node:path';
 import type { NameTransformFn } from './types';
 
 export const defaultNameTransform: NameTransformFn = (name, path, schema) => {

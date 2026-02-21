@@ -7,7 +7,7 @@ export const Plugin = z.record(
   z.string(),
   z.object({
     rules: z.record(z.string(), Rule),
-  })
+  }),
 );
 
 export const PluginRecords = z.record(z.string(), Plugin);
@@ -29,8 +29,8 @@ export const UserConfig = z
     ignores: z
       .array(
         convertZodFunctionToSchema(
-          z.function({ input: [z.string()], output: z.boolean() })
-        )
+          z.function({ input: [z.string()], output: z.boolean() }),
+        ),
       )
       .optional(),
     defaultIgnores: z.boolean().optional(),

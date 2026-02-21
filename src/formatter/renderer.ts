@@ -1,4 +1,4 @@
-import { md, type BlockText, type LinkMark } from 'build-md';
+import { type BlockText, type LinkMark, md } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
 import { normalizeExportedSchemas } from '../normalize';

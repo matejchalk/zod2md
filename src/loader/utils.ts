@@ -1,5 +1,5 @@
 export function groupPromiseResultsByStatus<T>(
-  results: PromiseSettledResult<T>[]
+  results: PromiseSettledResult<T>[],
 ) {
   return results.reduce(
     (acc, result) =>
@@ -9,6 +9,6 @@ export function groupPromiseResultsByStatus<T>(
     {
       fulfilled: [] as T[],
       rejected: [] as unknown[],
-    }
+    },
   );
 }

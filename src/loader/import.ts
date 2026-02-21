@@ -3,7 +3,7 @@ import type { ImportedModules, LoaderOptions } from './types';
 import { groupPromiseResultsByStatus } from './utils';
 
 export async function importModules(
-  options: LoaderOptions
+  options: LoaderOptions,
 ): Promise<ImportedModules> {
   const entries = Array.isArray(options.entry)
     ? options.entry
@@ -22,7 +22,7 @@ export async function importModules(
       }
 
       return [entry, mod] as const;
-    })
+    }),
   );
 
   const { fulfilled, rejected } = groupPromiseResultsByStatus(results);

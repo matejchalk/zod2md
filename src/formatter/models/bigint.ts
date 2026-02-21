@@ -1,4 +1,4 @@
-import { md, type BlockText, type InlineText } from 'build-md';
+import { type BlockText, type InlineText, md } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
 import type { IModel } from '../types';
@@ -24,8 +24,8 @@ export class BigIntModel implements IModel<z4.$ZodBigInt | z3.ZodBigInt> {
     return md.italic(
       `BigInt that ${smartJoin(
         validations.map(this.#formatValidationLong),
-        'and'
-      )}.`
+        'and',
+      )}.`,
     );
   }
 
@@ -35,7 +35,7 @@ export class BigIntModel implements IModel<z4.$ZodBigInt | z3.ZodBigInt> {
       return md.code('bigint');
     }
     return md`${md.code('bigint')} (${md.italic(
-      validations.map(this.#formatValidationShort).join(', ')
+      validations.map(this.#formatValidationShort).join(', '),
     )})`;
   }
 

@@ -10,10 +10,10 @@ describe('PromiseModel', () => {
       expect(
         new PromiseModel().renderBlock(
           z.promise(z.url()),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(
-        '_Promise, resolves to value of type:_ `string` (_url_)'
+        '_Promise, resolves to value of type:_ `string` (_url_)',
       );
     });
   });
@@ -25,8 +25,8 @@ describe('PromiseModel', () => {
       expect(
         new PromiseModel().renderInline(
           z.promise(userSchema),
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown('_Promise of:_ [User](#user)');
     });
 
@@ -34,8 +34,8 @@ describe('PromiseModel', () => {
       expect(
         new PromiseModel().renderInline(
           z.promise(z.union([z.string(), z.null()])),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`Promise<string | null>`');
     });
   });

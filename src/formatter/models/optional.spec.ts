@@ -9,8 +9,8 @@ describe('OptionalModel', () => {
       expect(
         new OptionalModel().renderBlock(
           z.enum(['male', 'female', 'other']).optional(),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Enum, one of the following possible values:_
 
@@ -28,8 +28,8 @@ describe('OptionalModel', () => {
       expect(
         new OptionalModel().renderInline(
           z.string().optional(),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`string` (_optional_)');
     });
   });

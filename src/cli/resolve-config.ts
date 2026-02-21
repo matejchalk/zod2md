@@ -1,7 +1,7 @@
 import type { Config, Prettify } from '../types';
 import { findDefaultConfig } from './find-config';
 import { importConfig } from './import-config';
-import { parseArgs, type CLIArgs } from './parse-args';
+import { type CLIArgs, parseArgs } from './parse-args';
 
 export async function resolveConfig(argv?: string[]): Promise<Config> {
   const cliArgs = await parseArgs(argv);
@@ -24,7 +24,7 @@ type SufficientCLIArgs = Prettify<
 >;
 
 function assertCliArgsSufficient(
-  cliArgs: CLIArgs
+  cliArgs: CLIArgs,
 ): asserts cliArgs is SufficientCLIArgs {
   const requiredArgs = typedObjectKeys({
     entry: true,
@@ -38,7 +38,7 @@ function assertCliArgsSufficient(
     throw new Error(
       `CLI arguments ${missingArgs
         .map(name => '`--' + name + '`')
-        .join(' and ')} are required when no config file is provided`
+        .join(' and ')} are required when no config file is provided`,
     );
   }
 }

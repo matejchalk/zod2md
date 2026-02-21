@@ -29,5 +29,5 @@ export const Rule = convertZodFunctionToSchema(
   z.function({
     input: [Commit, RuleConfigCondition.optional(), z.never().optional()],
     output: z.union([RuleOutcome, z.promise(RuleOutcome)]),
-  })
+  }),
 );

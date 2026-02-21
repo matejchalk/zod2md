@@ -1,7 +1,7 @@
+import { runServer } from 'verdaccio';
 import { exec } from 'child_process';
 import { type Server } from 'http';
 import { promisify } from 'util';
-import { runServer } from 'verdaccio';
 
 let server: Server;
 
@@ -16,7 +16,7 @@ export async function setup() {
   console.info(`🚀 Verdaccio local registry started at ${registry}`);
 
   await promisify(exec)(
-    `npm-cli-login -u test -p 1234 -e test@example.com -r ${registry}`
+    `npm-cli-login -u test -p 1234 -e test@example.com -r ${registry}`,
   );
   await promisify(exec)(`npm publish --registry ${registry} --force`);
   console.info('🚀 Published package to local registry');

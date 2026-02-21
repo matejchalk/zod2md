@@ -1,4 +1,4 @@
-import { md, type BlockText, type InlineText } from 'build-md';
+import { type BlockText, type InlineText, md } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
 import type { IModel } from '../types';

@@ -1,4 +1,4 @@
-import { CodeMark, md, type BlockText, type InlineText } from 'build-md';
+import { type BlockText, CodeMark, type InlineText, md } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
 import type { Renderer } from '../renderer';
@@ -9,11 +9,11 @@ type FunctionSignature = {
   returnValue: z4.$ZodType | z3.ZodTypeAny;
 };
 
-export class FunctionModel
-  implements IModel<z4.$ZodType | z3.ZodFunction<z3.ZodTuple, z3.ZodTypeAny>>
-{
+export class FunctionModel implements IModel<
+  z4.$ZodType | z3.ZodFunction<z3.ZodTuple, z3.ZodTypeAny>
+> {
   isSchema(
-    schema: z4.$ZodType | z3.ZodTypeAny
+    schema: z4.$ZodType | z3.ZodTypeAny,
   ): schema is z4.$ZodType | z3.ZodFunction<z3.ZodTuple, z3.ZodTypeAny> {
     return (
       (schema instanceof z4.$ZodType &&
@@ -24,7 +24,7 @@ export class FunctionModel
 
   renderBlock(
     schema: z4.$ZodType | z3.ZodFunction<z3.ZodTuple, z3.ZodTypeAny>,
-    renderer: Renderer
+    renderer: Renderer,
   ): BlockText {
     const { parameters, returnValue } = this.#getFunctionSignature(schema);
     return [
@@ -33,7 +33,7 @@ export class FunctionModel
       parameters.length > 0
         ? md.list(
             'ordered',
-            parameters.map(param => renderer.renderSchemaInline(param))
+            parameters.map(param => renderer.renderSchemaInline(param)),
           )
         : md.list([md.italic('none')]),
       md.paragraph(md.italic('Return value:')),
@@ -43,11 +43,11 @@ export class FunctionModel
 
   renderInline(
     schema: z4.$ZodType | z3.ZodFunction<z3.ZodTuple, z3.ZodTypeAny>,
-    renderer: Renderer
+    renderer: Renderer,
   ): InlineText {
     const { parameters, returnValue } = this.#getFunctionSignature(schema);
     const formattedParameters = parameters.map(param =>
-      renderer.renderSchemaInline(param)
+      renderer.renderSchemaInline(param),
     );
     const formattedReturnValue = renderer.renderSchemaInline(returnValue);
 
@@ -58,7 +58,7 @@ export class FunctionModel
       return md.code(
         `(${formattedParameters.map(param => param.text).join(', ')}) => ${
           formattedReturnValue.text
-        }`
+        }`,
       );
     }
 
@@ -73,7 +73,7 @@ export class FunctionModel
   }
 
   #getFunctionSignature(
-    schema: z4.$ZodType | z3.ZodFunction<z3.ZodTuple, z3.ZodTypeAny>
+    schema: z4.$ZodType | z3.ZodFunction<z3.ZodTuple, z3.ZodTypeAny>,
   ): FunctionSignature {
     if (schema instanceof z4.$ZodType) {
       const functionFactory = this.#getV4FunctionFactory(schema);

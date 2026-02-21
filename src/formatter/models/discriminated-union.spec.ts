@@ -24,8 +24,8 @@ describe('DiscriminatedUnionModel', () => {
       expect(
         new DiscriminatedUnionModel().renderBlock(
           z.discriminatedUnion('type', [productSchema, categorySchema]),
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown(`
         _Union of the following possible types (discriminated by \`type\`):_
         
@@ -40,8 +40,8 @@ describe('DiscriminatedUnionModel', () => {
       expect(
         new DiscriminatedUnionModel().renderInline(
           z.discriminatedUnion('type', [productSchema, categorySchema]),
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown('[Product](#product) _or_ [Category](#category)');
     });
   });

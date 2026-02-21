@@ -13,8 +13,8 @@ describe('RecordModel', () => {
       expect(
         new RecordModel().renderBlock(
           z.record(z.string(), z.array(productSchema)),
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown(`
         _Object with dynamic keys:_
 
@@ -32,10 +32,10 @@ describe('RecordModel', () => {
       expect(
         new RecordModel().renderInline(
           z.record(z.string(), z.array(productSchema)),
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown(
-        '_Object with dynamic keys of type_ `string` _and values of type_ _Array of_ [Product](#product) _items_'
+        '_Object with dynamic keys of type_ `string` _and values of type_ _Array of_ [Product](#product) _items_',
       );
     });
 
@@ -43,8 +43,8 @@ describe('RecordModel', () => {
       expect(
         new RecordModel().renderInline(
           z.record(z.string(), z.number()),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`Record<string, number>`');
     });
   });

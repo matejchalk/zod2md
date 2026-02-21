@@ -1,4 +1,4 @@
-import { md, type BlockText, type FormattedText, type Mark } from 'build-md';
+import { type BlockText, type FormattedText, type Mark, md } from 'build-md';
 
 export function formatLiteral(value: unknown): string {
   switch (typeof value) {

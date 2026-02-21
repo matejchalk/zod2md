@@ -9,8 +9,8 @@ describe('BrandedModel', () => {
       expect(
         new BrandedModel().renderBlock(
           z.string().brand<'User'>(),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('_String._');
     });
   });
@@ -20,8 +20,8 @@ describe('BrandedModel', () => {
       expect(
         new BrandedModel().renderInline(
           z.string().brand<'User'>(),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`string`');
     });
   });

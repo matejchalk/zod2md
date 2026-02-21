@@ -1,20 +1,17 @@
-import { md, type BlockText, type InlineText } from 'build-md';
+import { type BlockText, type InlineText, md } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
 import type { Renderer } from '../renderer';
 import type { IModel } from '../types';
 import { smartJoinMd } from '../utils';
 
-export class DiscriminatedUnionModel
-  implements
-    IModel<
-      | z4.$ZodDiscriminatedUnion
-      | z3.ZodDiscriminatedUnion<
-          string,
-          readonly z3.ZodDiscriminatedUnionOption<string>[]
-        >
+export class DiscriminatedUnionModel implements IModel<
+  | z4.$ZodDiscriminatedUnion
+  | z3.ZodDiscriminatedUnion<
+      string,
+      readonly z3.ZodDiscriminatedUnionOption<string>[]
     >
-{
+> {
   isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
     return (
       schema instanceof z4.$ZodDiscriminatedUnion ||
@@ -29,7 +26,7 @@ export class DiscriminatedUnionModel
           string,
           readonly z3.ZodDiscriminatedUnionOption<string>[]
         >,
-    renderer: Renderer
+    renderer: Renderer,
   ): BlockText {
     const options = this.#listOptions(schema);
     const discriminator = this.#getDiscriminator(schema);
@@ -47,11 +44,11 @@ export class DiscriminatedUnionModel
           string,
           readonly z3.ZodDiscriminatedUnionOption<string>[]
         >,
-    renderer: Renderer
+    renderer: Renderer,
   ): InlineText {
     const options = this.#listOptions(schema);
     const formattedItems = options.map(option =>
-      renderer.renderSchemaInline(option)
+      renderer.renderSchemaInline(option),
     );
     return smartJoinMd(formattedItems, md.italic('or'));
   }
@@ -62,7 +59,7 @@ export class DiscriminatedUnionModel
       | z3.ZodDiscriminatedUnion<
           string,
           readonly z3.ZodDiscriminatedUnionOption<string>[]
-        >
+        >,
   ): readonly (z4.$ZodType | z3.ZodTypeAny)[] {
     return schema instanceof z4.$ZodDiscriminatedUnion
       ? schema._zod.def.options
@@ -75,7 +72,7 @@ export class DiscriminatedUnionModel
       | z3.ZodDiscriminatedUnion<
           string,
           readonly z3.ZodDiscriminatedUnionOption<string>[]
-        >
+        >,
   ): string {
     return schema instanceof z4.$ZodDiscriminatedUnion
       ? schema._zod.def.discriminator

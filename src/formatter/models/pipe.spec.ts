@@ -16,15 +16,15 @@ describe('PipeModel', () => {
   describe('renderBlock', () => {
     it('should render piped output schema', () => {
       expect(
-        new PipeModel().renderBlock(postalCodeSchema, new Renderer(MODELS, {}))
+        new PipeModel().renderBlock(postalCodeSchema, new Renderer(MODELS, {})),
       ).toEqualMarkdown(
-        '_String that matches the regular expression `/^\\d{4}(?:[A-Z]{2}|\\d)?$/`._'
+        '_String that matches the regular expression `/^\\d{4}(?:[A-Z]{2}|\\d)?$/`._',
       );
     });
 
     it('should render input schema in case of transform', () => {
       expect(
-        new PipeModel().renderBlock(capitalizeSchema, new Renderer(MODELS, {}))
+        new PipeModel().renderBlock(capitalizeSchema, new Renderer(MODELS, {})),
       ).toEqualMarkdown('_String._');
     });
   });
@@ -32,13 +32,19 @@ describe('PipeModel', () => {
   describe('renderInline', () => {
     it('should render piped output schema', () => {
       expect(
-        new PipeModel().renderInline(postalCodeSchema, new Renderer(MODELS, {}))
+        new PipeModel().renderInline(
+          postalCodeSchema,
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`string` (_regex: `/^\\d{4}(?:[A-Z]{2}|\\d)?$/`_)');
     });
 
     it('should render input schema in case of transform', () => {
       expect(
-        new PipeModel().renderInline(capitalizeSchema, new Renderer(MODELS, {}))
+        new PipeModel().renderInline(
+          capitalizeSchema,
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`string`');
     });
   });

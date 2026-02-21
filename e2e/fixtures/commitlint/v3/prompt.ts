@@ -43,10 +43,10 @@ export const PromptConfig = z.object({
             description: z.string().optional(),
             title: z.string().optional(),
             emoji: z.string().optional(),
-          })
+          }),
         )
         .optional(),
-    })
+    }),
   ),
 });
 

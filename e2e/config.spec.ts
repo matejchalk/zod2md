@@ -19,9 +19,9 @@ describe.each(VERSIONS)('zod2md config (%s)', version => {
     expect(stdout).toContain('commitlint.md');
 
     await expect(
-      readFile('tmp/config/commitlint.md', 'utf8')
+      readFile('tmp/config/commitlint.md', 'utf8'),
     ).resolves.toMatchFileSnapshot(
-      `__snapshots__/${versionToCommitlintSnapshotFile(version)}`
+      `__snapshots__/${versionToCommitlintSnapshotFile(version)}`,
     );
   });
 
@@ -34,7 +34,7 @@ describe.each(VERSIONS)('zod2md config (%s)', version => {
     expect(stdout).toContain('prettier.md');
 
     await expect(
-      readFile('tmp/config/prettier.md', 'utf8')
+      readFile('tmp/config/prettier.md', 'utf8'),
     ).resolves.toMatchFileSnapshot('__snapshots__/prettier-example.md');
   });
 
@@ -47,7 +47,7 @@ describe.each(VERSIONS)('zod2md config (%s)', version => {
     expect(stdout).toContain('user-rest-api.md');
 
     await expect(
-      readFile('tmp/config/user-rest-api.md', 'utf8')
+      readFile('tmp/config/user-rest-api.md', 'utf8'),
     ).resolves.toMatchFileSnapshot('__snapshots__/user-rest-api-example.md');
   });
 });

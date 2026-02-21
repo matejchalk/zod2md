@@ -1,9 +1,9 @@
 import {
-  md,
   type BlockText,
   type InlineText,
   type TableColumn,
   type TableRow,
+  md,
 } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';

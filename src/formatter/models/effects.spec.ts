@@ -11,8 +11,8 @@ describe('EffectsModel', () => {
           z
             .union([z.string(), z.array(z.string())])
             .transform(value => (Array.isArray(value) ? value : [value])),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Union of the following possible types:_
 
@@ -29,8 +29,8 @@ describe('EffectsModel', () => {
           z
             .union([z.string(), z.array(z.string())])
             .transform(value => (Array.isArray(value) ? value : [value])),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`string | Array<string>`');
     });
   });

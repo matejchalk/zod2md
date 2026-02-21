@@ -12,7 +12,7 @@ export async function parseArgs(argv?: string[]) {
     .option('-t, --title <text>')
     .option('--tsconfig <path>')
     .addOption(
-      new Option('-f, --format <format>').choices(['esm', 'cjs'] as const)
+      new Option('-f, --format <format>').choices(['esm', 'cjs'] as const),
     );
 
   await program.parseAsync(argv);

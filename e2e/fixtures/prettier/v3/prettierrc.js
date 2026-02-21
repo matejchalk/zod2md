@@ -17,7 +17,7 @@ export const optionsSchema = z
         {
           description:
             'Include parentheses around a sole arrow function parameter.',
-        }
+        },
       )
       .default('always'),
 
@@ -54,7 +54,7 @@ export const optionsSchema = z
         {
           description:
             'Control how Prettier formats quoted code embedded in the file.',
-        }
+        },
       )
       .default('auto'),
 
@@ -78,7 +78,7 @@ export const optionsSchema = z
               "Maintain existing\n(mixed values within one file are normalised by looking at what's used after the first line)",
           }),
         ],
-        { description: 'Which end of line characters to apply.' }
+        { description: 'Which end of line characters to apply.' },
       )
       .default('lf'),
 
@@ -109,7 +109,7 @@ export const optionsSchema = z
         ],
         {
           description: 'How to handle whitespaces in HTML.',
-        }
+        },
       )
       .default('css'),
 
@@ -152,7 +152,7 @@ export const optionsSchema = z
         z.literal('lwc', { description: 'Lightning Web Components' }),
         z.string({ description: 'Custom parser' }),
       ],
-      { description: 'Which parser to use.' }
+      { description: 'Which parser to use.' },
     ),
 
     plugins: z
@@ -178,7 +178,7 @@ export const optionsSchema = z
         ],
         {
           description: 'How to wrap prose.',
-        }
+        },
       )
       .default('preserve'),
 
@@ -198,7 +198,7 @@ export const optionsSchema = z
               'Respect the input use of quotes in object properties.',
           }),
         ],
-        { description: 'Change when properties in objects are quoted.' }
+        { description: 'Change when properties in objects are quoted.' },
       )
       .default('as-needed'),
 
@@ -259,7 +259,7 @@ export const optionsSchema = z
         {
           description:
             'Print trailing commas wherever possible when multi-line.',
-        }
+        },
       )
       .default('all'),
 
@@ -291,7 +291,7 @@ export const overridesSchema = z.object({
     {
       description:
         'Provide a list of patterns to override prettier configuration.',
-    }
+    },
   ),
 });
 

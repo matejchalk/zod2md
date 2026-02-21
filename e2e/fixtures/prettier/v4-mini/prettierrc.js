@@ -14,7 +14,7 @@ export const optionsSchema = z.partial(
             description: 'Omit parens when possible. Example: `x => x`',
           }),
         ]),
-        'always'
+        'always',
       )
       .register(z.globalRegistry, {
         description:
@@ -48,7 +48,7 @@ export const optionsSchema = z.partial(
             description: 'Never automatically format embedded code.',
           }),
         ]),
-        'auto'
+        'auto',
       )
       .register(z.globalRegistry, {
         description:
@@ -75,7 +75,7 @@ export const optionsSchema = z.partial(
               "Maintain existing\n(mixed values within one file are normalised by looking at what's used after the first line)",
           }),
         ]),
-        'lf'
+        'lf',
       )
       .register(z.globalRegistry, {
         description: 'Which end of line characters to apply.',
@@ -106,7 +106,7 @@ export const optionsSchema = z.partial(
             description: 'Whitespaces are considered insensitive.',
           }),
         ]),
-        'css'
+        'css',
       )
       .register(z.globalRegistry, {
         description: 'How to handle whitespaces in HTML.',
@@ -202,7 +202,7 @@ export const optionsSchema = z.partial(
             .literal('preserve')
             .register(z.globalRegistry, { description: 'Wrap prose as-is.' }),
         ]),
-        'preserve'
+        'preserve',
       )
       .register(z.globalRegistry, {
         description: 'How to wrap prose.',
@@ -224,7 +224,7 @@ export const optionsSchema = z.partial(
               'Respect the input use of quotes in object properties.',
           }),
         ]),
-        'as-needed'
+        'as-needed',
       )
       .register(z.globalRegistry, {
         description: 'Change when properties in objects are quoted.',
@@ -284,7 +284,7 @@ export const optionsSchema = z.partial(
             .literal('none')
             .register(z.globalRegistry, { description: 'No trailing commas.' }),
         ]),
-        'all'
+        'all',
       )
       .register(z.globalRegistry, {
         description: 'Print trailing commas wherever possible when multi-line.',
@@ -300,7 +300,7 @@ export const optionsSchema = z.partial(
         description: 'Indent script and style tags in Vue files.',
       }),
     // ...existing code...
-  })
+  }),
 );
 
 export const overridesSchema = z.object({
@@ -320,7 +320,7 @@ export const overridesSchema = z.object({
         options: z.optional(optionsSchema).register(z.globalRegistry, {
           description: 'The options to apply for this override.',
         }),
-      })
+      }),
     )
     .register(z.globalRegistry, {
       description:
@@ -330,7 +330,7 @@ export const overridesSchema = z.object({
 
 export const configSchema = z.extend(
   optionsSchema,
-  overridesSchema._zod.def.shape
+  overridesSchema._zod.def.shape,
 );
 
 export const prettierrcSchema = z

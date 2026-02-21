@@ -25,8 +25,8 @@ describe('LazyModel', () => {
       expect(
         new LazyModel().renderBlock(
           subcategoriesSchema,
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown('_Array of [Category](#category) items._');
     });
   });
@@ -36,8 +36,8 @@ describe('LazyModel', () => {
       expect(
         new LazyModel().renderInline(
           subcategoriesSchema,
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown('_Array of_ [Category](#category) _items_');
     });
   });

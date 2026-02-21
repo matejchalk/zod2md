@@ -10,10 +10,10 @@ describe('IntersectionModel', () => {
         new IntersectionModel().renderBlock(
           z.intersection(
             z.uuid(),
-            z.object({ __brand__: z.literal('User').optional() })
+            z.object({ __brand__: z.literal('User').optional() }),
           ),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Intersection of the following types:_
         
@@ -27,14 +27,14 @@ describe('IntersectionModel', () => {
       const idSchema = z.uuid();
       const userIdSchema = z.intersection(
         idSchema,
-        z.object({ __brand__: z.literal('User').optional() })
+        z.object({ __brand__: z.literal('User').optional() }),
       );
       const schemas = { ID: idSchema, UserID: userIdSchema };
       expect(
         new IntersectionModel().renderBlock(
           userIdSchema,
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown(`
         _Intersection of the following types:_
         
@@ -51,7 +51,7 @@ describe('IntersectionModel', () => {
       const advancedOptionsSchema = z.object({});
       const optionsSchema = z.intersection(
         basicOptionsSchema,
-        advancedOptionsSchema
+        advancedOptionsSchema,
       );
       const schemas = {
         BasicOptions: basicOptionsSchema,
@@ -61,10 +61,10 @@ describe('IntersectionModel', () => {
       expect(
         new IntersectionModel().renderInline(
           optionsSchema,
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown(
-        '[BasicOptions](#basicoptions) _and_ [AdvancedOptions](#advancedoptions)'
+        '[BasicOptions](#basicoptions) _and_ [AdvancedOptions](#advancedoptions)',
       );
     });
 
@@ -72,8 +72,8 @@ describe('IntersectionModel', () => {
       expect(
         new IntersectionModel().renderInline(
           z.intersection(z.string(), z.number()),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`string & number`');
     });
   });

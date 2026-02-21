@@ -4,7 +4,7 @@ describe('UnknownModel', () => {
   describe('renderBlock', () => {
     it('should render short sentence', () => {
       expect(new UnknownModel().renderBlock()).toEqualMarkdown(
-        '_Unknown type._'
+        '_Unknown type._',
       );
     });
   });

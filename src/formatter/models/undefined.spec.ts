@@ -4,7 +4,7 @@ describe('UndefinedModel', () => {
   describe('renderBlock', () => {
     it('should render short sentence', () => {
       expect(new UndefinedModel().renderBlock()).toEqualMarkdown(
-        '_Undefined._'
+        '_Undefined._',
       );
     });
   });
@@ -12,7 +12,7 @@ describe('UndefinedModel', () => {
   describe('renderInline', () => {
     it('should render typescript code', () => {
       expect(new UndefinedModel().renderInline()).toEqualMarkdown(
-        '`undefined`'
+        '`undefined`',
       );
     });
   });

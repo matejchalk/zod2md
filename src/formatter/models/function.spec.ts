@@ -26,15 +26,18 @@ describe('FunctionModel', () => {
       expect(
         new FunctionModel().isSchema(
           convertZodFunctionToSchema(
-            z.function({ input: [z.string(), z.number()], output: z.boolean() })
-          )
-        )
+            z.function({
+              input: [z.string(), z.number()],
+              output: z.boolean(),
+            }),
+          ),
+        ),
       ).toBe(true);
     });
 
     it('should NOT recognize type without a function factory', () => {
       expect(new FunctionModel().isSchema(z.custom<() => string>())).toBe(
-        false
+        false,
       );
     });
   });
@@ -46,10 +49,10 @@ describe('FunctionModel', () => {
       expect(
         new FunctionModel().renderBlock(
           convertZodFunctionToSchema(
-            z.function({ input: [z.string(), optionsSchema] })
+            z.function({ input: [z.string(), optionsSchema] }),
           ),
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown(`
         _Function._
 
@@ -68,8 +71,8 @@ describe('FunctionModel', () => {
       expect(
         new FunctionModel().renderBlock(
           convertZodFunctionToSchema(z.function({ output: z.void() })),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Function._
 
@@ -99,13 +102,13 @@ describe('FunctionModel', () => {
                   z.function({
                     input: [z.string(), optionsSchema],
                     output: z.void(),
-                  })
+                  }),
                 ),
-                new Renderer(MODELS, schemas)
+                new Renderer(MODELS, schemas),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property   | Type                                                                                                                                                                   |
         | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -125,13 +128,13 @@ describe('FunctionModel', () => {
                   z.function({
                     input: [z.array(z.string()), z.boolean()],
                     output: z.number(),
-                  })
+                  }),
                 ),
-                new Renderer(MODELS, {})
+                new Renderer(MODELS, {}),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property   | Type                                 |
         | ---------- | ------------------------------------ |

@@ -7,7 +7,7 @@ export const Plugin = z.record(
   z.string(),
   z.object({
     rules: z.record(z.string(), Rule),
-  })
+  }),
 );
 
 export const PluginRecords = z.record(z.string(), Plugin);
@@ -24,19 +24,19 @@ export const UserConfig = z.intersection(
     formatter: z.optional(z.string()),
     rules: z.optional(RulesConfig),
     parserPreset: z.optional(
-      z.union([z.string(), ParserPreset, z.promise(ParserPreset)])
+      z.union([z.string(), ParserPreset, z.promise(ParserPreset)]),
     ),
     ignores: z.optional(
       z.array(
         convertZodFunctionToSchema(
-          z.function({ input: [z.string()], output: z.boolean() })
-        )
-      )
+          z.function({ input: [z.string()], output: z.boolean() }),
+        ),
+      ),
     ),
     defaultIgnores: z.optional(z.boolean()),
     plugin: PluginRecords,
     helpUrl: z.string(),
     prompt: UserPromptConfig,
   }),
-  z.record(z.string(), z.unknown())
+  z.record(z.string(), z.unknown()),
 );

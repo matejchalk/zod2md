@@ -11,14 +11,14 @@ export function findZodSchemas(modules: ImportedModules): ExportedSchema[] {
     return Object.entries(mod)
       .filter(
         (pair): pair is [string, z3.ZodType<unknown> | z4.$ZodType] =>
-          pair[1] instanceof z3.ZodType || pair[1] instanceof z4.$ZodType
+          pair[1] instanceof z3.ZodType || pair[1] instanceof z4.$ZodType,
       )
       .map(
         ([name, schema]): ExportedSchema => ({
           ...(name !== 'default' && { name }),
           schema,
           path,
-        })
+        }),
       );
   });
 }

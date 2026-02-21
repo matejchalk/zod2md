@@ -1,4 +1,4 @@
-import { CodeMark, md, type BlockText } from 'build-md';
+import { type BlockText, CodeMark, md } from 'build-md';
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
 import type { Renderer } from '../renderer';
@@ -11,16 +11,16 @@ type ArrayValidation =
   | { kind: 'max'; value: number }
   | { kind: 'length'; value: number };
 
-export class ArrayModel
-  implements IModel<z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>>
-{
+export class ArrayModel implements IModel<
+  z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>
+> {
   isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
     return schema instanceof z4.$ZodArray || schema instanceof z3.ZodArray;
   }
 
   renderBlock(
     schema: z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>,
-    renderer: Renderer
+    renderer: Renderer,
   ): BlockText {
     const itemSchema = this.#getItemSchema(schema);
     const validations = this.#listValidations(schema);
@@ -31,7 +31,7 @@ export class ArrayModel
         return model.renderBlock(itemSchema, renderer, {
           objectName: `${this.#formatPrefix(validations)} ${this.#formatSuffix(
             validations,
-            'object'
+            'object',
           )}`,
         });
       }
@@ -41,13 +41,13 @@ export class ArrayModel
     if (exportedSchema) {
       return md.italic(
         md`${this.#formatPrefix(validations)} ${renderer.formatExportedSchema(
-          exportedSchema
-        )} ${this.#formatSuffix(validations)}.`
+          exportedSchema,
+        )} ${this.#formatSuffix(validations)}.`,
       );
     }
 
     return md`${md.italic(
-      this.#formatPrefix(validations)
+      this.#formatPrefix(validations),
     )} ${renderer.renderSchemaInline(itemSchema)} ${md.italic([
       this.#formatSuffix(validations),
       '.',
@@ -56,7 +56,7 @@ export class ArrayModel
 
   renderInline(
     schema: z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>,
-    renderer: Renderer
+    renderer: Renderer,
   ): BlockText {
     const itemSchema = this.#getItemSchema(schema);
     const validations = this.#listValidations(schema);
@@ -64,9 +64,9 @@ export class ArrayModel
     const exportedSchema = renderer.findExportedSchema(itemSchema);
     if (exportedSchema) {
       return md`${md.italic(
-        this.#formatPrefix(validations)
+        this.#formatPrefix(validations),
       )} ${renderer.formatExportedSchema(exportedSchema)} ${md.italic(
-        this.#formatSuffix(validations)
+        this.#formatSuffix(validations),
       )}`;
     }
 
@@ -75,7 +75,7 @@ export class ArrayModel
       return model.renderInline(itemSchema, renderer, {
         objectName: `${this.#formatPrefix(validations)} ${this.#formatSuffix(
           validations,
-          'object'
+          'object',
         )}:`,
       });
     }
@@ -92,15 +92,15 @@ export class ArrayModel
     }
 
     const prefixText = `${this.#formatPrefix(validations)} ${this.#formatSuffix(
-      validations
+      validations,
     )} of type`;
     return md`${md.italic(prefixText)} ${renderer.renderSchemaInline(
-      itemSchema
+      itemSchema,
     )}`;
   }
 
   #getItemSchema(
-    schema: z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>
+    schema: z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>,
   ): z4.$ZodType | z3.ZodTypeAny {
     return schema instanceof z3.ZodArray
       ? schema.element
@@ -108,7 +108,7 @@ export class ArrayModel
   }
 
   #listValidations(
-    schema: z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>
+    schema: z4.$ZodArray<z4.$ZodType> | z3.ZodArray<z3.ZodTypeAny>,
   ): ArrayValidation[] {
     const possibleValidations: (ArrayValidation | null)[] =
       schema instanceof z3.ZodArray
@@ -126,7 +126,7 @@ export class ArrayModel
               value: schema._def.exactLength.value,
             },
           ]
-        : schema._zod.def.checks?.map((check): ArrayValidation | null => {
+        : (schema._zod.def.checks?.map((check): ArrayValidation | null => {
             if (check instanceof z4.$ZodCheckMinLength) {
               return { kind: 'min', value: check._zod.def.minimum };
             }
@@ -137,7 +137,7 @@ export class ArrayModel
               return { kind: 'length', value: check._zod.def.length };
             }
             return null;
-          }) ?? [];
+          }) ?? []);
     return possibleValidations.filter(value => value != null);
   }
 
@@ -153,14 +153,14 @@ export class ArrayModel
             return `exactly ${value}`;
         }
       }),
-      ' and '
+      ' and ',
     );
     return validationsText ? `Array of ${validationsText}` : 'Array of';
   }
 
   #formatSuffix(
     validations: ArrayValidation[],
-    noun: 'item' | 'object' = 'item'
+    noun: 'item' | 'object' = 'item',
   ): string {
     const isPlural = validations.every(({ value }) => value !== 1);
     return isPlural ? `${noun}s` : noun;

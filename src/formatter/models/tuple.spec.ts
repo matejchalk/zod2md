@@ -14,8 +14,8 @@ describe('TupleModel', () => {
       expect(
         new TupleModel().renderBlock(
           z.tuple([z.string(), userSchema]),
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown(`
         _Tuple, array of 2 items:_
 
@@ -28,8 +28,8 @@ describe('TupleModel', () => {
       expect(
         new TupleModel().renderBlock(
           z.tuple([z.number(), z.number(), z.boolean()], z.string()),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Tuple, array of 3+ items:_
 
@@ -55,11 +55,11 @@ describe('TupleModel', () => {
               md.code('userRow'),
               new TupleModel().renderInline(
                 z.tuple([z.string(), userSchema]),
-                new Renderer(MODELS, schemas)
+                new Renderer(MODELS, schemas),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property  | Type                                                                           |
         | --------- | ------------------------------------------------------------------------------ |
@@ -79,11 +79,11 @@ describe('TupleModel', () => {
               md.code('userRow'),
               new TupleModel().renderInline(
                 z.tuple([z.string(), userSchema], userSchema),
-                new Renderer(MODELS, schemas)
+                new Renderer(MODELS, schemas),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property  | Type                                                                                                                         |
         | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
@@ -95,8 +95,8 @@ describe('TupleModel', () => {
       expect(
         new TupleModel().renderInline(
           z.tuple([z.enum(['error', 'warning', 'info']), z.number()]),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown("`['error' | 'warning' | 'info', number]`");
     });
 
@@ -104,8 +104,8 @@ describe('TupleModel', () => {
       expect(
         new TupleModel().renderInline(
           z.tuple([z.number(), z.number(), z.boolean()], z.string()),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown('`[number, number, boolean, ...string[]]`');
     });
   });

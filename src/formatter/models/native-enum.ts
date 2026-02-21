@@ -1,4 +1,4 @@
-import { md, type BlockText, type InlineText } from 'build-md';
+import { type BlockText, type InlineText, md } from 'build-md';
 import * as z3 from 'zod/v3';
 import type { $ZodType } from 'zod/v4/core';
 import type { IModel } from '../types';
@@ -26,7 +26,7 @@ export class NativeEnumModel implements IModel<z3.ZodNativeEnum<z3.EnumLike>> {
         entries.map(([key, value]) => [
           md.code(key),
           md.code(formatLiteral(value)),
-        ])
+        ]),
       ),
     ];
   }
@@ -36,20 +36,20 @@ export class NativeEnumModel implements IModel<z3.ZodNativeEnum<z3.EnumLike>> {
       md.italic('Native enum:'),
       md.list(
         this.#listEntries(schema).map(([key, value]) =>
-          md.code(`${key} = ${formatLiteral(value)}`)
-        )
+          md.code(`${key} = ${formatLiteral(value)}`),
+        ),
       ),
     ];
   }
 
   #listEntries<T extends z3.EnumLike>(
-    schema: z3.ZodNativeEnum<T>
+    schema: z3.ZodNativeEnum<T>,
   ): [string, string | number][] {
     const numbers = Object.values(schema.enum).filter(
-      value => typeof value === 'number'
+      value => typeof value === 'number',
     );
     const strings = Object.values(schema.enum).filter(
-      value => typeof value === 'string'
+      value => typeof value === 'string',
     );
     if (
       numbers.length === strings.length &&
@@ -57,7 +57,7 @@ export class NativeEnumModel implements IModel<z3.ZodNativeEnum<z3.EnumLike>> {
       strings.every(str => typeof schema.enum[str] === 'number')
     ) {
       return Object.entries(schema.enum).filter(
-        ([, value]) => typeof value === 'number'
+        ([, value]) => typeof value === 'number',
       );
     }
     return Object.entries(schema.enum);

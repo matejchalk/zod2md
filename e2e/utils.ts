@@ -1,7 +1,7 @@
 export const VERSIONS = ['v3', 'v4', 'v4-mini'] as const;
 
 export function versionToCommitlintSnapshotFile(
-  version: (typeof VERSIONS)[number]
+  version: (typeof VERSIONS)[number],
 ): string {
   switch (version) {
     case 'v3':
