@@ -13,8 +13,8 @@ describe('ObjectModel', () => {
             cache: z.boolean().optional(),
             logs: z.enum(['error', 'warning', 'info', 'debug']).optional(),
           }),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Object containing the following properties:_
 
@@ -39,8 +39,8 @@ describe('ObjectModel', () => {
       expect(
         new ObjectModel().renderBlock(
           loggerConfigSchema,
-          new Renderer(MODELS, schemas)
-        )
+          new Renderer(MODELS, schemas),
+        ),
       ).toEqualMarkdown(`
         _Object containing the following properties:_
 
@@ -56,8 +56,8 @@ describe('ObjectModel', () => {
       expect(
         new ObjectModel().renderBlock(
           z.object({ x: z.number(), y: z.number(), z: z.number().optional() }),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Object containing the following properties:_
 
@@ -78,8 +78,8 @@ describe('ObjectModel', () => {
             format: z.enum(['esm', 'cjs']).optional().describe('Module format'),
             tsconfig: z.string().describe('Path to `tsconfig.json`').optional(),
           }),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Object containing the following properties:_
 
@@ -99,8 +99,8 @@ describe('ObjectModel', () => {
             format: z.enum(['esm', 'cjs']).optional(),
             tsconfig: z.string().default('tsconfig.json'),
           }),
-          new Renderer(MODELS, {})
-        )
+          new Renderer(MODELS, {}),
+        ),
       ).toEqualMarkdown(`
         _Object containing the following properties:_
 
@@ -132,11 +132,11 @@ describe('ObjectModel', () => {
               md.code('logs'),
               new ObjectModel().renderInline(
                 loggerConfigSchema,
-                new Renderer(MODELS, schemas)
+                new Renderer(MODELS, schemas),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
         | Property | Type                                                                                            |
         | -------- | ----------------------------------------------------------------------------------------------- |
@@ -148,6 +148,10 @@ describe('ObjectModel', () => {
       const logLevelSchema = z.enum(['error', 'warning', 'info', 'debug']);
       const loggerConfigSchema = z.object({
         level: logLevelSchema.meta({ description: 'Minimum log level' }),
+        colorize: z
+          .boolean()
+          .optional()
+          .meta({ description: 'Enable terminal colors' }),
       });
       const schemas = {
         LogLevel: logLevelSchema,
@@ -161,15 +165,15 @@ describe('ObjectModel', () => {
               md.code('logs'),
               new ObjectModel().renderInline(
                 loggerConfigSchema,
-                new Renderer(MODELS, schemas)
+                new Renderer(MODELS, schemas),
               ),
             ],
-          ]
-        )
+          ],
+        ),
       ).toEqualMarkdown(`
-        | Property | Type                                                                                                                            |
-        | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
-        | \`logs\`   | _Object with properties:_<ul><li><b><code>level</code></b> (\\*): <a href="#loglevel">LogLevel</a> - Minimum log level</li></ul> |
+        | Property | Type                                                                                                                                                                                                         |
+        | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+        | \`logs\`   | _Object with properties:_<ul><li><b><code>level</code></b> (\\*): <a href="#loglevel">LogLevel</a> - Minimum log level</li><li><code>colorize</code>: <code>boolean</code> - Enable terminal colors</li></ul> |
       `);
     });
   });

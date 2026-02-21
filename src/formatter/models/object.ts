@@ -25,9 +25,9 @@ type CustomRenderOptions = {
 
 const REQUIRED_ASTERISK = '(\\*)';
 
-export class ObjectModel
-  implements IModel<z4.$ZodObject | z3.ZodObject<z3.ZodRawShape>>
-{
+export class ObjectModel implements IModel<
+  z4.$ZodObject | z3.ZodObject<z3.ZodRawShape>
+> {
   isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
     return schema instanceof z4.$ZodObject || schema instanceof z3.ZodObject;
   }
@@ -35,7 +35,7 @@ export class ObjectModel
   renderBlock(
     schema: z4.$ZodObject | z3.ZodObject<z3.ZodRawShape>,
     renderer: Renderer,
-    options?: CustomRenderOptions
+    options?: CustomRenderOptions,
   ): BlockText {
     const fields = this.#parseObjectFields(schema, renderer);
 
@@ -53,7 +53,7 @@ export class ObjectModel
         ? md`${md.bold(md.code(field.key))} ${REQUIRED_ASTERISK}`
         : md.code(field.key),
       ...(hasDescription ? [field.description ?? ''] : []),
-      renderer.renderSchemaInline(field.schema),
+      renderer.renderSchemaInline(this.#unwrapPropSchema(field.schema)),
       ...(hasDefault
         ? [
             this.#hasDefaultValue(field)
@@ -72,14 +72,14 @@ export class ObjectModel
 
     return md`${md.paragraph(md.italic(introText))}${md.table(
       tableColumns,
-      tableRows
+      tableRows,
     )}${md.paragraph(md.italic(footerText))}`;
   }
 
   renderInline(
     schema: z4.$ZodObject | z3.ZodObject<z3.ZodRawShape>,
     renderer: Renderer,
-    options?: CustomRenderOptions
+    options?: CustomRenderOptions,
   ): InlineText {
     const fields = this.#parseObjectFields(schema, renderer);
 
@@ -87,65 +87,86 @@ export class ObjectModel
       const formattedKey = field.required
         ? md`${md.bold(md.code(field.key))} ${REQUIRED_ASTERISK}`
         : md.code(field.key);
-      const formattedType = renderer.renderSchemaInline(field.schema);
+      const formattedType = renderer.renderSchemaInline(
+        this.#unwrapPropSchema(field.schema),
+      );
       const description = renderer.getDescription(field.schema);
       const formattedDescription = description ? ` - ${description}` : '';
       return md`${formattedKey}: ${formattedType}${formattedDescription}`;
     });
 
     return md`${md.italic(
-      options?.objectName ?? 'Object with properties:'
+      options?.objectName ?? 'Object with properties:',
     )}${md.list(listItems)}`;
   }
 
   #parseObjectFields(
     schema: z4.$ZodObject | z3.ZodObject<z3.ZodRawShape>,
-    renderer: Renderer
+    renderer: Renderer,
   ): ObjectField[] {
     if (schema instanceof z4.$ZodObject) {
       const isOptionalOrHasDefault = (s: z4.$ZodType) =>
         s instanceof z4.$ZodOptional || s instanceof z4.$ZodDefault;
       return Object.entries(schema._zod.def.shape).map(
-        ([key, schema]): ObjectField => ({
-          key,
-          schema: isOptionalOrHasDefault(schema)
-            ? schema._zod.def.innerType
-            : schema,
-          description: renderer.getDescription(schema) ?? '',
-          required: !(
-            isOptionalOrHasDefault(schema) ||
-            renderer.findInWrapperTypeV4(
-              schema,
-              v =>
-                v instanceof z4.$ZodUnion &&
-                v._zod.def.options.some(isOptionalOrHasDefault)
-            )
-          ),
-          ...(schema instanceof z4.$ZodDefault && {
-            defaultValue: schema._zod.def.defaultValue,
-          }),
-        })
+        ([key, schema]): ObjectField => {
+          const defaultSchema = renderer.findInWrapperTypeV4(
+            schema,
+            v => v instanceof z4.$ZodDefault,
+          );
+          return {
+            key,
+            schema,
+            description: renderer.getDescription(schema) ?? '',
+            required: !(
+              isOptionalOrHasDefault(schema) ||
+              renderer.findInWrapperTypeV4(
+                schema,
+                v =>
+                  v instanceof z4.$ZodUnion &&
+                  v._zod.def.options.some(isOptionalOrHasDefault),
+              )
+            ),
+            ...(defaultSchema && {
+              defaultValue: defaultSchema._zod.def.defaultValue,
+            }),
+          };
+        },
       );
     }
 
     return Object.entries(schema._def.shape()).map(
-      ([key, schema]): ObjectField => ({
-        key,
-        schema:
-          schema instanceof z3.ZodOptional || schema instanceof z3.ZodDefault
-            ? schema._def.innerType
-            : schema,
-        description: renderer.getDescription(schema) ?? '',
-        required: !schema.isOptional(),
-        ...(schema instanceof z3.ZodDefault && {
-          defaultValue: schema._def.defaultValue(),
-        }),
-      })
+      ([key, schema]): ObjectField => {
+        const defaultSchema = renderer.findInWrapperTypeV3(
+          schema,
+          s => s instanceof z3.ZodDefault,
+        );
+        return {
+          key,
+          schema,
+          description: renderer.getDescription(schema) ?? '',
+          required: !schema.isOptional(),
+          ...(defaultSchema && {
+            defaultValue: defaultSchema._def.defaultValue(),
+          }),
+        };
+      },
     );
   }
 
   #hasDefaultValue(field: ObjectField): field is Required<ObjectField> {
     const key = 'defaultValue' satisfies keyof ObjectField;
     return key in field;
+  }
+
+  #unwrapPropSchema(
+    schema: z4.$ZodType | z3.ZodTypeAny,
+  ): z4.$ZodType | z3.ZodTypeAny {
+    if (schema instanceof z4.$ZodOptional || schema instanceof z4.$ZodDefault) {
+      return schema._zod.def.innerType;
+    }
+    if (schema instanceof z3.ZodOptional || schema instanceof z3.ZodDefault) {
+      return schema._def.innerType;
+    }
+    return schema;
   }
 }
