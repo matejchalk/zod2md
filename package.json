@@ -1,6 +1,6 @@
 {
   "name": "zod2md",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Generate Markdown docs from Zod schemas",
   "license": "MIT",
   "author": "Matěj Chalk <matejchalk@gmail.com>",
