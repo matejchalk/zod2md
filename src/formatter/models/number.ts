@@ -98,6 +98,8 @@ export class NumberModel implements IModel<z4.$ZodNumber | z3.ZodNumber> {
         return validation.value === 2
           ? 'even'
           : `multiple of ${validation.value}`;
+      case 'safeint':
+        return 'int';
       default:
         return validation.kind;
     }
