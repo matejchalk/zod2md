@@ -9,18 +9,66 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Unit tests and E2E tests
+    name: Unit tests
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
+      - name: Clone the repository
+        uses: actions/checkout@v6
       - name: Install dependencies
-        run: npm ci
-      - name: Unit tests
+        uses: ./.github/actions/install
+      - name: Test units with Vitest
         run: npm test
-      - name: E2E tests
+
+  e2e:
+    runs-on: ubuntu-latest
+    name: E2E tests
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v6
+      - name: Install dependencies
+        uses: ./.github/actions/install
+      - name: Test end-to-end with Vitest and Verdaccio
         run: npm run e2e
+
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v6
+      - name: Install dependencies
+        uses: ./.github/actions/install
+      - name: Build with tsup
+        run: npm run build
+
+  typecheck:
+    runs-on: ubuntu-latest
+    name: Type checking
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v6
+      - name: Install dependencies
+        uses: ./.github/actions/install
+      - name: Compile with TypeScript
+        run: npm run typecheck
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Linting
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v6
+      - name: Install dependencies
+        uses: ./.github/actions/install
+      - name: Static analysis with ESLint
+        run: npm run lint
+
+  format:
+    runs-on: ubuntu-latest
+    name: Formatting
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v6
+      - name: Install dependencies
+        uses: ./.github/actions/install
+      - name: Check formatting with Prettier
+        run: npm run format:check

@@ -13,6 +13,9 @@
     "module": "ESNext",
     "noEmit": true,
     "lib": ["es2022"],
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "paths": {
+      "zod2md": ["./src/index.ts"]
+    }
   }
 }

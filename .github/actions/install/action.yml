@@ -1,0 +1,14 @@
+name: Install dependencies
+description: Install Node.js and npm dependencies
+
+runs:
+  using: composite
+  steps:
+    - name: Install Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: package.json
+        cache: npm
+    - name: Install npm dependencies
+      run: npm ci
+      shell: bash
