@@ -4,8 +4,8 @@ export function formatLiteral(value: unknown): string {
   switch (typeof value) {
     case 'string':
       return value.includes("'")
-        ? `"${value.replace(/"/g, '\\"')}"`
-        : `'${value.replace(/'/g, "\\'")}'`;
+        ? `"${escapeQuotes(value, 'double')}"`
+        : `'${escapeQuotes(value, 'single')}'`;
     case 'number':
     case 'boolean':
     case 'symbol':
@@ -14,7 +14,7 @@ export function formatLiteral(value: unknown): string {
     case 'undefined':
       return 'undefined';
     case 'object':
-      if (value === null) {
+      if (value == null) {
         return 'null';
       }
       return JSON.stringify(value);
@@ -23,11 +23,20 @@ export function formatLiteral(value: unknown): string {
   }
 }
 
+function escapeQuotes(text: string, quotes: 'single' | 'double'): string {
+  switch (quotes) {
+    case 'single':
+      return text.replace(/'/g, String.raw`\'`);
+    case 'double':
+      return text.replace(/"/g, String.raw`\"`);
+  }
+}
+
 export function slugify(text: string): string {
   return text
     .replace(/\s+/g, '-')
     .toLowerCase()
-    .replace(/[^a-z0-9-]/g, '');
+    .replace(/[^a-z\d-]/g, '');
 }
 
 export function smartJoin(items: string[], sep: string): string {

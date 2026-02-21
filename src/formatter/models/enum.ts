@@ -38,6 +38,7 @@ export class EnumModel implements IModel<
       values
         .slice(0, MAX_VALUES)
         .map(formatLiteral)
+        // eslint-disable-next-line unicorn/prefer-spread
         .concat(values.length > MAX_VALUES ? ['...'] : [])
         .join(' | '),
     );

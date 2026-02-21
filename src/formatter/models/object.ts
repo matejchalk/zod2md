@@ -23,7 +23,7 @@ type CustomRenderOptions = {
   objectName?: string;
 };
 
-const REQUIRED_ASTERISK = '(\\*)';
+const REQUIRED_ASTERISK = String.raw`(\*)`;
 
 export class ObjectModel implements IModel<
   z4.$ZodObject | z3.ZodObject<z3.ZodRawShape>
@@ -107,25 +107,23 @@ export class ObjectModel implements IModel<
     renderer: Renderer,
   ): ObjectField[] {
     if (schema instanceof z4.$ZodObject) {
-      const isOptionalOrHasDefault = (s: z4.$ZodType) =>
-        s instanceof z4.$ZodOptional || s instanceof z4.$ZodDefault;
       return Object.entries(schema._zod.def.shape).map(
-        ([key, schema]): ObjectField => {
+        ([key, propSchema]): ObjectField => {
           const defaultSchema = renderer.findInWrapperTypeV4(
-            schema,
+            propSchema,
             v => v instanceof z4.$ZodDefault,
           );
           return {
             key,
-            schema,
-            description: renderer.getDescription(schema) ?? '',
+            schema: propSchema,
+            description: renderer.getDescription(propSchema) ?? '',
             required: !(
-              isOptionalOrHasDefault(schema) ||
+              this.#isOptionalOrHasDefaultV4(propSchema) ||
               renderer.findInWrapperTypeV4(
-                schema,
+                propSchema,
                 v =>
                   v instanceof z4.$ZodUnion &&
-                  v._zod.def.options.some(isOptionalOrHasDefault),
+                  v._zod.def.options.some(this.#isOptionalOrHasDefaultV4),
               )
             ),
             ...(defaultSchema && {
@@ -137,16 +135,16 @@ export class ObjectModel implements IModel<
     }
 
     return Object.entries(schema._def.shape()).map(
-      ([key, schema]): ObjectField => {
+      ([key, propSchema]): ObjectField => {
         const defaultSchema = renderer.findInWrapperTypeV3(
-          schema,
+          propSchema,
           s => s instanceof z3.ZodDefault,
         );
         return {
           key,
-          schema,
-          description: renderer.getDescription(schema) ?? '',
-          required: !schema.isOptional(),
+          schema: propSchema,
+          description: renderer.getDescription(propSchema) ?? '',
+          required: !propSchema.isOptional(),
           ...(defaultSchema && {
             defaultValue: defaultSchema._def.defaultValue(),
           }),
@@ -174,5 +172,11 @@ export class ObjectModel implements IModel<
       return this.#unwrapPropSchema(schema._def.innerType, renderer);
     }
     return schema;
+  }
+
+  #isOptionalOrHasDefaultV4(schema: z4.$ZodType) {
+    return (
+      schema instanceof z4.$ZodOptional || schema instanceof z4.$ZodDefault
+    );
   }
 }

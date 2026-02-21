@@ -11,6 +11,8 @@ type BigIntValidation =
   | { kind: 'lt'; value: bigint }
   | { kind: 'multipleOf'; value: bigint };
 
+const BIGINT_2 = 2n;
+
 export class BigIntModel implements IModel<z4.$ZodBigInt | z3.ZodBigInt> {
   isSchema(schema: z4.$ZodType | z3.ZodTypeAny) {
     return schema instanceof z4.$ZodBigInt || schema instanceof z3.ZodBigInt;
@@ -50,7 +52,7 @@ export class BigIntModel implements IModel<z4.$ZodBigInt | z3.ZodBigInt> {
       case 'lte':
         return `is less than or equal to ${validation.value}`;
       case 'multipleOf':
-        return validation.value === 2n
+        return validation.value === BIGINT_2
           ? 'is even'
           : `is a multiple of ${validation.value}`;
     }
@@ -67,7 +69,7 @@ export class BigIntModel implements IModel<z4.$ZodBigInt | z3.ZodBigInt> {
       case 'lte':
         return `≤${validation.value}`;
       case 'multipleOf':
-        return validation.value === 2n
+        return validation.value === BIGINT_2
           ? 'even'
           : `multiple of ${validation.value}`;
     }

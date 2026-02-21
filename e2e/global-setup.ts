@@ -1,8 +1,9 @@
 import { runServer } from 'verdaccio';
-import { exec } from 'child_process';
-import { type Server } from 'http';
-import { promisify } from 'util';
+import { exec } from 'node:child_process';
+import type { Server } from 'node:http';
+import { promisify } from 'node:util';
 
+// eslint-disable-next-line functional/no-let
 let server: Server;
 
 const port = 4873;

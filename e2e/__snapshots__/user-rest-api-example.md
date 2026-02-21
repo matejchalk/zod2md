@@ -15,9 +15,9 @@ _All properties are optional._
 
 _Object containing the following properties:_
 
-| Property         | Type                                                                                                                                                                                                                                                                                                                |
-| :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`users`** (\*) | _Array of objects:_<ul><li><b><code>username</code></b> (\*): <code>string</code> (<i>regex: `/^[a-z][a-z0-9.]*$/`</i>)</li><li><b><code>email</code></b> (\*): <code>string</code> (<i>email</i>)</li><li><code>firstName</code>: <code>string</code></li><li><code>lastName</code>: <code>string</code></li></ul> |
+| Property         | Type                                                                                                                                                                                                                                                                                                               |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`users`** (\*) | _Array of objects:_<ul><li><b><code>username</code></b> (\*): <code>string</code> (<i>regex: `/^[a-z][a-z\d.]*$/`</i>)</li><li><b><code>email</code></b> (\*): <code>string</code> (<i>email</i>)</li><li><code>firstName</code>: <code>string</code></li><li><code>lastName</code>: <code>string</code></li></ul> |
 
 _(\*) Required._
 
@@ -25,9 +25,9 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-| Property            | Type                                      |
-| :------------------ | :---------------------------------------- |
-| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z0-9.]*$/`_) |
+| Property            | Type                                     |
+| :------------------ | :--------------------------------------- |
+| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z\d.]*$/`_) |
 
 _(\*) Required._
 
@@ -35,12 +35,12 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-| Property            | Type                                      |
-| :------------------ | :---------------------------------------- |
-| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z0-9.]*$/`_) |
-| **`email`** (\*)    | `string` (_email_)                        |
-| `firstName`         | `string`                                  |
-| `lastName`          | `string`                                  |
+| Property            | Type                                     |
+| :------------------ | :--------------------------------------- |
+| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z\d.]*$/`_) |
+| **`email`** (\*)    | `string` (_email_)                       |
+| `firstName`         | `string`                                 |
+| `lastName`          | `string`                                 |
 
 _(\*) Required._
 
@@ -48,13 +48,13 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-| Property            | Type                                      |
-| :------------------ | :---------------------------------------- |
-| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z0-9.]*$/`_) |
-| **`email`** (\*)    | `string` (_email_)                        |
-| `firstName`         | `string`                                  |
-| `lastName`          | `string`                                  |
-| **`password`** (\*) | `string` (_min length: 6_)                |
+| Property            | Type                                     |
+| :------------------ | :--------------------------------------- |
+| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z\d.]*$/`_) |
+| **`email`** (\*)    | `string` (_email_)                       |
+| `firstName`         | `string`                                 |
+| `lastName`          | `string`                                 |
+| **`password`** (\*) | `string` (_min length: 6_)               |
 
 _(\*) Required._
 
@@ -62,12 +62,12 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-| Property            | Type                                      |
-| :------------------ | :---------------------------------------- |
-| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z0-9.]*$/`_) |
-| **`email`** (\*)    | `string` (_email_)                        |
-| `firstName`         | `string`                                  |
-| `lastName`          | `string`                                  |
+| Property            | Type                                     |
+| :------------------ | :--------------------------------------- |
+| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z\d.]*$/`_) |
+| **`email`** (\*)    | `string` (_email_)                       |
+| `firstName`         | `string`                                 |
+| `lastName`          | `string`                                 |
 
 _(\*) Required._
 
@@ -75,9 +75,9 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-| Property            | Type                                      |
-| :------------------ | :---------------------------------------- |
-| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z0-9.]*$/`_) |
+| Property            | Type                                     |
+| :------------------ | :--------------------------------------- |
+| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z\d.]*$/`_) |
 
 _(\*) Required._
 
@@ -97,8 +97,8 @@ _(\*) Required._
 
 _Object containing the following properties:_
 
-| Property            | Type                                      |
-| :------------------ | :---------------------------------------- |
-| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z0-9.]*$/`_) |
+| Property            | Type                                     |
+| :------------------ | :--------------------------------------- |
+| **`username`** (\*) | `string` (_regex: `/^[a-z][a-z\d.]*$/`_) |
 
 _(\*) Required._

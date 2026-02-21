@@ -83,6 +83,7 @@ export class StringModel implements IModel<StringType> {
     )})`;
   }
 
+  // eslint-disable-next-line complexity
   #formatValidationLong(validation: StringValidation): string {
     switch (validation.kind) {
       case 'email':
@@ -120,9 +121,11 @@ export class StringModel implements IModel<StringType> {
       case 'datetime':
         return `is a date and time in ISO 8601 format (${[
           validation.offset ? 'UTC' : 'any timezone offset',
-          ...(validation.precision != null
-            ? [`sub-second precision of ${validation.precision} decimal places`]
-            : []),
+          ...(validation.precision == null
+            ? []
+            : [
+                `sub-second precision of ${validation.precision} decimal places`,
+              ]),
         ].join(', ')})`;
       case 'ip':
         return `is in IP${validation.version ?? ''} address format`;
@@ -141,9 +144,9 @@ export class StringModel implements IModel<StringType> {
       case 'datetime':
         const options = [
           validation.offset ? '' : 'no timezone offset',
-          validation.precision != null
-            ? `${validation.precision} decimals sub-second precision`
-            : '',
+          validation.precision == null
+            ? ''
+            : `${validation.precision} decimals sub-second precision`,
         ]
           .filter(Boolean)
           .join(' and ');
@@ -209,6 +212,7 @@ export class StringModel implements IModel<StringType> {
     return this.#parseStringSubTypeV4(check);
   }
 
+  // eslint-disable-next-line max-lines-per-function
   #parseStringSubTypeV4(
     obj: z4.$ZodCheck | Exclude<StringType, z3.ZodString>,
   ): StringValidation | null {

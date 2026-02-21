@@ -11,7 +11,7 @@ describe('PipeModel', () => {
 
   const capitalizeSchema = z
     .string()
-    .transform(x => `${x[0]?.toUpperCase() ?? ''}${x.substring(1)}`);
+    .transform(x => `${x[0]?.toUpperCase() ?? ''}${x.slice(1)}`);
 
   describe('renderBlock', () => {
     it('should render piped output schema', () => {

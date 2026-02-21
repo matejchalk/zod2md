@@ -4,6 +4,7 @@ import { Renderer } from '../renderer';
 import { CatchModel } from './catch';
 
 describe('CatchModel', () => {
+  // eslint-disable-next-line unicorn/catch-error-name
   const permissiveUrlSchema = z.url().catch(ctx => {
     if (
       ctx.issues.length === 1 &&

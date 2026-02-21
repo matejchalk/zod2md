@@ -53,15 +53,13 @@ export const optionsSchema = z
     endOfLine: z
       .union([
         z.literal('lf').meta({
-          description:
-            'Line Feed only (\\n), common on Linux and macOS as well as inside git repos',
+          description: String.raw`Line Feed only (\n), common on Linux and macOS as well as inside git repos`,
         }),
         z.literal('crlf').meta({
-          description:
-            'Carriage Return + Line Feed characters (\\r\\n), common on Windows',
+          description: String.raw`Carriage Return + Line Feed characters (\r\n), common on Windows`,
         }),
         z.literal('cr').meta({
-          description: 'Carriage Return character only (\\r), used very rarely',
+          description: String.raw`Carriage Return character only (\r), used very rarely`,
         }),
         z.literal('auto').meta({
           description:

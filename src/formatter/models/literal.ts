@@ -38,6 +38,7 @@ export class LiteralModel implements IModel<
   #parseValue(schema: z4.core.$ZodLiteral | z3.ZodLiteral<z3.Primitive>) {
     if (schema instanceof z4.core.$ZodLiteral) {
       if (schema._zod.def.values.length === 1) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return schema._zod.def.values[0]!;
       }
       return schema._zod.def.values;

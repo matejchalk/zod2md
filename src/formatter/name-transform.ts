@@ -1,9 +1,13 @@
 import * as z3 from 'zod/v3';
 import * as z4 from 'zod/v4/core';
-import { basename, dirname, sep } from 'node:path';
+import path from 'node:path';
 import type { NameTransformFn } from './types';
 
-export const defaultNameTransform: NameTransformFn = (name, path, schema) => {
+export const defaultNameTransform: NameTransformFn = (
+  name,
+  filePath,
+  schema,
+) => {
   const metaTitle = getMetaTitle(schema);
   if (metaTitle) {
     return metaTitle;
@@ -13,11 +17,11 @@ export const defaultNameTransform: NameTransformFn = (name, path, schema) => {
     return formatName(name);
   }
 
-  const fileWithoutExt = basename(path).replace(/\.[cm]?[jt]sx?$/, '');
+  const fileWithoutExt = path.basename(filePath).replace(/\.[cm]?[jt]sx?$/, '');
   if (fileWithoutExt !== 'index') {
     return formatName(fileWithoutExt);
   }
-  const parentDir = dirname(path).split(sep).at(-1)!;
+  const parentDir = path.dirname(filePath).split(path.sep).at(-1) ?? filePath;
   return formatName(parentDir);
 };
 
@@ -54,7 +58,7 @@ const stripSchemaSuffix: ConverterFn = (str: string) =>
   str.replace(/schema$/i, '');
 
 const removeNonAlphaNumeric: ConverterFn = (str: string) =>
-  str.replace(/[^a-z0-9]/gi, '');
+  str.replace(/[^a-z\d]/gi, '');
 
 const capitalize: ConverterFn = (str: string) =>
   (str[0]?.toUpperCase() ?? '') + str.slice(1);

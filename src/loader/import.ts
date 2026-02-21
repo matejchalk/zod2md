@@ -17,7 +17,7 @@ export async function importModules(
         format: options.format,
       });
 
-      if (typeof mod !== 'object' || mod === null) {
+      if (typeof mod !== 'object' || mod == null) {
         throw new Error('Expected module exports to be an object');
       }
 

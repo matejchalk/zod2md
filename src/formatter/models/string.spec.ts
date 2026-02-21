@@ -47,8 +47,8 @@ describe('StringModel', () => {
 
     it('should include validations from string checks', () => {
       expect(
-        new StringModel().renderInline(z.string().regex(/^[a-z0-9_]+$/)),
-      ).toEqualMarkdown('`string` (_regex: `/^[a-z0-9_]+$/`_)');
+        new StringModel().renderInline(z.string().regex(/^[a-z\d_]+$/)),
+      ).toEqualMarkdown('`string` (_regex: `/^[a-z\\d_]+$/`_)');
     });
 
     it('should include validations from string sub-types', () => {

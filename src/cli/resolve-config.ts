@@ -37,7 +37,7 @@ function assertCliArgsSufficient(
   if (missingArgs.length > 0) {
     throw new Error(
       `CLI arguments ${missingArgs
-        .map(name => '`--' + name + '`')
+        .map(name => `\`--${name}\``)
         .join(' and ')} are required when no config file is provided`,
     );
   }

@@ -5,6 +5,7 @@ export function convertZodFunctionToSchema<T extends $ZodFunction>(factory: T) {
   return z
     .transform((arg, payload) => {
       if (typeof arg !== 'function') {
+        // eslint-disable-next-line functional/immutable-data
         payload.issues.push({
           input: payload.value,
           code: 'custom',

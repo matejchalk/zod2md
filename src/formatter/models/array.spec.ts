@@ -171,7 +171,9 @@ describe('ArrayModel', () => {
      `);
     });
 
-    // TODO
-    // it("should render array of items that don't serialize as inline code", () => {});
+    it.todo(
+      "should render array of items that don't serialize as inline code",
+      () => {},
+    );
   });
 });

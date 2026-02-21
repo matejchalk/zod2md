@@ -3,7 +3,7 @@ import { EnumModel } from './enum';
 
 describe('EnumModel', () => {
   const alphabet = Array.from({ length: 26 }).map((_, i) =>
-    String.fromCharCode('A'.charCodeAt(0) + i),
+    String.fromCodePoint('A'.codePointAt(0)! + i),
   );
 
   describe('renderBlock', () => {

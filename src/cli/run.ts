@@ -1,5 +1,5 @@
-import { mkdir, writeFile } from 'fs/promises';
-import { dirname } from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import type { Options } from '../types';
 import { resolveConfig } from './resolve-config';
 
@@ -11,7 +11,7 @@ export async function runCLI(
 
   const markdown = await handler(config);
 
-  await mkdir(dirname(config.output), { recursive: true });
-  await writeFile(config.output, markdown);
+  await fs.mkdir(path.dirname(config.output), { recursive: true });
+  await fs.writeFile(config.output, markdown);
   console.info(`🚀 Generated Markdown docs in ${config.output}`);
 }

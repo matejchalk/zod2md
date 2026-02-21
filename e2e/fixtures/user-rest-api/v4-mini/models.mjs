@@ -1,6 +1,6 @@
 import { z } from 'zod/v4-mini';
 
-export const Username = z.string().check(z.regex(/^[a-z][a-z0-9.]*$/));
+export const Username = z.string().check(z.regex(/^[a-z][a-z\d.]*$/));
 
 export const User = z.object({
   username: Username,

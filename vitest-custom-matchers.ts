@@ -48,7 +48,7 @@ function isMarkdownText(received: unknown): received is FormattedText {
   return (
     typeof received === 'string' ||
     (typeof received === 'object' &&
-      received !== null &&
+      received != null &&
       (received.constructor.name.endsWith('Block') ||
         received.constructor.name.endsWith('Mark')))
   );

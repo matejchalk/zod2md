@@ -56,7 +56,9 @@ export class Renderer {
     schema: z4.$ZodType,
     predicate: ((s: z4.$ZodType) => s is T) | ((s: z4.$ZodType) => boolean),
   ): T | undefined {
+    // eslint-disable-next-line functional/no-let
     let curr = schema;
+    // eslint-disable-next-line functional/no-loop-statements
     while (!predicate(curr)) {
       if (
         curr instanceof z4.$ZodOptional ||
@@ -77,7 +79,9 @@ export class Renderer {
     schema: z3.ZodTypeAny,
     predicate: ((s: z3.ZodTypeAny) => s is T) | ((s: z3.ZodTypeAny) => boolean),
   ): T | undefined {
+    // eslint-disable-next-line functional/no-let
     let curr = schema;
+    // eslint-disable-next-line functional/no-loop-statements
     while (!predicate(curr)) {
       if (
         curr instanceof z3.ZodOptional ||
@@ -111,7 +115,7 @@ export class Renderer {
   findModel(
     schema: z3.ZodTypeAny | z4.$ZodType,
   ): IModel<z3.ZodTypeAny | z4.$ZodType> {
-    const model = this.#models.find(model => model.isSchema(schema));
+    const model = this.#models.find(m => m.isSchema(schema));
     if (model) {
       return model;
     }
