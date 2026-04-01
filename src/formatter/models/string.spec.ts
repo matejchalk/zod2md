@@ -36,6 +36,18 @@ describe('StringModel', () => {
         '_String that is a date and time in ISO 8601 format (any timezone offset)._',
       );
     });
+
+    it('should ignore refinements', () => {
+      expect(
+        new StringModel().renderBlock(
+          z
+            .string()
+            .refine(() => true)
+            .check(() => {})
+            .superRefine(() => {}),
+        ),
+      ).toEqualMarkdown('_String._');
+    });
   });
 
   describe('renderInline', () => {
@@ -61,6 +73,18 @@ describe('StringModel', () => {
       expect(new StringModel().renderInline(z.string().trim())).toEqualMarkdown(
         '`string`',
       );
+    });
+
+    it('should ignore refinements', () => {
+      expect(
+        new StringModel().renderBlock(
+          z
+            .string()
+            .refine(() => true)
+            .check(() => {})
+            .superRefine(() => {}),
+        ),
+      ).toEqualMarkdown('_String._');
     });
   });
 });

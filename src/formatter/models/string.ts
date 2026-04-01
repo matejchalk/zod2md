@@ -169,7 +169,8 @@ export class StringModel implements IModel<StringType> {
 
     return [
       this.#parseStringSubTypeV4(schema),
-      ...(schema._zod.def.checks?.map(this.#parseStringCheckV4) ?? []),
+      ...(schema._zod.def.checks?.map(this.#parseStringCheckV4.bind(this)) ??
+        []),
     ].filter(value => value != null);
   }
 
