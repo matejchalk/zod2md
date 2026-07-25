@@ -132,8 +132,8 @@ export const predicateSchema = convertZodFunctionToSchema(
 
 ## Contributing
 
-- Install dependencies with `npm install`.
-- Run unit tests with `npm test` (uses [Vitest](https://vitest.dev/)).
-- Run E2E tests with `npm run e2e` (uses [Vitest](https://vitest.dev/) and [Verdaccio](https://verdaccio.org/)).
-- Build library with `npm run build` (uses [tsup](https://tsup.egoist.dev/)).
-- Release new version with `npm run release` (uses [release-it](https://github.com/release-it/release-it?tab=readme-ov-file)).
+- Install dependencies with `pnpm install`.
+- Run unit tests with `pnpm test` (uses [Vitest](https://vitest.dev/)).
+- Run E2E tests with `pnpm run e2e` (uses [Vitest](https://vitest.dev/) and [Verdaccio](https://verdaccio.org/)).
+- Build library with `pnpm run build` (uses [tsup](https://tsup.egoist.dev/)).
+- Release new version with `pnpm run release` (uses [release-it](https://github.com/release-it/release-it?tab=readme-ov-file)).

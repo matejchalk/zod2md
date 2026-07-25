@@ -36,7 +36,7 @@
     "node": ">=22.16.0"
   },
   "scripts": {
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm run build",
     "prepare": "husky",
     "build": "tsup",
     "typecheck": "tsc --noEmit",
@@ -50,7 +50,7 @@
     "e2e": "vitest run --config e2e/vitest.config.ts",
     "e2e:update": "vitest run --config e2e/vitest.config.ts -u",
     "verdaccio:serve": "verdaccio --config .verdaccio/config.yml",
-    "verdaccio:publish": "npm unpublish --registry http://localhost:4873 --force && npm publish --registry http://localhost:4873 --force",
+    "verdaccio:publish": "pnpm unpublish zod2md --registry http://localhost:4873 --force && pnpm publish --registry http://localhost:4873 --force --no-git-checks",
     "release": "release-it",
     "release:dry-run": "release-it --dry-run"
   },
@@ -92,10 +92,5 @@
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
-  },
-  "allowScripts": {
-    "esbuild@0.28.1": true,
-    "esbuild@0.25.12": true,
-    "unrs-resolver@1.11.1": true
   }
 }

@@ -29,18 +29,20 @@ export async function setup() {
   console.info(`🚀 Verdaccio local registry started at ${registry}`);
 
   await loginToRegistry();
-  await promisify(exec)(`npm publish --registry ${registry} --force`);
+  await promisify(exec)(
+    `pnpm publish --registry ${registry} --force --no-git-checks`,
+  );
   console.info('🚀 Published package to local registry');
 
-  await promisify(exec)(`npm i -D zod2md --registry ${registry}`);
+  await promisify(exec)(`pnpm add -D zod2md --registry ${registry}`);
   console.info('🚀 Installed zod2md from local registry\n');
 }
 
 export async function teardown() {
-  await promisify(exec)(`npm rm zod2md`);
+  await promisify(exec)(`pnpm rm zod2md`);
   console.info('🧹 Un-installed zod2md');
 
-  await promisify(exec)(`npm unpublish --registry ${registry} --force`);
+  await promisify(exec)(`pnpm unpublish zod2md --registry ${registry} --force`);
   console.info('🧹 Un-published package in local registry');
 
   await rm(npmrcPath, { force: true });
