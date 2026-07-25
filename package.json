@@ -92,5 +92,10 @@
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "esbuild@0.25.12": true,
+    "unrs-resolver@1.11.1": true
   }
 }
