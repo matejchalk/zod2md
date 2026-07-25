@@ -131,3 +131,5 @@ dist
 
 # temporary files
 tmp
+# Verdaccio auth in E2E tests
+/.npmrc
