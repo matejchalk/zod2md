@@ -3,3 +3,5 @@ allowBuilds:
   unrs-resolver: true
 minimumReleaseAgeExclude:
   - zod2md
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 129600 # 90 days in minutes
