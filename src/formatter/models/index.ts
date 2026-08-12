@@ -9,6 +9,7 @@ import { BrandedModel } from './branded';
 import { CatchModel } from './catch';
 import { DateModel } from './date';
 import { DefaultModel } from './default';
+import { DiscriminatedUnionModel } from './discriminated-union';
 import { EffectsModel } from './effects';
 import { EnumModel } from './enum';
 import { FunctionModel } from './function';
@@ -46,6 +47,7 @@ export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new OptionalModel(),
   new NullableModel(),
   new DefaultModel(),
+  new DiscriminatedUnionModel(), // must precede UnionModel, since v4 discriminated union extends union
   new UnionModel(),
   new IntersectionModel(),
   new RecordModel(),
