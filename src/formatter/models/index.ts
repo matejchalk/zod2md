@@ -25,6 +25,7 @@ import { NumberModel } from './number';
 import { ObjectModel } from './object';
 import { OptionalModel } from './optional';
 import { PipeModel } from './pipe';
+import { PrefaultModel } from './prefault';
 import { PromiseModel } from './promise';
 import { ReadonlyModel } from './readonly';
 import { RecordModel } from './record';
@@ -47,6 +48,7 @@ export const MODELS: IModel<z4.$ZodType | z3.ZodTypeAny>[] = [
   new OptionalModel(),
   new NullableModel(),
   new DefaultModel(),
+  new PrefaultModel(),
   new DiscriminatedUnionModel(), // must precede UnionModel, since v4 discriminated union extends union
   new UnionModel(),
   new IntersectionModel(),
